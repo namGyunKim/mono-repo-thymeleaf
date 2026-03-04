@@ -93,9 +93,12 @@ mono-repo-thymeleaf/
 ├── gradle/wrapper/             # Gradle 9.3.1 Wrapper
 ├── build.gradle.kts            # Gradle 루트 (백엔드 공통)
 ├── settings.gradle.kts         # Gradle 서브프로젝트 include
-└── docs/backend/               # 백엔드 상세 가이드
-    ├── README.md               # 백엔드 프로젝트 개요
-    └── RULES.md                # 백엔드 개발 규칙 (본 문서)
+├── docs/
+│   ├── backend/                   # 백엔드 상세 가이드
+│   │   ├── README.md              # 백엔드 프로젝트 개요
+│   │   └── RULES.md              # 백엔드 개발 규칙 (본 문서)
+│   └── frontend/                  # 프론트엔드 상세 가이드
+│       └── UI_UX_RULES.md        # UI/UX 디자인 지침
 ```
 
 ## 기술 스택 하한 (CRITICAL)
