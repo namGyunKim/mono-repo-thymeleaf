@@ -7,11 +7,11 @@ feat/*  ──→  develop  ──→  deploy/*
           (Squash PR)    (merge/push)
 ```
 
-| 브랜치            | 역할                        | 보호 규칙                |
-|----------------|---------------------------|----------------------|
-| `feat/*`       | 기능 개발                     | 없음                   |
-| `develop`      | 통합 브랜치 — 모든 feat이 여기로 머지됨 | Branch Protection 적용 |
-| `deploy/user`  | user 배포 트리거               | push 시 자동 배포         |
+| 브랜치           | 역할                        | 보호 규칙                |
+|---------------|---------------------------|----------------------|
+| `feat/*`      | 기능 개발                     | 없음                   |
+| `develop`     | 통합 브랜치 — 모든 feat이 여기로 머지됨 | Branch Protection 적용 |
+| `deploy/user` | user 배포 트리거               | push 시 자동 배포         |
 
 > 새 앱 추가 시 `deploy/{app-name}` 브랜치를 생성하여 동일한 배포 패턴을 적용한다.
 
@@ -110,13 +110,13 @@ feat/* → develop PR 생성 시:
 
 백엔드 컴파일 및 단위 테스트를 실행한다.
 
-| 항목     | 값                                              |
-|--------|------------------------------------------------|
-| Runner | `ubuntu-latest`                                |
-| Java   | Temurin 21 (Gradle toolchain이 25로 자동 프로비저닝)    |
-| 명령어    | `./gradlew :apps:user:build` |
-| 포함 범위  | 컴파일, 단위 테스트, QueryDSL 코드 생성                    |
-| 평균 소요  | ~40초                                           |
+| 항목     | 값                                           |
+|--------|---------------------------------------------|
+| Runner | `ubuntu-latest`                             |
+| Java   | Temurin 21 (Gradle toolchain이 25로 자동 프로비저닝) |
+| 명령어    | `./gradlew :apps:user:build`                |
+| 포함 범위  | 컴파일, 단위 테스트, QueryDSL 코드 생성                 |
+| 평균 소요  | ~40초                                        |
 
 ---
 

@@ -38,7 +38,7 @@ public class UserMemberCommandService extends AbstractMemberCommandService {
 
     @Override
     public List<AccountRole> getSupportedRoles() {
-        return List.of(AccountRole.USER);
+        return List.of(AccountRole.values());
     }
 
     @Override
