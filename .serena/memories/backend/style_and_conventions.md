@@ -60,12 +60,15 @@ Least Privilege, Idempotency, Module Boundary, Response DTO Composition
 - `tools.jackson.*` (핵심), `com.fasterxml.jackson.annotation.*` (어노테이션)
 - ❌ `com.fasterxml.jackson.databind.*` 금지
 
-### 보안
+### 보안 (세션 기반 인증)
+- 인증 방식: HttpSession + 쿠키 기반 (Thymeleaf SSR 환경)
+- SessionCreationPolicy.IF_REQUIRED — 인증 성공 시 세션 자동 생성
+- CSRF 활성화 (Thymeleaf 폼 보호), API 경로(`/api/**`)는 CSRF 제외
 - 모든 컨트롤러에 `@PreAuthorize` 필수
 - 인증 체크: `MemberGuard` @Component로 통합
 - ❌ SecurityUtils/SecurityContextHolder 직접 호출 금지
-- 리프레시 토큰: 암호화 저장(AES-GCM), 복호화 검증
-- 토큰 폐기 시 액세스+리프레시 양쪽 블랙리스트
+- 소셜 OAuth 리프레시 토큰: AES-GCM 암호화 저장 (`SocialTokenCrypto`)
+- 로그아웃 시 세션 무효화 + 인증 정보 삭제
 
 ### API 규칙
 - API-Version 헤더 필수 (`version = ApiVersioning.V1`)

@@ -7,25 +7,24 @@
 
 ## 디자인 철학
 
-| 원칙 | 설명 |
-|---|---|
-| **미니멀리즘** | 불필요한 장식 제거, 콘텐츠 중심 |
-| **일관성** | 색상·간격·타이포그래피·컴포넌트를 전역에서 통일 |
-| **가독성 우선** | 텍스트 크기·행간·명암비를 충분히 확보 |
-| **자연스러움** | 그라디언트·그림자·애니메이션을 과하지 않게 사용 |
-| **접근성** | WCAG 2.1 AA 이상 명암비, 키보드 탐색 가능 |
+| 원칙         | 설명                            |
+|------------|-------------------------------|
+| **일관성**    | 색상·간격·타이포그래피·컴포넌트를 전역에서 통일    |
+| **가독성 우선** | 텍스트 크기·행간·명암비를 충분히 확보         |
+| **자연스러움**  | 그라디언트·그림자·애니메이션을 과하지 않게 사용    |
+| **접근성**    | WCAG 2.1 AA 이상 명암비, 키보드 탐색 가능 |
 
 ---
 
 ## 기술 스택
 
-| 영역 | 기술 | 버전 | 용도 |
-|---|---|---|---|
-| CSS/UI 프레임워크 | **Tabler** (Bootstrap 5 기반) | 1.3.2 | UI 컴포넌트, 레이아웃, 그리드 |
-| 인터랙션 | **HTMX** | 2.0.6 | JS 없이 서버 인터랙션 (부분 페이지 갱신) |
-| 템플릿 엔진 | **Thymeleaf** | Spring Boot 내장 | SSR HTML 렌더링 |
-| 레이아웃 | **Thymeleaf Layout Dialect** | 3.4.0 | 공통 레이아웃 데코레이터 패턴 |
-| 의존성 관리 | **WebJars** (npm) | — | 정적 라이브러리를 JAR로 관리 |
+| 영역           | 기술                          | 버전             | 용도                                   |
+|--------------|-----------------------------|----------------|--------------------------------------|
+| CSS/UI 프레임워크 | **Tabler** (Bootstrap 5 기반) | 1.3.2          | UI 컴포넌트, 레이아웃, 그리드                   |
+| 인터랙션         | **HTMX**                    | 2.0.6          | JS 없이 서버 인터랙션 (부분 페이지 갱신)            |
+| 템플릿 엔진       | **Thymeleaf**               | Spring Boot 내장 | SSR HTML 렌더링                         |
+| 레이아웃         | **Thymeleaf 파라미터 Fragment** | —              | `th:fragment` + `th:replace` 기반 레이아웃 |
+| 의존성 관리       | **WebJars** (npm)           | —              | 정적 라이브러리를 JAR로 관리                    |
 
 ### WebJars 경로 규칙
 
@@ -80,30 +79,30 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 ```css
 :root {
     /* ── 기본 ── */
-    --color-bg:           #FFFFFF;
-    --color-surface:      #F9FAFB;
-    --color-border:       #E5E7EB;
+    --color-bg: #FFFFFF;
+    --color-surface: #F9FAFB;
+    --color-border: #E5E7EB;
 
     /* ── 텍스트 ── */
-    --color-text-primary:   #111827;
+    --color-text-primary: #111827;
     --color-text-secondary: #6B7280;
-    --color-text-muted:     #9CA3AF;
+    --color-text-muted: #9CA3AF;
 
     /* ── 브랜드 / 액션 ── */
-    --color-primary:      #2563EB;
+    --color-primary: #2563EB;
     --color-primary-hover: #1D4ED8;
     --color-primary-light: #EFF6FF;
 
     /* ── 상태 ── */
-    --color-success:  #059669;
-    --color-warning:  #D97706;
-    --color-danger:   #DC2626;
-    --color-info:     #0284C7;
+    --color-success: #059669;
+    --color-warning: #D97706;
+    --color-danger: #DC2626;
+    --color-info: #0284C7;
 
     /* ── 그림자 ── */
-    --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md:  0 4px 6px rgba(0, 0, 0, 0.07);
-    --shadow-lg:  0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 ```
 
@@ -125,24 +124,24 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
     /* 크기 체계 (rem) */
-    --text-xs:   0.75rem;   /* 12px */
-    --text-sm:   0.875rem;  /* 14px */
-    --text-base: 1rem;      /* 16px */
-    --text-lg:   1.125rem;  /* 18px */
-    --text-xl:   1.25rem;   /* 20px */
-    --text-2xl:  1.5rem;    /* 24px */
-    --text-3xl:  1.875rem;  /* 30px */
+    --text-xs: 0.75rem; /* 12px */
+    --text-sm: 0.875rem; /* 14px */
+    --text-base: 1rem; /* 16px */
+    --text-lg: 1.125rem; /* 18px */
+    --text-xl: 1.25rem; /* 20px */
+    --text-2xl: 1.5rem; /* 24px */
+    --text-3xl: 1.875rem; /* 30px */
 
     /* 행간 */
-    --leading-tight:  1.25;
+    --leading-tight: 1.25;
     --leading-normal: 1.5;
     --leading-relaxed: 1.75;
 
     /* 굵기 */
-    --font-normal:   400;
-    --font-medium:   500;
+    --font-normal: 400;
+    --font-medium: 500;
     --font-semibold: 600;
-    --font-bold:     700;
+    --font-bold: 700;
 }
 ```
 
@@ -163,16 +162,16 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 
 ```css
 :root {
-    --space-1:  0.25rem;  /*  4px */
-    --space-2:  0.5rem;   /*  8px */
-    --space-3:  0.75rem;  /* 12px */
-    --space-4:  1rem;     /* 16px */
-    --space-5:  1.25rem;  /* 20px */
-    --space-6:  1.5rem;   /* 24px */
-    --space-8:  2rem;     /* 32px */
-    --space-10: 2.5rem;   /* 40px */
-    --space-12: 3rem;     /* 48px */
-    --space-16: 4rem;     /* 64px */
+    --space-1: 0.25rem; /*  4px */
+    --space-2: 0.5rem; /*  8px */
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem; /* 16px */
+    --space-5: 1.25rem; /* 20px */
+    --space-6: 1.5rem; /* 24px */
+    --space-8: 2rem; /* 32px */
+    --space-10: 2.5rem; /* 40px */
+    --space-12: 3rem; /* 48px */
+    --space-16: 4rem; /* 64px */
 }
 ```
 
@@ -189,11 +188,11 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 
 ```css
 :root {
-    --radius-sm:   0.25rem;  /*  4px */
-    --radius-md:   0.375rem; /*  6px */
-    --radius-lg:   0.5rem;   /*  8px */
-    --radius-xl:   0.75rem;  /* 12px */
-    --radius-full: 9999px;   /* pill */
+    --radius-sm: 0.25rem; /*  4px */
+    --radius-md: 0.375rem; /*  6px */
+    --radius-lg: 0.5rem; /*  8px */
+    --radius-xl: 0.75rem; /* 12px */
+    --radius-full: 9999px; /* pill */
 }
 ```
 
@@ -209,12 +208,12 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 
 ### 버튼
 
-| 유형 | 스타일 |
-|---|---|
-| Primary | `bg: --color-primary`, 텍스트 흰색, hover 시 `--color-primary-hover` |
+| 유형        | 스타일                                                                     |
+|-----------|-------------------------------------------------------------------------|
+| Primary   | `bg: --color-primary`, 텍스트 흰색, hover 시 `--color-primary-hover`          |
 | Secondary | `bg: transparent`, `border: --color-border`, 텍스트 `--color-text-primary` |
-| Danger | `bg: --color-danger`, 텍스트 흰색 — 삭제/탈퇴 등 위험 액션에만 사용 |
-| Ghost | 배경·보더 없음, 텍스트 `--color-primary` — 부가 액션용 |
+| Danger    | `bg: --color-danger`, 텍스트 흰색 — 삭제/탈퇴 등 위험 액션에만 사용                       |
+| Ghost     | 배경·보더 없음, 텍스트 `--color-primary` — 부가 액션용                                |
 
 ```
 공통:
@@ -305,9 +304,9 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 
 ```css
 :root {
-    --transition-fast:   0.15s ease;
+    --transition-fast: 0.15s ease;
     --transition-normal: 0.2s ease;
-    --transition-slow:   0.3s ease;
+    --transition-slow: 0.3s ease;
 }
 ```
 
@@ -500,30 +499,30 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 
 ### 페이지 공통 규칙
 
-| 항목 | 규칙 |
-|---|---|
+| 항목     | 규칙                                       |
+|--------|------------------------------------------|
 | 페이지 제목 | `h2`, `--font-semibold` — 모든 페이지에 반드시 존재 |
-| 뒤로가기 | 상세/폼 페이지는 좌측 상단에 `← 목록으로` 링크 |
-| 로딩 상태 | 콘텐츠 영역에 스켈레톤 UI 또는 중앙 스피너 |
-| 빈 상태 | `--color-text-muted` 중앙 텍스트 + 액션 버튼 |
-| 성공 피드백 | 저장/삭제 후 목록으로 리다이렉트 + 상단 토스트 알림 |
-| 에러 피드백 | 폼: 필드별 인라인 에러 / 서버 에러: 상단 알림 배너 |
-| 브레드크럼 | 2depth 이상일 때만 표시 (1depth는 페이지 제목으로 충분) |
+| 뒤로가기   | 상세/폼 페이지는 좌측 상단에 `← 목록으로` 링크             |
+| 로딩 상태  | 콘텐츠 영역에 스켈레톤 UI 또는 중앙 스피너                |
+| 빈 상태   | `--color-text-muted` 중앙 텍스트 + 액션 버튼      |
+| 성공 피드백 | 저장/삭제 후 목록으로 리다이렉트 + 상단 토스트 알림           |
+| 에러 피드백 | 폼: 필드별 인라인 에러 / 서버 에러: 상단 알림 배너          |
+| 브레드크럼  | 2depth 이상일 때만 표시 (1depth는 페이지 제목으로 충분)   |
 
 ---
 
 ## 금지 사항 (AI 느낌 방지)
 
-| 금지 | 이유 |
-|---|---|
-| 그라디언트 배경 남발 | AI 생성물의 전형적 패턴 |
-| 과도한 그림자 중첩 | 비현실적 깊이감 |
-| 장식용 원형/블롭 도형 | 랜딩 페이지 느낌 |
-| 무의미한 아이콘 나열 | 정보 없는 장식 |
-| hero 섹션에 큰 일러스트 | SaaS 랜딩 페이지 느낌 |
-| 색상 5개 이상 동시 사용 | 산만한 화면 |
-| 문단마다 볼드/이탤릭 | 강조 남발 |
-| lorem ipsum 더미 텍스트 | 미완성 느낌 |
+| 금지                 | 이유             |
+|--------------------|----------------|
+| 그라디언트 배경 남발        | AI 생성물의 전형적 패턴 |
+| 과도한 그림자 중첩         | 비현실적 깊이감       |
+| 장식용 원형/블롭 도형       | 랜딩 페이지 느낌      |
+| 무의미한 아이콘 나열        | 정보 없는 장식       |
+| hero 섹션에 큰 일러스트    | SaaS 랜딩 페이지 느낌 |
+| 색상 5개 이상 동시 사용     | 산만한 화면         |
+| 문단마다 볼드/이탤릭        | 강조 남발          |
+| lorem ipsum 더미 텍스트 | 미완성 느낌         |
 
 ---
 
@@ -560,7 +559,7 @@ src/main/resources/
 
 ## Thymeleaf 컨벤션
 
-- 레이아웃: `thymeleaf-layout-dialect` 사용
+- 레이아웃: 순수 Thymeleaf 파라미터 Fragment (`th:fragment` + `th:replace`) 사용
 - fragment 분리: 헤더, 사이드바, 푸터는 반드시 fragment로 분리
 - 인라인 스타일 금지: 모든 스타일은 CSS 파일에 작성
 - 인라인 스크립트 최소화: 이벤트 바인딩은 JS 파일에서 처리

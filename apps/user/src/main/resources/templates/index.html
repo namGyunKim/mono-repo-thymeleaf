@@ -1,27 +1,419 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default}">
+<html th:replace="~{layout/default :: layout(~{::title}, ~{::header}, ~{::content}, ~{::scripts})}"
+      lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>홈</title>
+    <title>mono-repo-thymeleaf</title>
 </head>
 <body>
-    <div layout:fragment="header">
+    <th:block th:fragment="header">
         <div class="container-xl">
-            <h2 class="page-title">홈</h2>
+            <div class="page-pretitle text-blue">Base Project Template</div>
+            <h2 class="page-title">mono-repo-thymeleaf</h2>
         </div>
-    </div>
+    </th:block>
 
-    <div layout:fragment="content">
-        <div class="row row-deck row-cards">
+    <th:block th:fragment="content">
+        <!-- Status -->
+        <div class="row mb-4">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title" th:text="${message}">User App</h3>
+                <div class="alert alert-success" role="alert">
+                    <div class="d-flex align-items-center">
+                        <span class="status status-green me-2"></span>
+                        <span th:text="${message}">서버가 정상 작동 중입니다.</span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Stat Cards -->
+        <div class="row row-deck row-cards mb-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="bg-blue text-white avatar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M7 8l-4 4l4 4"/><path d="M17 8l4 4l-4 4"/>
+                                        <path d="M14 4l-4 16"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <div class="font-weight-medium">Spring Boot 4.0.3</div>
+                                <div class="text-secondary">Framework</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="bg-azure text-white avatar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M11.5 21h-2.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"/>
+                                        <path d="M20 21l2 -2l-2 -2"/><path d="M17 17l-2 2l2 2"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <div class="font-weight-medium">Java 25</div>
+                                <div class="text-secondary">Language</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="bg-teal text-white avatar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"/>
+                                        <path d="M14.5 5.5l4 4"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <div class="font-weight-medium">Gradle 9.3.1</div>
+                                <div class="text-secondary">Build Tool</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="bg-indigo text-white avatar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M12 6m-8 0a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"/>
+                                        <path d="M4 6v6a8 3 0 0 0 16 0v-6"/>
+                                        <path d="M4 12v6a8 3 0 0 0 16 0v-6"/>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <div class="font-weight-medium">PostgreSQL</div>
+                                <div class="text-secondary">Database</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stacks -->
+        <div class="row row-deck row-cards mb-4">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-blue me-2">BE</span>
+                            <h3 class="card-title mb-0">Backend</h3>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-vcenter card-table">
+                            <tbody>
+                                <tr>
+                                    <td class="text-secondary" style="width:35%">ORM</td>
+                                    <td>JPA + QueryDSL <span class="badge bg-blue-lt">7.1</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Auth</td>
+                                    <td>Spring Security <span class="badge bg-green-lt">Session</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">JSON</td>
+                                    <td>Jackson <span class="badge bg-blue-lt">3</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Async</td>
+                                    <td>Virtual Thread <span class="badge bg-purple-lt">JEP</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Storage</td>
+                                    <td>AWS S3</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Logging</td>
+                                    <td>SLF4J + P6Spy</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-purple me-2">FE</span>
+                            <h3 class="card-title mb-0">Frontend</h3>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-vcenter card-table">
+                            <tbody>
+                                <tr>
+                                    <td class="text-secondary" style="width:35%">Template</td>
+                                    <td>Thymeleaf <span class="badge bg-cyan-lt">SSR</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">UI Kit</td>
+                                    <td>Tabler <span class="badge bg-purple-lt">1.3.2</span> <span class="text-muted">Bootstrap 5</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Interaction</td>
+                                    <td>HTMX <span class="badge bg-orange-lt">2.0.6</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Layout</td>
+                                    <td>Thymeleaf Fragment</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Dependencies</td>
+                                    <td>WebJars <span class="text-muted">(npm)</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">CSRF</td>
+                                    <td>Thymeleaf form <span class="badge bg-green-lt">enabled</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module Structure & Architecture -->
+        <div class="row row-deck row-cards mb-4">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-teal me-2">Mono</span>
+                            <h3 class="card-title mb-0">Module Structure</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <pre class="mb-0" style="font-size: 0.8125rem; background: transparent; border: none; padding: 0;"><code>mono-repo-thymeleaf/
+├── apps/
+│   └── <span class="text-blue fw-bold">user/</span>              <span class="text-muted"># Spring Boot App</span>
+└── libs/backend/
+    ├── <span class="text-teal">common/</span>            <span class="text-muted"># Entity, Payload, Utils</span>
+    ├── <span class="text-teal">global-core/</span>       <span class="text-muted"># Config, Exception, Event</span>
+    ├── <span class="text-azure">domain-core/</span>       <span class="text-muted"># Domain Logic (CQRS)</span>
+    ├── <span class="text-orange">security-web/</span>      <span class="text-muted"># Auth / Guard Filters</span>
+    └── <span class="text-purple">web-support/</span>       <span class="text-muted"># MVC, AOP, Versioning</span></code></pre>
+                        <hr class="my-3">
+                        <div class="text-secondary mb-2" style="font-size: 0.8125rem;">
+                            <strong>Dependency Flow</strong> &mdash; one-way only
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center gap-1" style="font-size: 0.8125rem;">
+                            <span class="badge bg-teal-lt">common</span>
+                            <span class="text-muted">&larr;</span>
+                            <span class="badge bg-teal-lt">global-core</span>
+                            <span class="text-muted">&larr;</span>
+                            <span class="badge bg-azure-lt">domain-core</span>
+                            <span class="text-muted">&larr;</span>
+                            <span class="badge bg-orange-lt">security-web</span>
+                            <span class="text-muted">&larr;</span>
+                            <span class="badge bg-purple-lt">web-support</span>
+                            <span class="text-muted">&larr;</span>
+                            <span class="badge bg-blue">apps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-orange me-2">Arch</span>
+                            <h3 class="card-title mb-0">Architecture</h3>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar avatar-sm bg-blue-lt text-blue">C</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="fw-medium">CQRS</div>
+                                        <div class="text-secondary" style="font-size: 0.8125rem;">Command / Query 서비스 물리적 분리</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar avatar-sm bg-teal-lt text-teal">D</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="fw-medium">DDD + Vertical Slicing</div>
+                                        <div class="text-secondary" style="font-size: 0.8125rem;">기술 계층이 아닌 도메인 단위 구성</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar avatar-sm bg-purple-lt text-purple">H</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="fw-medium">Hexagonal Architecture</div>
+                                        <div class="text-secondary" style="font-size: 0.8125rem;">Port / Adapter로 도메인-인프라 격리</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar avatar-sm bg-orange-lt text-orange">V</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="fw-medium">API Versioning</div>
+                                        <div class="text-secondary" style="font-size: 0.8125rem;">API-Version 헤더 기반 버저닝</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="avatar avatar-sm bg-cyan-lt text-cyan">E</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="fw-medium">Event-driven Logging</div>
+                                        <div class="text-secondary" style="font-size: 0.8125rem;">비동기 이벤트 리스너, traceId 추적</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Domains -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-cyan me-2">Domain</span>
+                            <h3 class="card-title mb-0">Domains</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-sm-6 col-md-4 col-lg-2">
+                                <div class="p-3 rounded bg-blue-lt">
+                                    <div class="fw-medium text-blue">account</div>
+                                    <div class="text-secondary mt-1" style="font-size: 0.75rem;">계정 인증/조합</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-2">
+                                <div class="p-3 rounded bg-azure-lt">
+                                    <div class="fw-medium text-azure">member</div>
+                                    <div class="text-secondary mt-1" style="font-size: 0.75rem;">회원 CRUD, 프로필, 권한</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-2">
+                                <div class="p-3 rounded bg-teal-lt">
+                                    <div class="fw-medium text-teal">social</div>
+                                    <div class="text-secondary mt-1" style="font-size: 0.75rem;">Google OAuth</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-2">
+                                <div class="p-3 rounded bg-purple-lt">
+                                    <div class="fw-medium text-purple">log</div>
+                                    <div class="text-secondary mt-1" style="font-size: 0.75rem;">활동 로그, 파티셔닝</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-2">
+                                <div class="p-3 rounded bg-orange-lt">
+                                    <div class="fw-medium text-orange">aws</div>
+                                    <div class="text-secondary mt-1" style="font-size: 0.75rem;">S3 파일 업로드</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-2">
+                                <div class="p-3 rounded bg-cyan-lt">
+                                    <div class="fw-medium text-cyan">init</div>
+                                    <div class="text-secondary mt-1" style="font-size: 0.75rem;">로컬 시드 데이터</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Commands -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-dark me-2">CLI</span>
+                            <h3 class="card-title mb-0">Quick Commands</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-1">
+                                    <span class="badge bg-green-lt">Run</span>
+                                </div>
+                                <code class="d-block p-2 rounded" style="font-size: 0.8125rem; background: var(--tblr-bg-surface);">./gradlew :apps:user:bootRun</code>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-1">
+                                    <span class="badge bg-blue-lt">Build</span>
+                                </div>
+                                <code class="d-block p-2 rounded" style="font-size: 0.8125rem; background: var(--tblr-bg-surface);">./gradlew :apps:user:build</code>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-1">
+                                    <span class="badge bg-purple-lt">Test</span>
+                                </div>
+                                <code class="d-block p-2 rounded" style="font-size: 0.8125rem; background: var(--tblr-bg-surface);">./gradlew test</code>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-1">
+                                    <span class="badge bg-cyan-lt">Health</span>
+                                </div>
+                                <code class="d-block p-2 rounded" style="font-size: 0.8125rem; background: var(--tblr-bg-surface);">GET /api/health</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+
+    <th:block th:fragment="scripts"></th:block>
 </body>
 </html>

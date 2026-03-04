@@ -61,7 +61,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             final ApiErrorResponse body = ApiErrorResponse.from(ErrorCode.AUTHENTICATION_REQUIRED);
             SecurityJsonResponseWriter.writeJsonErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), body, objectMapper);
         } else {
-            response.sendRedirect("/login");
+            response.sendRedirect("/");
         }
     }
 

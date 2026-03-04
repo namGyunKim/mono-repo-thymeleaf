@@ -53,7 +53,7 @@ mono-repo-thymeleaf/
 - Spring Framework `7.x`
 - QueryDSL `7.1` (`io.github.openfeign.querydsl`)
 - PostgreSQL
-- Thymeleaf (SSR 뷰) + Thymeleaf Layout Dialect `3.4.0`
+- Thymeleaf (SSR 뷰) + 파라미터 Fragment 레이아웃 (순수 Thymeleaf)
 - Tabler `1.3.2` (Bootstrap 5 기반 UI 키트, WebJars)
 - HTMX `2.0.6` (서버 인터랙션, WebJars)
 - Gradle Wrapper `9.3.1`
@@ -150,7 +150,7 @@ mono-repo-thymeleaf/
 ### 로그아웃
 
 - 세션 무효화(`invalidateHttpSession`) + 인증 정보 삭제(`clearAuthentication`)
-- API 로그아웃 → 204 No Content, 페이지 로그아웃 → `/login?logout` 리다이렉트
+- API 로그아웃 → 204 No Content, 페이지 로그아웃 → `/` 리다이렉트
 
 ### 보안 감사 로깅
 
