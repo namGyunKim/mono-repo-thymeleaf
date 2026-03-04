@@ -608,26 +608,23 @@ Response에 필드를 평면적으로 나열하지 않고, **관련 필드를 �
 #### 예시
 
 ```java
-// ❌ 필드 나열 — 회원 정보와 토큰이 혼합
-public record LoginTokenResponse(
-                Long id, String loginId, String role, String nickName,
-                String memberType, boolean active,
-                String accessToken, String refreshToken
+// ❌ 필드 나열 — 회원 정보와 주문 정보가 혼합
+public record OrderSummaryResponse(
+                Long id, String loginId, String nickName,
+                Long orderId, String orderStatus, int totalPrice
         ) {
 }
 
 // ✅ DTO 조합 — 관심사별 분리
-public record LoginTokenResponse(
-        LoginMemberResponse member,
-        String accessToken,
-        String refreshToken
+public record OrderSummaryResponse(
+        MemberSummaryResponse member,
+        OrderDetailResponse order
 ) {
-    public static LoginTokenResponse of(
-            final LoginMemberResponse member,
-            final String accessToken,
-            final String refreshToken
+    public static OrderSummaryResponse of(
+            final MemberSummaryResponse member,
+            final OrderDetailResponse order
     ) {
-        return new LoginTokenResponse(member, accessToken, refreshToken);
+        return new OrderSummaryResponse(member, order);
     }
 }
 ```
@@ -760,7 +757,7 @@ libs/backend/domain-core/src/main/java/com/example/domain/
 | 도메인          | 특수 구조                                                               | 사유                                                                                                   |
 |--------------|---------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
 | **account**  | `entity`/`repository` 없음                                            | `AccountMemberQueryPort`를 통해 member 도메인에 위임하는 **조회·조합 전용 도메인**                                       |
-| **security** | `api`/`entity`/`repository` 없음, `token/`·`port/`·`adapter/` 분리      | JWT·Guard·블랙리스트 등 **횡단 관심사 도메인**, 자체 영속 엔티티 없음. `token/`=토큰 서비스, `port/`=외부 도메인 계약, `adapter/`=포트 구현 |
+| **security** | `api`/`entity`/`repository` 없음, `port/`·`adapter/` 분리               | Guard·세션 인증 등 **횡단 관심사 도메인**, 자체 영속 엔티티 없음. `port/`=외부 도메인 계약, `adapter/`=포트 구현                       |
 | **social**   | 루트에 `service` 없음, `google/` 서브도메인 중심                                | 소셜 제공자별 서브도메인 구조(`social/google/service/`), 제공자 추가 시 동일 패턴 복제                                        |
 | **aws**      | `entity`/`repository`/`validator` 없음                                | S3 파일 업로드 등 **외부 인프라 연동 전용 도메인**                                                                     |
 | **log**      | 이벤트 리스너 + 관리자 조회 API                                                | 활동 로그는 이벤트 리스너로 저장, 관리자 로그 조회용 `api/` 존재                                                             |
@@ -852,8 +849,7 @@ libs/backend/domain-core/src/main/java/com/example/domain/
 ```
 BaseAppException (추상)
 ├── GlobalException         — 공통/범용 비즈니스 예외 (ErrorCode 기반)
-├── SocialException         — 소셜 로그인 관련 예외
-└── JwtInterceptorException — JWT 인터셉터 인증 실패 예외
+└── SocialException         — 소셜 로그인 관련 예외
 ```
 
 - `ErrorCode` enum으로 예외 코드/메시지를 중앙 관리한다
@@ -928,8 +924,6 @@ BaseAppException (추상)
 | `LogType`               | log/enums                | 활동 로그 발행 Port 파라미터로 account·member·social 사용 |
 | `MemberActiveStatus`    | member/enums             | 회원 활성 상태 판별에 account·social 등 필수             |
 | `MemberType`            | member/enums             | 회원 유형 분기에 account·social 등 필수                |
-| `LoginTokenResponse`    | account/payload/response | 로그인 토큰 반환에 security·social 필수                |
-| `RefreshTokenResponse`  | account/payload/response | 토큰 갱신 반환에 security 필수                        |
 | `AccountAuthMemberView` | account/payload/dto      | 인증 주체 정보 전달에 security 필수                     |
 | `LoginMemberView`       | account/payload/dto      | 로그인 회원 뷰 전달에 security 필수                     |
 | `MemberUploadDirect`    | member/enums             | 이미지 업로드 경로 분기에 aws 도메인 Port 파라미터로 사용         |
@@ -1108,24 +1102,19 @@ domain-core/src/main/java/com/example/domain/
 - **모든 컨트롤러**에 `@PreAuthorize` 필수 — 권한 필요 API는 역할 검증, 공개 API는 `@PreAuthorize("permitAll()")`
 - ❌ `@PreAuthorize` 없는 컨트롤러 금지 — 누락인지 의도적 공개인지 구분할 수 없으므로
 - ❌ 서비스/컨트롤러 내부 if-else 권한 체크 금지
-- 인증 필요 API에 `@SecurityRequirement(name = "Bearer Authentication")` 필수
+- 인증 필요 API는 세션 기반 인증을 사용한다 (HttpSession + 쿠키)
 - SpEL에서 패키지 의존형 `T(...)` 참조 지양 → `@Component` 메서드 호출로 캡슐화
 - 인증/인가 체크는 **`MemberGuard`** `@Component`로 통합
 - `SecurityUtils`/`SecurityContextHolder` 직접 호출 금지
 
-### JWT/토큰 보안 규칙 (CRITICAL)
+### 세션 인증 보안 규칙 (CRITICAL)
 
-- 리프레시 토큰: **암호화 저장(AES-GCM 등)**, 복호화 검증 (해시 비교 금지)
-- 사용자당 리프레시 토큰 **1개만 유효**
-- 신규 발급 시 이전 토큰 즉시 폐기
-- 복호화 실패/재사용 감지 시 토큰 전면 무효화
-- 토큰 블랙리스트는 **해시 저장**
-- 암호화/서명 키 회전 시 기존 토큰 전부 폐기
+- 인증 방식: **HttpSession + 쿠키 기반** (Thymeleaf SSR 환경)
+- `SessionCreationPolicy.IF_REQUIRED` — 인증 성공 시 세션 자동 생성
+- CSRF 활성화 (Thymeleaf 폼 보호), API 경로(`/api/**`)는 CSRF 제외
+- 로그아웃 시 세션 무효화(`invalidateHttpSession`) + 인증 정보 삭제(`clearAuthentication`)
+- 소셜 OAuth 리프레시 토큰: **AES-GCM 암호화 저장** (`SocialTokenCrypto`)
 - API 보안 기본값: 인증 필요, 공개 API만 allowlist 명시
-- **토큰 폐기 시 액세스/리프레시 양쪽 모두 블랙리스트에 등록한다** — DB 무효화만으로는 TTL 내 재사용 차단 불가
-    - 로그아웃: 액세스 토큰 블랙리스트 + 저장된 리프레시 토큰 복호화 후 블랙리스트 + DB 폐기(tokenVersion 회전)
-    - 재발급: 기존 액세스 토큰 블랙리스트(Authorization 헤더에서 추출, nullable) + 기존 리프레시 토큰 블랙리스트 + 신규 토큰 발급
-    - 복호화 실패 시 `log.warn()` 후 블랙리스트 등록 생략 (키 회전 등으로 인한 정상 상황)
 
 ---
 
@@ -1145,11 +1134,10 @@ domain-core/src/main/java/com/example/domain/
 
 - [ ] `@PreAuthorize` 누락으로 공개되는 API 없는가?
 
-### 토큰/세션
+### 세션/인증
 
-- [ ] 리프레시 토큰 암호화 저장 / 복호화 검증되는가?
-- [ ] 재발급 시 이전 토큰(액세스+리프레시) **양쪽 모두** 블랙리스트 등록되는가?
-- [ ] 로그아웃 시 액세스 토큰 + 저장된 리프레시 토큰 **양쪽 모두** 블랙리스트 등록되는가?
+- [ ] 인증 필요 API에서 세션 미존재 시 적절한 응답(401 또는 리다이렉트)이 반환되는가?
+- [ ] 로그아웃 시 세션이 무효화되는가?
 
 ### API 응답/버전
 
@@ -1257,7 +1245,7 @@ domain-core/src/main/java/com/example/domain/
 | Enum 계약 동기화   | `Api* == Domain name()` 유지 + 빌드 시 TS 자동 생성(`generateContractEnumTs`) + `pnpm nx test domain-core` 통과 |
 | 외부 연동         | SDK → `@HttpExchange` → `@EnableHttpServices`                                                        |
 | 보안            | `@PreAuthorize`만, 누락=공개                                                                              |
-| 리프레시 토큰       | 암호화 저장 + 복호화 검증 + 재발급 시 폐기                                                                           |
+| 인증             | HttpSession + 쿠키 기반, CSRF 활성화 (API 제외)                                                              |
 | JPA           | `LAZY` 명시, `EAGER` 금지                                                                                |
 | 멀티라인          | `"\n"` 금지, Text Block 사용                                                                             |
 | InitBinder    | DTO 1:1 매칭, 공용 이름 금지, `supports()` 방어                                                                |

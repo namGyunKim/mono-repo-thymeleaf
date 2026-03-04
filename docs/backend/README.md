@@ -90,14 +90,14 @@ mono-repo-thymeleaf/
 - `GET /` : 인덱스 페이지 (Thymeleaf)
 - `GET /api/health` : 헬스체크
 - `POST /api/sessions` : 사용자 로그인
-- `POST /api/tokens` : 토큰 갱신
+- `DELETE /api/sessions` : 사용자 로그아웃
 
 ### admin (로컬 `localhost:8082`, 프로덕션 `localhost:8080`)
 
 - `GET /` : 인덱스 페이지 (Thymeleaf)
 - `GET /api/health` : 헬스체크
 - `POST /api/admin/sessions` : 관리자 로그인
-- `POST /api/tokens` : 토큰 갱신
+- `DELETE /api/admin/sessions` : 관리자 로그아웃
 
 ---
 
@@ -145,22 +145,22 @@ mono-repo-thymeleaf/
 
 ## 8. 보안 아키텍처
 
-### JWT 인증 흐름
+### 세션 기반 인증
 
-- 로그인 성공 시 Access Token(헤더) + Refresh Token(DB 저장) 발급
-- Access Token은 `Authorization: Bearer` 헤더로 전달
-- Refresh Token은 SHA-256 해시 후 DB에 저장, 원본은 응답 헤더로 전달
+- 인증 방식: **HttpSession + 쿠키 기반** (Thymeleaf SSR 환경)
+- 로그인 성공 시 Spring Security가 SecurityContext를 세션에 자동 저장
+- 인증 상태는 JSESSIONID 쿠키로 유지
+- CSRF 보호 활성화 (Thymeleaf 폼), API 경로(`/api/**`)는 CSRF 제외
+- 핸들러 듀얼 패턴: API 요청 → JSON 응답, 페이지 요청 → 리다이렉트
 
-### 토큰 블랙리스트
+### 로그아웃
 
-- 로그아웃 시 `JwtLogoutHandler` → `JwtTokenRevocationCommandService`가 동작
-    - Access Token을 `BlacklistedToken` 엔티티로 블랙리스트에 등록 (SHA-256 해시 저장)
-    - 해당 회원의 Refresh Token을 DB에서 삭제
-- 매일 03:00 `BlacklistedTokenCleanupCommandService`가 만료된 블랙리스트 토큰을 정리
+- 세션 무효화(`invalidateHttpSession`) + 인증 정보 삭제(`clearAuthentication`)
+- API 로그아웃 → 204 No Content, 페이지 로그아웃 → `/login?logout` 리다이렉트
 
 ### 보안 감사 로깅
 
-- 로그인 성공/실패, 로그아웃, 토큰 폐기 등 보안 상태 변경은 반드시 INFO 레벨로 로깅한다
+- 로그인 성공/실패, 로그아웃 등 보안 상태 변경은 반드시 INFO 레벨로 로깅한다
 
 ---
 
@@ -189,8 +189,7 @@ libs/backend/common/src/test/java/com/example/global/
 └── aop/support/              # AOP 지원 테스트 (2개)
 
 libs/backend/global-core/src/test/java/com/example/global/
-├── security/                 # 보안 테스트 (5개)
-│   └── blacklist/            # 블랙리스트 테스트 (2개)
+├── security/                 # 보안 테스트 (2개)
 └── exception/support/        # 예외 처리 지원 테스트 (5개)
 
 libs/backend/security-web/src/test/java/com/example/global/

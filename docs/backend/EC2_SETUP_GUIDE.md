@@ -168,7 +168,7 @@ application-prod.yml:    url: ${DB_URL}
 | `DOCKER_ENV_DB_URL`              | `<RDS_HOST>`, `<DB_NAME>`     | `spring.datasource.url`      |
 | `DOCKER_ENV_DB_USERNAME`         | `<DB_USER>`                   | `spring.datasource.username` |
 | `DOCKER_ENV_DB_PASSWORD`         | `<DB_PASSWORD>`               | `spring.datasource.password` |
-| `DOCKER_ENV_JWT_SECRET`          | `<JWT_SECRET_KEY_MIN_256BIT>` | `app.jwt.secret`             |
+| `DOCKER_ENV_ENCRYPTION_SECRET`   | `<ENCRYPTION_SECRET_KEY>`     | `app.security.encryption-secret` |
 | `DOCKER_ENV_S3_BUCKET`           | `<S3_BUCKET_NAME>`            | `s3.bucket`                  |
 | `DOCKER_ENV_AWS_ACCESS_KEY`      | `<AWS_ACCESS_KEY_ID>`         | `aws.access-key`             |
 | `DOCKER_ENV_AWS_SECRET_KEY`      | `<AWS_SECRET_ACCESS_KEY>`     | `aws.secret-key`             |
@@ -341,7 +341,7 @@ cp /opt/deploy/projects/user.env /opt/deploy/projects/admin.env
 | `IMAGE`            | `ghcr.io/namgyunkim/mono-repo/user` | `ghcr.io/namgyunkim/mono-repo/admin` |
 | `TARGET_GROUP_ARN` | user 타겟 그룹 ARN                      | **admin 타겟 그룹 ARN**                  |
 
-> 나머지 값(DB, JWT, S3, 로깅 등)은 **동일한 인프라를 공유한다면 그대로** 사용한다.
+> 나머지 값(DB, S3, 로깅 등)은 **동일한 인프라를 공유한다면 그대로** 사용한다.
 > 별도 DB나 설정이 필요하면 해당 `DOCKER_ENV_*` 값도 변경한다.
 
 ### 2. `/etc/nginx/conf.d/` Nginx 설정 교체
