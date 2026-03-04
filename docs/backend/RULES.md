@@ -791,11 +791,52 @@ libs/backend/domain-core/src/main/java/com/example/domain/
     - 이벤트 리스너는 호출자 트랜잭션과 분리되어야 하므로 독립 트랜잭션이 필요
 - 서비스 계층에서 `REQUIRES_NEW` 사용은 금지 — 트랜잭션 분리가 필요하면 이벤트로 전환한다
 
-### 전략 패턴 (Strategy Pattern)
+### 전략 패턴 (Strategy Pattern) — CRITICAL
+
+권한(AccountRole), 게시판 타입 등 **열거형 값에 따라 동일 인터페이스의 구현이 달라지는 경우** 전략 패턴을 사용한다.
+
+#### 기본 원칙
 
 - if-else/switch 타입 분기 금지
 - `{Domain}StrategyFactory`로 구현체 분기
 - 미등록 타입은 즉시 예외, 암묵적 기본값 금지
+
+#### 구조
+
+```
+인터페이스         MemberCommandService
+                    ├── getSupportedRoles(): List<AccountRole>
+                    └── 비즈니스 메서드들
+                           │
+추상 클래스         AbstractMemberCommandService (공통 로직)
+                           │
+구체 클래스         UserMemberCommandService (역할별 차이점만 오버라이드)
+                           │
+팩토리             MemberStrategyFactory
+                    ├── @PostConstruct → getBeansOfType() + getSupportedRoles()로 EnumMap 구성
+                    └── getCommandService(role) / getQueryService(role)
+```
+
+#### 구현 규칙
+
+1. **인터페이스**: `getSupportedXxx()` 메서드를 선언하여 구현체가 자신이 담당하는 타입을 반환하게 한다
+2. **추상 클래스**: 공통 로직(수정, 비활성화, 검증 등)을 Template Method로 구현한다. 차이점은 abstract/protected 메서드로 위임
+3. **구체 클래스**: `getSupportedXxx()`를 오버라이드하여 담당 타입을 반환하고, 차이점만 구현한다
+4. **팩토리**: `@PostConstruct`에서 `ApplicationContext.getBeansOfType()`으로 빈을 수집하고, `getSupportedXxx()` 반환값으로 `EnumMap`에 등록한다
+5. **프록시 대응**: `@Transactional` 등으로 JDK Dynamic Proxy가 적용될 수 있으므로 `instanceof` 분기 대신 반드시 인터페이스의 `getSupportedXxx()` 메서드를 사용한다
+
+#### 새 타입/역할 추가 시 체크리스트
+
+- [ ] 구체 Service 클래스의 `getSupportedXxx()` 반환값에 새 타입 포함 확인
+- [ ] 또는 새 구체 클래스를 생성하여 `getSupportedXxx()`에 새 타입 반환
+- [ ] StrategyFactory가 `@PostConstruct`에서 자동 수집하므로 팩토리 코드 수정 불필요
+- [ ] 앱 기동 테스트로 `StrategyFactory 초기화 완료` 로그에 등록된 서비스 수 확인
+- [ ] 미등록 타입 예외 테스트 — 모든 enum 값이 커버되는지 검증
+
+#### 구체 클래스가 하나뿐인 경우
+
+앱이 하나(예: user)라서 구체 클래스가 하나만 존재할 때는 `getSupportedXxx()`에서 해당 enum의 **모든 값**(`AccountRole.values()`)을 반환한다.
+향후 앱이 추가되어 역할별 분리가 필요해지면, 새 구체 클래스를 만들고 각각 담당 역할만 반환하도록 변경한다.
 
 ### Template Method + Resolver (권장)
 
