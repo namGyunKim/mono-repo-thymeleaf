@@ -42,9 +42,6 @@ subprojects {
         "annotationProcessor"("jakarta.annotation:jakarta.annotation-api")
         "annotationProcessor"("jakarta.persistence:jakarta.persistence-api")
 
-        "implementation"("io.jsonwebtoken:jjwt-api:0.13.0")
-        "runtimeOnly"("io.jsonwebtoken:jjwt-impl:0.13.0")
-        "runtimeOnly"("io.jsonwebtoken:jjwt-gson:0.13.0")
 
         "compileOnly"("org.projectlombok:lombok")
         "annotationProcessor"("org.projectlombok:lombok")

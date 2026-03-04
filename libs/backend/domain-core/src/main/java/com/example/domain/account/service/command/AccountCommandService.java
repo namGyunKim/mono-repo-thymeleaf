@@ -7,7 +7,6 @@ import com.example.domain.account.payload.dto.AccountWithdrawCommand;
 import com.example.domain.account.payload.dto.CurrentAccountDTO;
 import com.example.domain.account.support.AccountActivityPublishPort;
 import com.example.domain.account.support.AccountMemberCommandPort;
-import com.example.domain.account.support.AccountTokenRevocationPort;
 import com.example.domain.account.validator.AccountInputValidator;
 import com.example.domain.log.enums.LogType;
 
@@ -23,7 +22,6 @@ public class AccountCommandService {
 
     private final AccountMemberCommandPort accountMemberCommandPort;
     private final AccountActivityPublishPort accountActivityPublishPort;
-    private final AccountTokenRevocationPort accountTokenRevocationPort;
 
     public void logout(final AccountLogoutCommand command) {
         validateLogoutCommand(command);
@@ -32,7 +30,6 @@ public class AccountCommandService {
         accountActivityPublishPort.publishMemberActivity(
                 AccountActivityPublishCommand.of(currentAccount.loginId(), currentAccount.id(), LogType.LOGOUT, "로그아웃")
         );
-        accountTokenRevocationPort.revokeOnLogout(currentAccount.id(), command.accessToken());
     }
 
     public void withdraw(final AccountWithdrawCommand command) {
@@ -41,7 +38,6 @@ public class AccountCommandService {
         final CurrentAccountDTO currentAccount = command.currentAccount();
         // 계정 탈퇴 응답 시점에 회원 비활성화 상태가 즉시 반영되어야 하므로 동일 트랜잭션 동기 호출을 유지합니다.
         accountMemberCommandPort.deactivateMember(currentAccount.role(), currentAccount.id());
-        accountTokenRevocationPort.revokeOnLogout(currentAccount.id(), command.accessToken());
     }
 
     public Long updateProfile(final AccountProfileUpdateCommand command) {

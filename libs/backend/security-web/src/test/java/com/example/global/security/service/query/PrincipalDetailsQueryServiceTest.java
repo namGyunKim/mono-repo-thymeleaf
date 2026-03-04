@@ -42,7 +42,7 @@ class PrincipalDetailsQueryServiceTest {
         final String loginId = "user01";
         final AccountAuthMemberView member = AccountAuthMemberView.of(
                 1L, loginId, "encodedPassword", "닉네임",
-                AccountRole.USER, MemberType.GENERAL, MemberActiveStatus.ACTIVE, 1L
+                AccountRole.USER, MemberType.GENERAL, MemberActiveStatus.ACTIVE
         );
         when(securityAccountAuthQueryPort.findActiveMemberForAuthByLoginId(any(AccountLoginIdQuery.class)))
                 .thenReturn(member);
@@ -67,7 +67,7 @@ class PrincipalDetailsQueryServiceTest {
         final String loginId = "googleUser";
         final AccountAuthMemberView member = AccountAuthMemberView.of(
                 2L, loginId, "password", "구글유저",
-                AccountRole.USER, MemberType.GOOGLE, MemberActiveStatus.ACTIVE, 1L
+                AccountRole.USER, MemberType.GOOGLE, MemberActiveStatus.ACTIVE
         );
         when(securityAccountAuthQueryPort.findActiveMemberForAuthByLoginId(any(AccountLoginIdQuery.class)))
                 .thenReturn(member);

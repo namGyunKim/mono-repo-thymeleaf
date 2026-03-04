@@ -23,9 +23,6 @@ public enum ErrorCode {
     AUTHENTICATION_FAILED("1002", "아이디 또는 비밀번호가 올바르지 않습니다."),
     ACCESS_DENIED("1004", "권한이 없습니다."),
     SOCIAL_TOKEN_ERROR("1006", "소셜 토큰 에러"),
-    REFRESH_TOKEN_INVALID("1007", "유효하지 않은 리프레시 토큰입니다."),
-    REFRESH_TOKEN_EXPIRED("1008", "리프레시 토큰이 만료되었습니다."),
-    REFRESH_TOKEN_REVOKED("1009", "이미 폐기된 리프레시 토큰입니다."),
 
     // === MEMBER (1100) ===
     MEMBER_NOT_EXIST("1101", "존재하지 않는 회원입니다."),

@@ -25,4 +25,14 @@ public interface SecurityAccountAuthQueryPort {
      * @throws com.example.global.exception.GlobalException 해당 로그인 ID의 활성 회원이 존재하지 않을 경우
      */
     AccountAuthMemberView findActiveMemberForAuthByLoginId(final AccountLoginIdQuery query);
+
+    /**
+     * 회원 ID로 활성 상태인 회원의 인증 정보를 조회한다.
+     *
+     * <p>소셜 로그인 등에서 memberId 기반으로 세션 인증을 설정할 때 사용한다.
+     *
+     * @param memberId null이 아닌 조회할 회원 ID
+     * @return 활성 상태인 회원의 인증 정보, 존재하지 않으면 empty
+     */
+    java.util.Optional<AccountAuthMemberView> findAuthMemberById(final Long memberId);
 }

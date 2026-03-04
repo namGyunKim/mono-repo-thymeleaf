@@ -12,11 +12,9 @@ import com.example.global.annotation.CurrentAccount;
 import com.example.global.api.RestApiController;
 import com.example.global.payload.response.IdResponse;
 import com.example.global.payload.response.RestApiResponse;
-import com.example.global.security.jwt.AccessTokenResolver;
 import com.example.global.version.ApiVersioning;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +38,6 @@ public class AccountApiController {
     private final AccountQueryService accountQueryService;
     private final AccountCommandService accountCommandService;
     private final RestApiController restApiController;
-    private final AccessTokenResolver accessTokenResolver;
 
     @GetMapping(value = "/me", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isAuthenticated()")
@@ -63,9 +60,8 @@ public class AccountApiController {
 
     @DeleteMapping(value = "/me", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isAuthenticated() and @memberGuard.canAccessSelf(#currentAccount)")
-    public ResponseEntity<Void> withdraw(@CurrentAccount final CurrentAccountDTO currentAccount, final HttpServletRequest request) {
-        final String accessToken = accessTokenResolver.resolveAccessToken(request).orElse(null);
-        accountCommandService.withdraw(AccountWithdrawCommand.of(currentAccount, accessToken));
+    public ResponseEntity<Void> withdraw(@CurrentAccount final CurrentAccountDTO currentAccount) {
+        accountCommandService.withdraw(AccountWithdrawCommand.of(currentAccount));
         return restApiController.noContent();
     }
 }

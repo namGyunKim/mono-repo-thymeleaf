@@ -6,7 +6,7 @@ import com.example.domain.social.enums.SocialProvider;
 import com.example.domain.social.payload.dto.SocialAccountKeyQuery;
 import com.example.domain.social.payload.dto.SocialAccountMemberProviderQuery;
 import com.example.domain.social.repository.SocialAccountRepository;
-import com.example.global.security.RefreshTokenCrypto;
+import com.example.global.security.SocialTokenCrypto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class GoogleSocialAccountManager {
 
     private final SocialAccountRepository socialAccountRepository;
-    private final RefreshTokenCrypto refreshTokenCrypto;
+    private final SocialTokenCrypto socialTokenCrypto;
 
     public Optional<SocialAccount> findBySocialKey(final String socialKey) {
         return socialAccountRepository.findByProviderAndSocialKey(
@@ -53,7 +53,7 @@ public class GoogleSocialAccountManager {
         if (socialAccount == null || !StringUtils.hasText(refreshToken)) {
             return;
         }
-        final String encrypted = refreshTokenCrypto.encrypt(refreshToken);
+        final String encrypted = socialTokenCrypto.encrypt(refreshToken);
         socialAccount.updateRefreshTokenEncrypted(encrypted);
     }
 }

@@ -12,7 +12,6 @@ import com.example.domain.member.support.MemberActivityPublishPort;
 import com.example.domain.member.support.MemberImageStoragePort;
 import com.example.domain.member.support.MemberPermissionCheckPort;
 import com.example.domain.member.support.MemberSocialCleanupPort;
-import com.example.domain.member.support.MemberTokenRevocationPort;
 import com.example.domain.member.support.MemberUniquenessSupport;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
@@ -38,7 +37,6 @@ public class AdminMemberCommandService extends AbstractMemberCommandService {
     private final MemberSocialCleanupPort memberSocialCleanupPort;
 
     private final MemberActivityPublishPort memberActivityPublishPort;
-    private final MemberTokenRevocationPort memberTokenRevocationPort;
     private final MemberPermissionCheckPort memberPermissionCheckPort;
 
     @Override
@@ -102,7 +100,6 @@ public class AdminMemberCommandService extends AbstractMemberCommandService {
         deactivateMemberCommon(member, MemberDeactivateContext.of(
                 memberImageStoragePort, memberSocialCleanupPort, memberActivityPublishPort, "관리자 탈퇴/비활성화 처리"
         ));
-        revokeSelfLogoutIfNeeded(command);
 
         return member.getId();
     }
@@ -132,23 +129,5 @@ public class AdminMemberCommandService extends AbstractMemberCommandService {
                         List.of(AccountRole.ADMIN, AccountRole.SUPER_ADMIN)
                 )
                 .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_EXIST));
-    }
-
-    private void revokeSelfLogoutIfNeeded(final MemberDeactivateCommand command) {
-        if (command == null) {
-            return;
-        }
-        final Long memberId = command.memberId();
-        final Long currentAccountId = command.currentAccountId();
-        if (memberId == null || currentAccountId == null) {
-            return;
-        }
-        if (!memberId.equals(currentAccountId)) {
-            return;
-        }
-        if (command.logoutCommand() == null) {
-            return;
-        }
-        memberTokenRevocationPort.revokeOnLogout(command.logoutCommand());
     }
 }

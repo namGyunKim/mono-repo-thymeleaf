@@ -5,11 +5,7 @@ import com.example.domain.account.payload.dto.CurrentAccountDTO;
 import com.example.domain.account.service.command.AccountCommandService;
 import com.example.global.annotation.CurrentAccount;
 import com.example.global.api.RestApiController;
-import com.example.global.security.jwt.AccessTokenResolver;
 import com.example.global.version.ApiVersioning;
-
-
-import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,13 +24,11 @@ public class AccountSessionApiController {
 
     private final AccountCommandService accountCommandService;
     private final RestApiController restApiController;
-    private final AccessTokenResolver accessTokenResolver;
 
     @DeleteMapping(value = "/me", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isAuthenticated()")
-    public ResponseEntity<Void> logout(@CurrentAccount final CurrentAccountDTO currentAccount, final HttpServletRequest request) {
-        final String accessToken = accessTokenResolver.resolveAccessToken(request).orElse(null);
-        accountCommandService.logout(AccountLogoutCommand.of(currentAccount, accessToken));
+    public ResponseEntity<Void> logout(@CurrentAccount final CurrentAccountDTO currentAccount) {
+        accountCommandService.logout(AccountLogoutCommand.of(currentAccount));
         return restApiController.noContent();
     }
 }

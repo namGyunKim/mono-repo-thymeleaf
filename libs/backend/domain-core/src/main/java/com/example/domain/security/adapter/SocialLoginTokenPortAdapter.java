@@ -1,22 +1,36 @@
 package com.example.domain.security.adapter;
 
-import com.example.domain.account.payload.response.LoginTokenResponse;
-import com.example.domain.security.token.LoginTokenCommandService;
+import com.example.domain.security.port.SecurityAccountAuthQueryPort;
+import com.example.domain.account.payload.dto.AccountAuthMemberView;
+import com.example.domain.security.guard.PrincipalDetails;
 import com.example.domain.social.support.SocialLoginTokenPort;
-import com.example.global.security.payload.LoginTokenIssueCommand;
+import com.example.global.exception.enums.ErrorCode;
+import com.example.global.exception.GlobalException;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class SocialLoginTokenPortAdapter implements SocialLoginTokenPort {
 
-    private final LoginTokenCommandService loginTokenCommandService;
+    private final SecurityAccountAuthQueryPort securityAccountAuthQueryPort;
 
     @Override
-    public LoginTokenResponse issueTokens(final Long memberId) {
-        return loginTokenCommandService.issueTokens(LoginTokenIssueCommand.of(memberId));
+    public void authenticateBySession(final Long memberId) {
+        final AccountAuthMemberView memberView = securityAccountAuthQueryPort.findAuthMemberById(memberId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_EXIST));
+
+        final PrincipalDetails principalDetails = new PrincipalDetails(memberView);
+        final UsernamePasswordAuthenticationToken authentication =
+                UsernamePasswordAuthenticationToken.authenticated(
+                        principalDetails,
+                        null,
+                        principalDetails.getAuthorities()
+                );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

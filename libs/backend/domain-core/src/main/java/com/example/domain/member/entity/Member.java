@@ -69,12 +69,6 @@ public class Member extends BaseTimeEntity implements Serializable {
     @Column(columnDefinition = "varchar(255)", comment = "유저 타입")
     private MemberType memberType;
 
-    @Column(name = "jwt_refresh_token_encrypted", columnDefinition = "text", comment = "JWT Refresh Token Encrypted")
-    private String refreshTokenEncrypted;
-
-    @Column(nullable = false, comment = "JWT 토큰 버전")
-    private long tokenVersion = 0L;
-
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     // [중요]
     // JPA 엔티티의 컬렉션 필드는 `final` / `transient` 키워드를 사용하지 않는 것이 안전합니다.
@@ -150,20 +144,6 @@ public class Member extends BaseTimeEntity implements Serializable {
         this.active = MemberActiveStatus.INACTIVE;
         this.loginId = "%s_LEAVE_%s".formatted(this.loginId, nowStr);
         this.nickName = "%s_LEAVE_%s".formatted(this.nickName, nowStr);
-        this.refreshTokenEncrypted = null;
-        rotateTokenVersion();
-    }
-
-    public void updateRefreshTokenEncrypted(final String refreshTokenEncrypted) {
-        this.refreshTokenEncrypted = refreshTokenEncrypted;
-    }
-
-    public void invalidateRefreshTokenEncrypted() {
-        this.refreshTokenEncrypted = null;
-    }
-
-    public void rotateTokenVersion() {
-        this.tokenVersion += 1;
     }
 
     // Active 상태 변경

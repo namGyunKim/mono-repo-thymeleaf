@@ -5,7 +5,6 @@ import com.example.domain.log.event.ExceptionEvent;
 import com.example.global.annotation.CurrentAccount;
 import com.example.global.exception.advice.support.ExceptionAdviceSupport;
 import com.example.global.exception.GlobalException;
-import com.example.global.exception.JwtInterceptorException;
 import com.example.global.exception.SocialException;
 import com.example.global.payload.response.ApiErrorResponse;
 
@@ -54,16 +53,4 @@ public class CustomExceptionAdvice {
         });
     }
 
-    @ExceptionHandler(JwtInterceptorException.class)
-    public ResponseEntity<ApiErrorResponse> handleJwtException(
-            final JwtInterceptorException e,
-            @CurrentAccount final CurrentAccountDTO account,
-            final HttpServletRequest request
-    ) {
-        return support.withFilterLogged(request, () -> {
-            final CurrentAccountDTO resolvedAccount = support.resolveAccount(account);
-            support.publishExceptionEvent(ExceptionEvent.from((Exception) e, resolvedAccount, request));
-            return support.toResponse(e.getErrorCode(), HttpStatus.UNAUTHORIZED);
-        });
-    }
 }

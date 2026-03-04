@@ -79,9 +79,17 @@ public class AccountMemberQueryPortAdapter implements AccountMemberQueryPort {
                 member.getNickName(),
                 member.getRole(),
                 member.getMemberType(),
-                member.getActive(),
-                member.getTokenVersion()
+                member.getActive()
         );
+    }
+
+    @Override
+    public Optional<AccountAuthMemberView> findAuthMemberById(final Long memberId) {
+        if (memberId == null) {
+            return Optional.empty();
+        }
+        return memberRepository.findById(memberId)
+                .map(this::toAuthMemberView);
     }
 
     private AccountLoginCandidateView toLoginCandidateView(final Member member) {

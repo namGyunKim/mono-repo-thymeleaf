@@ -43,17 +43,6 @@ public class RestApiController {
     }
 
     /**
-     * JWT 에러용 실패 응답(기본 UNAUTHORIZED)
-     * <p>
-     * - 현재는 fail(..., UNAUTHORIZED)와 동일하지만,
-     * 향후 JWT 전용 payload/헤더 정책이 생길 수 있어 메서드를 분리해둡니다.
-     * </p>
-     */
-    public ResponseEntity<ApiErrorResponse> failWithJwt(final ApiErrorResponse error) {
-        return fail(error, HttpStatus.UNAUTHORIZED);
-    }
-
-    /**
      * 성공 응답 (OK 200)
      */
     public <T> ResponseEntity<RestApiResponse<T>> ok(final T data) {

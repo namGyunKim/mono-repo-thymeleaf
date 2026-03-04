@@ -1,18 +1,14 @@
 package com.example.domain.social.api;
 
-import com.example.domain.account.payload.response.LoginTokenResponse;
 import com.example.domain.social.google.payload.dto.GoogleSocialRedirectCommand;
 import com.example.domain.social.google.payload.request.GoogleRedirectRequest;
 import com.example.domain.social.google.service.command.GoogleSocialLoginStartCommandService;
 import com.example.domain.social.google.service.command.GoogleSocialRedirectCommandService;
 import com.example.domain.social.google.service.query.GoogleSocialLoginStartQueryService;
 import com.example.domain.social.google.validator.GoogleRedirectRequestValidator;
-import com.example.domain.social.payload.response.SocialLoginSuccessResponse;
 import com.example.domain.social.payload.response.SocialRedirectResponse;
 import com.example.global.api.RestApiController;
 import com.example.global.payload.response.RestApiResponse;
-import com.example.global.security.support.LocalTokenHeaderLoggingSupport;
-import com.example.global.security.TokenResponseHeaders;
 import com.example.global.version.ApiVersioning;
 
 
@@ -21,7 +17,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +47,6 @@ public class SocialApiController {
     private final GoogleSocialRedirectCommandService googleSocialRedirectCommandService;
     private final GoogleRedirectRequestValidator googleRedirectRequestValidator;
     private final RestApiController restApiController;
-    private final LocalTokenHeaderLoggingSupport localTokenHeaderLoggingSupport;
 
     @InitBinder("googleRedirectRequest")
     public void initGoogleRedirectBinder(final WebDataBinder binder) {
@@ -70,17 +64,15 @@ public class SocialApiController {
     /**
      * 외부 OAuth Provider 콜백은 API-Version 헤더 전달이 불가능합니다.
      * 따라서 이 엔드포인트는 URL 버저닝({@code /v1/...})을 사용하며, 헤더 버저닝 예외로 취급합니다.
+     * 소셜 로그인 성공 시 세션이 설정된 상태로 홈페이지로 리다이렉트합니다.
      */
     @GetMapping(value = "/v1/google/redirect")
-    public ResponseEntity<RestApiResponse<SocialLoginSuccessResponse>> googleRedirect(@Valid @ModelAttribute("googleRedirectRequest") final GoogleRedirectRequest googleRedirectRequest) {
+    public ResponseEntity<Void> googleRedirect(@Valid @ModelAttribute("googleRedirectRequest") final GoogleRedirectRequest googleRedirectRequest) {
         final GoogleSocialRedirectCommand command = GoogleSocialRedirectCommand.from(googleRedirectRequest);
-        final LoginTokenResponse response = googleSocialRedirectCommandService.loginByRedirect(command);
-        localTokenHeaderLoggingSupport.logResponseTokenHeaders(
-                "social-google-redirect",
-                response.accessToken(),
-                response.refreshToken()
-        );
-        final HttpHeaders headers = TokenResponseHeaders.of(response.accessToken(), response.refreshToken());
-        return restApiController.okWithHeaders(SocialLoginSuccessResponse.ok(), headers);
+        googleSocialRedirectCommandService.loginByRedirect(command);
+
+        return ResponseEntity.status(302)
+                .header("Location", "/")
+                .build();
     }
 }

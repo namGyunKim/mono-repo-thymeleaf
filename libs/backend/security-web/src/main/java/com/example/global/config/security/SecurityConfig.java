@@ -1,7 +1,6 @@
 package com.example.global.config.security;
 
 import com.example.global.security.filter.JsonBodyLoginAuthenticationFilter;
-import com.example.global.security.filter.JwtAuthenticationFilter;
 import com.example.global.security.filter.support.JsonBodyLoginErrorWriter;
 import com.example.global.security.filter.support.JsonBodyLoginRequestParser;
 import com.example.global.security.filter.support.JsonBodyLoginRequestValidator;
@@ -9,9 +8,7 @@ import com.example.global.security.handler.CustomAccessDeniedHandler;
 import com.example.global.security.handler.CustomAuthenticationEntryPoint;
 import com.example.global.security.handler.CustomAuthFailureHandler;
 import com.example.global.security.handler.CustomAuthSuccessHandler;
-import com.example.global.security.handler.JwtLogoutHandler;
 import com.example.global.security.handler.RoleBasedLogoutSuccessHandler;
-import com.example.global.security.jwt.JwtProperties;
 import com.example.global.security.SecurityPublicPaths;
 import com.example.global.security.service.query.PrincipalDetailsQueryService;
 import com.example.global.utils.RequestUriUtils;
@@ -19,7 +16,6 @@ import com.example.global.utils.RequestUriUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -27,12 +23,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -42,7 +38,6 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-@EnableConfigurationProperties(JwtProperties.class)
 public class SecurityConfig {
 
     @Value("${app.cors.allowed-origins:}")
@@ -50,8 +45,6 @@ public class SecurityConfig {
 
     /**
      * JSON 로그인 API 경로
-     * <p>
-     * - Swagger/Postman 등 비브라우저 클라이언트에서 JSON 바디 인증을 허용합니다.
      */
     private static final String AUTH_LOGIN_JSON_API_PATH = "/api/sessions";
     private static final String ADMIN_LOGIN_JSON_API_PATH = "/api/admin/sessions";
@@ -115,19 +108,17 @@ public class SecurityConfig {
             final CustomAccessDeniedHandler accessDeniedHandler, final CustomAuthenticationEntryPoint entryPoint,
             final JsonBodyLoginRequestParser parser, final JsonBodyLoginRequestValidator validator,
             final JsonBodyLoginErrorWriter errorWriter, final AuthenticationConfiguration authConfig,
-            final JwtAuthenticationFilter jwtFilter,
-            final JwtLogoutHandler jwtLogoutHandler,
             final RoleBasedLogoutSuccessHandler logoutSuccessHandler
     ) throws Exception {
         configureBasePolicy(http);
 
         final var loginFilter = createJsonBodyLoginFilter(parser, validator, errorWriter, authConfig, successHandler, failureHandler);
         http.addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.logout(logout -> logout
                 .logoutRequestMatcher(SecurityConfig::isLogoutRequest)
-                .addLogoutHandler(jwtLogoutHandler)
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
                 .logoutSuccessHandler(logoutSuccessHandler)
         );
 
@@ -145,8 +136,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()
         );
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // API 경로는 CSRF 비활성화 (JSON API는 CSRF 불필요), Thymeleaf 폼은 CSRF 활성화
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**")
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        );
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
     }
 
     @Bean

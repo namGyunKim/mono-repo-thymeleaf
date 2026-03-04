@@ -49,8 +49,12 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             request.setAttribute(RequestLoggingAttributes.FILTER_LOGGED, Boolean.TRUE);
         }
 
-        final ApiErrorResponse body = ApiErrorResponse.from(ErrorCode.ACCESS_DENIED);
-        SecurityJsonResponseWriter.writeJsonErrorResponse(response, HttpStatus.FORBIDDEN.value(), body, objectMapper);
+        if (isApiRequest(request)) {
+            final ApiErrorResponse body = ApiErrorResponse.from(ErrorCode.ACCESS_DENIED);
+            SecurityJsonResponseWriter.writeJsonErrorResponse(response, HttpStatus.FORBIDDEN.value(), body, objectMapper);
+        } else {
+            response.sendRedirect("/error/403");
+        }
     }
 
     private void publishAccessDeniedEvent(final HttpServletRequest request, final AccessDeniedException e, final String message) {
@@ -66,6 +70,14 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private CurrentAccountDTO resolveCurrentAccount() {
         return memberGuard.getCurrentAccount().orElse(null);
+    }
+
+    private boolean isApiRequest(final HttpServletRequest request) {
+        if (request == null) {
+            return true;
+        }
+        final String uri = request.getRequestURI();
+        return uri != null && uri.startsWith("/api/");
     }
 
     private String resolveMessage(final AccessDeniedException e) {

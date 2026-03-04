@@ -11,7 +11,6 @@ import com.example.domain.member.support.MemberActivityPublishPort;
 import com.example.domain.member.support.MemberImageStoragePort;
 import com.example.domain.member.support.MemberPermissionCheckPort;
 import com.example.domain.member.support.MemberSocialCleanupPort;
-import com.example.domain.member.support.MemberTokenRevocationPort;
 import com.example.domain.member.support.MemberUniquenessSupport;
 import com.example.global.exception.GlobalException;
 
@@ -56,9 +55,6 @@ class AdminMemberCommandServiceTest {
 
     @Mock
     private MemberActivityPublishPort memberActivityPublishPort;
-
-    @Mock
-    private MemberTokenRevocationPort memberTokenRevocationPort;
 
     @Mock
     private MemberPermissionCheckPort memberPermissionCheckPort;

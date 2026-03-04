@@ -2,7 +2,6 @@ package com.example.global.security;
 
 import com.example.global.exception.GlobalException;
 import com.example.global.exception.enums.ErrorCode;
-import com.example.global.security.jwt.JwtProperties;
 
 import javax.crypto.Cipher;
 import javax.crypto.KDF;
@@ -11,6 +10,7 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.HKDFParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Base64;
 
 @Component
-public class RefreshTokenCrypto {
+public class SocialTokenCrypto {
 
     private static final String KDF_ALGORITHM = "HKDF-SHA256";
     private static final String TRANSFORMATION = "AES/GCM/NoPadding";
@@ -31,18 +31,18 @@ public class RefreshTokenCrypto {
     private static final int IV_LENGTH = 12;
     private static final int TAG_LENGTH_BIT = 128;
     private static final int KEY_LENGTH_BYTES = 32;
-    private static final byte[] KEY_DERIVATION_SALT = "gyun-refresh-token".getBytes(StandardCharsets.UTF_8);
-    private static final byte[] KEY_DERIVATION_INFO = "refresh-token-aes-gcm-key".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] KEY_DERIVATION_SALT = "gyun-social-token".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] KEY_DERIVATION_INFO = "social-token-aes-gcm-key".getBytes(StandardCharsets.UTF_8);
 
     private final SecretKey secretKey;
     private final SecureRandom secureRandom = new SecureRandom();
 
-    public RefreshTokenCrypto(final JwtProperties jwtProperties) {
-        this.secretKey = new SecretKeySpec(deriveKeyMaterial(jwtProperties.secret()), AES_ALGORITHM);
+    public SocialTokenCrypto(@Value("${app.security.encryption-secret}") final String encryptionSecret) {
+        this.secretKey = new SecretKeySpec(deriveKeyMaterial(encryptionSecret), AES_ALGORITHM);
     }
 
-    public String encrypt(final String refreshToken) {
-        if (!StringUtils.hasText(refreshToken)) {
+    public String encrypt(final String plainText) {
+        if (!StringUtils.hasText(plainText)) {
             return "";
         }
 
@@ -52,7 +52,7 @@ public class RefreshTokenCrypto {
 
             final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
-            final byte[] cipherText = cipher.doFinal(refreshToken.getBytes(StandardCharsets.UTF_8));
+            final byte[] cipherText = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
 
             final ByteBuffer buffer = ByteBuffer.allocate(iv.length + cipherText.length);
             buffer.put(iv);
@@ -64,15 +64,15 @@ public class RefreshTokenCrypto {
         }
     }
 
-    public String decrypt(final String encryptedRefreshToken) {
-        if (!StringUtils.hasText(encryptedRefreshToken)) {
+    public String decrypt(final String encryptedText) {
+        if (!StringUtils.hasText(encryptedText)) {
             return "";
         }
 
         try {
-            final byte[] combined = Base64.getDecoder().decode(encryptedRefreshToken);
+            final byte[] combined = Base64.getDecoder().decode(encryptedText);
             if (combined.length <= IV_LENGTH) {
-                throw new GlobalException(ErrorCode.REFRESH_TOKEN_INVALID, "리프레시 토큰 암호문 형식이 올바르지 않습니다.");
+                throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR, "암호문 형식이 올바르지 않습니다.");
             }
 
             final byte[] iv = Arrays.copyOfRange(combined, 0, IV_LENGTH);
@@ -80,9 +80,9 @@ public class RefreshTokenCrypto {
 
             final Cipher cipher = Cipher.getInstance(TRANSFORMATION);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(TAG_LENGTH_BIT, iv));
-            final byte[] plainText = cipher.doFinal(cipherText);
+            final byte[] resultPlainText = cipher.doFinal(cipherText);
 
-            return new String(plainText, StandardCharsets.UTF_8);
+            return new String(resultPlainText, StandardCharsets.UTF_8);
         } catch (final GlobalException e) {
             throw e;
         } catch (final Exception e) {
@@ -92,7 +92,7 @@ public class RefreshTokenCrypto {
 
     private static byte[] deriveKeyMaterial(final String secret) {
         if (!StringUtils.hasText(secret)) {
-            throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR, "리프레시 토큰 암호화 키 시드(secret)가 비어 있습니다.");
+            throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR, "소셜 토큰 암호화 키(encryption-secret)가 비어 있습니다.");
         }
 
         try {

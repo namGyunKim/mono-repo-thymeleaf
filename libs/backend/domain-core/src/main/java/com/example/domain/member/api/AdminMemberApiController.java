@@ -23,12 +23,9 @@ import com.example.global.annotation.CurrentAccount;
 import com.example.global.api.RestApiController;
 import com.example.global.payload.response.IdResponse;
 import com.example.global.payload.response.RestApiResponse;
-import com.example.global.security.jwt.AccessTokenResolver;
-import com.example.global.security.payload.SecurityLogoutCommand;
 import com.example.global.version.ApiVersioning;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
@@ -65,7 +62,6 @@ public class AdminMemberApiController {
     private final MemberListRequestPolicyValidator memberListRequestPolicyValidator;
 
     private final RestApiController restApiController;
-    private final AccessTokenResolver accessTokenResolver;
 
     @InitBinder
     public void initMemberCreateRequestBinder(final WebDataBinder binder) {
@@ -127,15 +123,9 @@ public class AdminMemberApiController {
 
     @DeleteMapping(value = "/{id}", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.hasAnyAdminRole() and @memberGuard.canAccessMember(#id)")
-    public ResponseEntity<Void> deactivateMember(@PathVariable final Long id, @CurrentAccount final CurrentAccountDTO currentAccount, final HttpServletRequest request) {
+    public ResponseEntity<Void> deactivateMember(@PathVariable final Long id, @CurrentAccount final CurrentAccountDTO currentAccount) {
         final MemberCommandService commandService = memberStrategyFactory.getCommandServiceByMemberId(id);
-        final MemberDeactivateCommand deactivateCommand = accessTokenResolver.resolveAccessToken(request)
-                .map(accessToken -> MemberDeactivateCommand.of(
-                        id,
-                        currentAccount.id(),
-                        SecurityLogoutCommand.of(currentAccount.id(), accessToken)
-                ))
-                .orElseGet(() -> MemberDeactivateCommand.of(id, currentAccount.id()));
+        final MemberDeactivateCommand deactivateCommand = MemberDeactivateCommand.of(id, currentAccount.id());
         commandService.deactivateMember(deactivateCommand);
         return restApiController.noContent();
     }

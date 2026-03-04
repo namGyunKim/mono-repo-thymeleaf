@@ -25,8 +25,8 @@ import java.io.IOException;
 /**
  * 인증 실패(401) 처리 EntryPoint
  * <p>
- * - REST API 전용으로 JSON 응답을 반환합니다.
- * - 로그인 실패(아이디/비밀번호 불일치) 응답은 CustomAuthFailureHandler에서 처리합니다.
+ * - API 요청: JSON 에러 응답을 반환합니다.
+ * - 페이지 요청: 로그인 페이지로 리다이렉트합니다.
  * </p>
  */
 @Component
@@ -57,7 +57,19 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 authException != null ? authException.getMessage() : ""
         );
 
-        final ApiErrorResponse body = ApiErrorResponse.from(ErrorCode.AUTHENTICATION_REQUIRED);
-        SecurityJsonResponseWriter.writeJsonErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), body, objectMapper);
+        if (isApiRequest(request)) {
+            final ApiErrorResponse body = ApiErrorResponse.from(ErrorCode.AUTHENTICATION_REQUIRED);
+            SecurityJsonResponseWriter.writeJsonErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), body, objectMapper);
+        } else {
+            response.sendRedirect("/login");
+        }
+    }
+
+    private boolean isApiRequest(final HttpServletRequest request) {
+        if (request == null) {
+            return true;
+        }
+        final String uri = request.getRequestURI();
+        return uri != null && uri.startsWith("/api/");
     }
 }

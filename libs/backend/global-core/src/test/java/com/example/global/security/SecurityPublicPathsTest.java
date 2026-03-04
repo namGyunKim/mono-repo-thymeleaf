@@ -31,11 +31,6 @@ class SecurityPublicPathsTest {
     }
 
     @Test
-    void isPublicApiPath_tokens_returns_true() {
-        assertThat(SecurityPublicPaths.isPublicApiPath("/api/tokens")).isTrue();
-    }
-
-    @Test
     void isPublicApiPath_social_exact_returns_true() {
         assertThat(SecurityPublicPaths.isPublicApiPath("/api/social")).isTrue();
     }

@@ -40,7 +40,7 @@ class MemberAuthQueryServiceTest {
         final MemberLoginIdQuery query = MemberLoginIdQuery.of(loginId);
         final AccountAuthMemberView expectedMember = AccountAuthMemberView.of(
                 1L, loginId, "encodedPassword", "닉네임",
-                AccountRole.USER, MemberType.GENERAL, MemberActiveStatus.ACTIVE, 1L
+                AccountRole.USER, MemberType.GENERAL, MemberActiveStatus.ACTIVE
         );
         when(securityMemberAccessPort.findActiveAuthMemberByLoginId(loginId))
                 .thenReturn(Optional.of(expectedMember));
