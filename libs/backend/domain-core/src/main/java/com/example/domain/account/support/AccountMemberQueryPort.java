@@ -54,4 +54,12 @@ public interface AccountMemberQueryPort {
      * @return 로그인 후보 회원 뷰, 존재하지 않으면 empty
      */
     Optional<AccountLoginCandidateView> findLoginCandidate(final AccountLoginValidationQuery query);
+
+    /**
+     * 회원 ID로 인증용 회원 정보를 조회한다.
+     *
+     * @param memberId null이 아닌 조회할 회원 ID
+     * @return 해당 회원의 인증 정보 뷰, 존재하지 않으면 empty
+     */
+    Optional<AccountAuthMemberView> findAuthMemberById(final Long memberId);
 }

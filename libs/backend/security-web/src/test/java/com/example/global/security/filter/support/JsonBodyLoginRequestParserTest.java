@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import com.example.domain.account.payload.request.AccountAdminLoginRequest;
 import com.example.domain.account.payload.request.AccountUserLoginRequest;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -161,26 +160,6 @@ class JsonBodyLoginRequestParserTest {
         }
 
         @Test
-        @DisplayName("관리자 경로로 정상 JSON 파싱 시 AccountAdminLoginRequest 반환")
-        void parse_adminLoginPath_returnsAdminLoginRequest() throws Exception {
-            // Arrange
-            final MockHttpServletRequest request = new MockHttpServletRequest();
-            request.setRequestURI("/api/admin/sessions");
-            request.setContent("{\"loginId\":\"admin01\",\"password\":\"1234\"}".getBytes(StandardCharsets.UTF_8));
-
-            final AccountAdminLoginRequest expectedRequest = AccountAdminLoginRequest.of("admin01", "1234");
-            when(objectMapper.readValue(any(InputStream.class), eq(AccountAdminLoginRequest.class)))
-                    .thenReturn(expectedRequest);
-
-            // Act
-            final LoginRequestParseResult result = parser.parse(request);
-
-            // Assert
-            assertThat(result.hasErrors()).isFalse();
-            assertThat(result.loginRequest()).isEqualTo(expectedRequest);
-        }
-
-        @Test
         @DisplayName("잘못된 JSON 파싱 시 JacksonException에 대한 실패 결과 반환")
         void parse_invalidJson_returnsFailureWithParseError() throws Exception {
             // Arrange
@@ -206,8 +185,6 @@ class JsonBodyLoginRequestParserTest {
         void parse_ioException_returnsFailureWithIoError() {
             // Arrange: getInputStream()에서 IOException이 발생하는 요청을 시뮬레이션
             final HttpServletRequest request = org.mockito.Mockito.mock(HttpServletRequest.class);
-            when(request.getRequestURI()).thenReturn("/api/sessions");
-            when(request.getContextPath()).thenReturn("");
             try {
                 when(request.getInputStream()).thenThrow(new IOException("읽기 실패"));
             } catch (final IOException ignored) {

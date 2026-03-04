@@ -39,7 +39,7 @@ public interface SecurityMemberAccessPort {
     /**
      * 로그인 ID로 활성 회원의 인증 정보를 조회한다.
      *
-     * <p>JWT 인증 필터에서 토큰 subject 기반 회원 조회에 사용한다.
+     * <p>인증 처리 시 로그인 ID 기반 회원 조회에 사용한다.
      *
      * @param loginId null이 아닌 비어 있지 않은 조회할 로그인 ID
      * @return 해당 회원의 인증 정보 뷰, 존재하지 않으면 empty

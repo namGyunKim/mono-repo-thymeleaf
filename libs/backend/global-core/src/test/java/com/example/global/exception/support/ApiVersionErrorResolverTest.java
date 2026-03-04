@@ -20,7 +20,7 @@ class ApiVersionErrorResolverTest {
     @Test
     void resolve_non_api_path_returns_fallback() {
         final MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/swagger-ui.html");
+        request.setRequestURI("/");
         assertThat(resolver.resolve(request, FALLBACK)).isEqualTo(FALLBACK);
     }
 

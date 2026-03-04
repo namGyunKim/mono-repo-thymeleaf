@@ -17,7 +17,6 @@ EC2마다 1개의 프로젝트를 운영하며, 대상 프로젝트만 바꾸면
 #    │ Secret                 │ 값                                       │
 #    ├────────────────────────┼──────────────────────────────────────────┤
 #    │ USER_API_SERVER_HOST   │ user EC2 IP (예: 10.0.1.10)         │
-#    │ ADMIN_API_SERVER_HOST  │ admin EC2 IP (예: 10.0.1.20)        │
 #    │                        │ 2대 이상: 쉼표로 구분 (예: 10.0.1.10,10.0.1.11) │
 #    │                        │ → 첫 번째 서버 배포 완료 후 두 번째 서버 순차 배포  │
 #    │ SERVER_USER            │ EC2 기본 유저 (예: ec2-user)              │
@@ -35,7 +34,6 @@ EC2마다 1개의 프로젝트를 운영하며, 대상 프로젝트만 바꾸면
 
 # 3. 배포 브랜치 생성 (최초 1회)
 git push origin develop:deploy/user
-git push origin develop:deploy/admin
 #    → 각 프로젝트의 GitHub Actions 워크플로우가
 #      on.push.branches에 해당 브랜치를 트리거로 등록하고 있다.
 #      따라서 deploy/user 브랜치에 push하면 워크플로우가 자동 실행되어
@@ -53,7 +51,7 @@ git push origin develop:deploy/admin
 ## AWS 세팅
 
 서버 세팅 전에 AWS 콘솔에서 먼저 준비해야 하는 항목들이다.
-프로젝트당 1회 수행하며, user 기준으로 설명한다. admin도 동일한 절차.
+프로젝트당 1회 수행하며, user 기준으로 설명한다. 새 프로젝트 추가 시 동일한 절차를 반복한다.
 
 ### 1. EC2 인스턴스 생성
 
@@ -156,7 +154,7 @@ ALB가 트래픽을 올바른 타겟 그룹으로 라우팅하도록 규칙을 �
 | 조건 (IF)                           | 액션 (THEN)                 |
 |-----------------------------------|---------------------------|
 | Host header = `api.example.com`   | Forward to `user-tg`  |
-| Host header = `admin.example.com` | Forward to `admin-tg` |
+| Host header = `{새 프로젝트}.example.com` | Forward to `{새 프로젝트}-tg` |
 | 기본 규칙                             | Fixed response 404        |
 
 > 호스트 기반 라우팅으로 하나의 ALB에서 여러 프로젝트를 처리한다.
@@ -171,7 +169,6 @@ ALB가 트래픽을 올바른 타겟 그룹으로 라우팅하도록 규칙을 �
 | 레코드 이름              | 타입 | 라우팅         | 대상     |
 |---------------------|----|-------------|--------|
 | `api.example.com`   | A  | Alias → ALB | ALB 선택 |
-| `admin.example.com` | A  | Alias → ALB | ALB 선택 |
 
 ### 요약 — AWS에서 확인할 것
 
@@ -280,10 +277,11 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 
 ### 프로젝트별 파일
 
-| 프로젝트      | 디렉토리                                               |
-|-----------|----------------------------------------------------|
-| user  | [`docs/backend/deployment/user/`](user/)   |
-| admin | [`docs/backend/deployment/admin/`](admin/) |
+| 프로젝트 | 디렉토리                                           |
+|------|------------------------------------------------|
+| user | [`docs/backend/deployment/user/`](user/) |
+
+> 새 프로젝트 추가 시 동일 구조로 `{project}/` 디렉토리를 생성한다.
 
 ---
 
@@ -308,7 +306,7 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 │ │ App │ │  │ │ App │ │  │                       │
 │ │8080 │ │  │ │8080 │ │  │                       │
 │ └─────┘ │  │ └─────┘ │  │                       │
-│user │  │admin│  │                       │
+│user │  │ ... │  │                       │
 └────┬────┘  └────┬────┘  │                       │
      │            │       │                       │
   ┌──▼────────────▼──┐    │                       │
@@ -384,7 +382,7 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 | [`user/user.env`](user/user.env)               | 서버 `/opt/deploy/projects/user.env`  |
 | [`user/nginx/user.conf`](user/nginx/user.conf) | 서버 `/etc/nginx/conf.d/user.conf`    |
 
-> admin도 동일한 구조. [`admin/`](admin/) 디렉토리 참조.
+> 새 프로젝트 추가 시 동일 구조로 `{project}/` 디렉토리를 생성한다.
 
 ### 수정 규칙
 
@@ -398,8 +396,6 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 | `backend-cd.yml`                 | `.github/workflows/backend-cd.yml`       |
 | `user/deploy-user.yml`   | `.github/workflows/deploy-user.yml`  |
 | `user/stage-user.yml`    | `.github/workflows/stage-user.yml`   |
-| `admin/deploy-admin.yml` | `.github/workflows/deploy-admin.yml` |
-| `admin/stage-admin.yml`  | `.github/workflows/stage-admin.yml`  |
 | `backend.Dockerfile`             | `infra/docker/backend.Dockerfile`        |
 
 > 원본과 배치 파일은 항상 동일한 내용을 유지해야 한다. 배치 위치만 직접 수정하면 원본과 불일치가 발생한다.
@@ -415,7 +411,8 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 | 브랜치                | 배포 대상     |
 |--------------------|-----------|
 | `deploy/user`  | user  |
-| `deploy/admin` | admin |
+
+> 새 프로젝트 추가 시 `deploy/{project}` 브랜치를 생성한다.
 
 ```
 git push origin deploy/user

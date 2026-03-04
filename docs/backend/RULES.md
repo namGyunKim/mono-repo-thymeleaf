@@ -57,7 +57,7 @@ common ←── global-core ←── domain-core ←── security-web ←─
 - **구조 변경**(모듈 추가/삭제, 파일 이동, 패키지 재구성 등) 시 `docs/backend/README.md`의 구조도·테스트 현황·명령어 등을 반드시 확인하고 불일치하면 즉시 수정한다
 - 코드 변경 완료 후 **커밋은 자율 진행**, 푸시/PR은 사용자 명시 요청 시에만 진행
 
-> 모노레포 경로: `apps/user/`, `apps/admin/`, `libs/backend/*`
+> 모노레포 경로: `apps/user/`, `libs/backend/*`
 
 ### Serena 메모리 관리 규칙
 
@@ -82,8 +82,7 @@ common ←── global-core ←── domain-core ←── security-web ←─
 ```
 mono-repo-thymeleaf/
 ├── apps/
-│   ├── user/               # Spring Boot 4.0.3 + Thymeleaf (Java 25)
-│   └── admin/              # Spring Boot 4.0.3 + Thymeleaf (Java 25)
+│   └── user/               # Spring Boot 4.0.3 + Thymeleaf (Java 25)
 ├── libs/
 │   └── backend/
 │       ├── common/             # 순수 공유(entity, payload, utils, annotation, version)
@@ -94,9 +93,12 @@ mono-repo-thymeleaf/
 ├── gradle/wrapper/             # Gradle 9.3.1 Wrapper
 ├── build.gradle.kts            # Gradle 루트 (백엔드 공통)
 ├── settings.gradle.kts         # Gradle 서브프로젝트 include
-└── docs/backend/               # 백엔드 상세 가이드
-    ├── README.md               # 백엔드 프로젝트 개요
-    └── RULES.md                # 백엔드 개발 규칙 (본 문서)
+├── docs/
+│   ├── backend/                   # 백엔드 상세 가이드
+│   │   ├── README.md              # 백엔드 프로젝트 개요
+│   │   └── RULES.md              # 백엔드 개발 규칙 (본 문서)
+│   └── frontend/                  # 프론트엔드 상세 가이드
+│       └── UI_UX_RULES.md        # UI/UX 디자인 지침
 ```
 
 ## 기술 스택 하한 (CRITICAL)
@@ -114,15 +116,12 @@ mono-repo-thymeleaf/
 ```bash
 # 빌드
 ./gradlew :apps:user:build
-./gradlew :apps:admin:build
 
 # 실행
 ./gradlew :apps:user:bootRun
-./gradlew :apps:admin:bootRun
 
 # 테스트
 ./gradlew :apps:user:test
-./gradlew :apps:admin:test
 
 # 라이브러리 단위 테스트
 ./gradlew :libs:backend:common:test
@@ -205,7 +204,7 @@ mono-repo-thymeleaf/
 - URL 버전 세그먼트(`/v1`, `/api/v1`) 사용 금지
 - 예외: `/api/social/**` 콜백에 한해 URL 버저닝 허용
 - 기본값 `0.0`은 유효하지 않으며, 프론트는 `1.0` 명시 전송 필수
-- Swagger 문서에서도 `/api/health`, `/api/social/**` 제외 API는 `API-Version`을 `required=true`로 표기
+- API 테스트 시 `/api/health`, `/api/social/**` 제외 API는 `API-Version` 헤더 필수
 
 ### 마크다운 테이블 포맷팅 규칙
 
@@ -235,8 +234,8 @@ mono-repo-thymeleaf/
 
 ### 모노레포 Gradle 경로 규칙
 
-- Gradle 명령 시 서브프로젝트 경로 명시: `./gradlew :apps:user:build`, `./gradlew :apps:admin:build`
-- NX 경유: `pnpm nx build user`, `pnpm nx build admin`
+- Gradle 명령 시 서브프로젝트 경로 명시: `./gradlew :apps:user:build`
+- NX 경유: `pnpm nx build user`
 
 ### 설정파일 관련 의도사항
 
@@ -608,26 +607,23 @@ Response에 필드를 평면적으로 나열하지 않고, **관련 필드를 �
 #### 예시
 
 ```java
-// ❌ 필드 나열 — 회원 정보와 토큰이 혼합
-public record LoginTokenResponse(
-                Long id, String loginId, String role, String nickName,
-                String memberType, boolean active,
-                String accessToken, String refreshToken
+// ❌ 필드 나열 — 회원 정보와 주문 정보가 혼합
+public record OrderSummaryResponse(
+                Long id, String loginId, String nickName,
+                Long orderId, String orderStatus, int totalPrice
         ) {
 }
 
 // ✅ DTO 조합 — 관심사별 분리
-public record LoginTokenResponse(
-        LoginMemberResponse member,
-        String accessToken,
-        String refreshToken
+public record OrderSummaryResponse(
+        MemberSummaryResponse member,
+        OrderDetailResponse order
 ) {
-    public static LoginTokenResponse of(
-            final LoginMemberResponse member,
-            final String accessToken,
-            final String refreshToken
+    public static OrderSummaryResponse of(
+            final MemberSummaryResponse member,
+            final OrderDetailResponse order
     ) {
-        return new LoginTokenResponse(member, accessToken, refreshToken);
+        return new OrderSummaryResponse(member, order);
     }
 }
 ```
@@ -690,12 +686,12 @@ public record LoginRequest(
 Spring Data JPA 2025.1부터 파생 쿼리가 Criteria API 대신 **JPQL 문자열로 변환**되어 Hibernate의 **Query Structure Caching** 혜택을 받는다.
 동일 쿼리 재실행 시 파싱/컴파일을 건너뛰므로 처리량이 약 **25% 향상**된다 (인메모리 DB 기준 최대 3.5배).
 
-| 상황 | 선택 | 이유 |
-|---|---|---|
-| 조건 1~2개, 정적 조회 | 파생 쿼리 (`findByLoginId`) | Query Structure Caching 자동 적용, 코드 간결 |
-| JOIN/서브쿼리/복잡한 조건 | `@Query` JPQL | 파생 쿼리로 표현 불가하거나 가독성 저하 |
-| 동적 조건 조합 | QueryDSL | 런타임 조건 분기 필요 |
-| DTO Projection | `@Query` JPQL 또는 QueryDSL | 파생 쿼리는 엔티티 반환만 지원 |
+| 상황               | 선택                        | 이유                                   |
+|------------------|---------------------------|--------------------------------------|
+| 조건 1~2개, 정적 조회   | 파생 쿼리 (`findByLoginId`)   | Query Structure Caching 자동 적용, 코드 간결 |
+| JOIN/서브쿼리/복잡한 조건 | `@Query` JPQL             | 파생 쿼리로 표현 불가하거나 가독성 저하               |
+| 동적 조건 조합         | QueryDSL                  | 런타임 조건 분기 필요                         |
+| DTO Projection   | `@Query` JPQL 또는 QueryDSL | 파생 쿼리는 엔티티 반환만 지원                    |
 
 > 파생 쿼리로 충분한 경우 `@Query`로 재작성하지 않는다 — 캐싱 효율이 동일하면서 메서드 시그니처만으로 의도가 드러나는 파생 쿼리가 유지보수에 유리하다.
 
@@ -760,7 +756,7 @@ libs/backend/domain-core/src/main/java/com/example/domain/
 | 도메인          | 특수 구조                                                               | 사유                                                                                                   |
 |--------------|---------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
 | **account**  | `entity`/`repository` 없음                                            | `AccountMemberQueryPort`를 통해 member 도메인에 위임하는 **조회·조합 전용 도메인**                                       |
-| **security** | `api`/`entity`/`repository` 없음, `token/`·`port/`·`adapter/` 분리      | JWT·Guard·블랙리스트 등 **횡단 관심사 도메인**, 자체 영속 엔티티 없음. `token/`=토큰 서비스, `port/`=외부 도메인 계약, `adapter/`=포트 구현 |
+| **security** | `api`/`entity`/`repository` 없음, `port/`·`adapter/` 분리               | Guard·세션 인증 등 **횡단 관심사 도메인**, 자체 영속 엔티티 없음. `port/`=외부 도메인 계약, `adapter/`=포트 구현                       |
 | **social**   | 루트에 `service` 없음, `google/` 서브도메인 중심                                | 소셜 제공자별 서브도메인 구조(`social/google/service/`), 제공자 추가 시 동일 패턴 복제                                        |
 | **aws**      | `entity`/`repository`/`validator` 없음                                | S3 파일 업로드 등 **외부 인프라 연동 전용 도메인**                                                                     |
 | **log**      | 이벤트 리스너 + 관리자 조회 API                                                | 활동 로그는 이벤트 리스너로 저장, 관리자 로그 조회용 `api/` 존재                                                             |
@@ -822,8 +818,10 @@ libs/backend/domain-core/src/main/java/com/example/domain/
 1. **인터페이스**: `getSupportedXxx()` 메서드를 선언하여 구현체가 자신이 담당하는 타입을 반환하게 한다
 2. **추상 클래스**: 공통 로직(수정, 비활성화, 검증 등)을 Template Method로 구현한다. 차이점은 abstract/protected 메서드로 위임
 3. **구체 클래스**: `getSupportedXxx()`를 오버라이드하여 담당 타입을 반환하고, 차이점만 구현한다
-4. **팩토리**: `@PostConstruct`에서 `ApplicationContext.getBeansOfType()`으로 빈을 수집하고, `getSupportedXxx()` 반환값으로 `EnumMap`에 등록한다
-5. **프록시 대응**: `@Transactional` 등으로 JDK Dynamic Proxy가 적용될 수 있으므로 `instanceof` 분기 대신 반드시 인터페이스의 `getSupportedXxx()` 메서드를 사용한다
+4. **팩토리**: `@PostConstruct`에서 `ApplicationContext.getBeansOfType()`으로 빈을 수집하고, `getSupportedXxx()` 반환값으로 `EnumMap`에
+   등록한다
+5. **프록시 대응**: `@Transactional` 등으로 JDK Dynamic Proxy가 적용될 수 있으므로 `instanceof` 분기 대신 반드시 인터페이스의 `getSupportedXxx()` 메서드를
+   사용한다
 
 #### 새 타입/역할 추가 시 체크리스트
 
@@ -852,8 +850,7 @@ libs/backend/domain-core/src/main/java/com/example/domain/
 ```
 BaseAppException (추상)
 ├── GlobalException         — 공통/범용 비즈니스 예외 (ErrorCode 기반)
-├── SocialException         — 소셜 로그인 관련 예외
-└── JwtInterceptorException — JWT 인터셉터 인증 실패 예외
+└── SocialException         — 소셜 로그인 관련 예외
 ```
 
 - `ErrorCode` enum으로 예외 코드/메시지를 중앙 관리한다
@@ -928,8 +925,6 @@ BaseAppException (추상)
 | `LogType`               | log/enums                | 활동 로그 발행 Port 파라미터로 account·member·social 사용 |
 | `MemberActiveStatus`    | member/enums             | 회원 활성 상태 판별에 account·social 등 필수             |
 | `MemberType`            | member/enums             | 회원 유형 분기에 account·social 등 필수                |
-| `LoginTokenResponse`    | account/payload/response | 로그인 토큰 반환에 security·social 필수                |
-| `RefreshTokenResponse`  | account/payload/response | 토큰 갱신 반환에 security 필수                        |
 | `AccountAuthMemberView` | account/payload/dto      | 인증 주체 정보 전달에 security 필수                     |
 | `LoginMemberView`       | account/payload/dto      | 로그인 회원 뷰 전달에 security 필수                     |
 | `MemberUploadDirect`    | member/enums             | 이미지 업로드 경로 분기에 aws 도메인 Port 파라미터로 사용         |
@@ -1038,24 +1033,32 @@ domain-core/src/main/java/com/example/domain/
 - Health 제외 모든 API에 `version = ApiVersioning.V1` 등 버전 매핑
 - 상태 코드: POST→`201 Created`+Location, PUT/PATCH→`200`/`204`, DELETE→`204`
 
-### 컨트롤러 앱 격리 규칙 (CRITICAL)
+### 컨트롤러 네이밍 컨벤션
 
-두 앱(`user`, `admin`)은 동일한 `scanBasePackages = "com.example"`을 사용하므로,
-`domain-core`의 컨트롤러가 양쪽 앱에 모두 등록되는 것을 방지하기 위해 `@ConditionalOnProperty`로 격리한다.
+| 접미사 | 어노테이션 | 역할 |
+|---|---|---|
+| `*ApiController` | `@RestController` | REST API (JSON 응답) |
+| `*Controller` | `@Controller` | Thymeleaf 뷰 (화면 렌더링) |
+
+- REST API 전용 컨트롤러는 반드시 `*ApiController`로 명명한다
+- Thymeleaf 화면을 반환하는 컨트롤러는 `*Controller`로 명명한다
+- 하나의 컨트롤러에서 REST와 뷰를 혼합하지 않는다
+
+### 컨트롤러 앱 격리 규칙
+
+현재 `apps/user` 하나로 운영하지만, 모노레포 구조상 새 앱을 추가할 수 있다.
+멀티 앱 환경에서는 `@ConditionalOnProperty`로 컨트롤러를 격리한다.
 
 - 각 앱의 `Application` 클래스에서 `setDefaultProperties(Map.of("app.type", "..."))`로 앱 타입을 설정한다
     - `UserApiApplication`: `app.type = user`
-    - `AdminApiApplication`: `app.type = admin`
-- 앱 전용 컨트롤러에는 `@ConditionalOnProperty(name = "app.type", havingValue = "...")`를 반드시 추가한다
-- 양쪽 앱에서 공통으로 사용하는 컨트롤러는 `@ConditionalOnProperty`를 **추가하지 않는다**
+- 앱 전용 컨트롤러에는 `@ConditionalOnProperty(name = "app.type", havingValue = "...")`를 추가한다
 
-| 구분           | 대상 컨트롤러                                                                                                          | `@ConditionalOnProperty` |
-|--------------|------------------------------------------------------------------------------------------------------------------|--------------------------|
-| **admin 전용** | `AdminMemberApiController`, `AdminLogApiController`, `AdminS3ApiController`, `AdminAccountAuthDocsApiController` | `havingValue = "admin"`  |
-| **user 전용**  | `AccountSessionApiController`, `AccountAuthDocsApiController`, `AccountApiController`, `SocialApiController`     | `havingValue = "user"`   |
-| **공통**       | `RootApiController`, `AccountAuthApiController`, `HealthRestController`                                          | 추가 안 함                   |
+| 구분          | 대상 컨트롤러                                                                                                      | `@ConditionalOnProperty` |
+|-------------|----------------------------------------------------------------------------------------------------------------|--------------------------|
+| **user 전용** | `AccountSessionApiController`, `AccountAuthDocsApiController`, `AccountApiController`, `SocialApiController` | `havingValue = "user"`   |
+| **공통**      | `RootController`, `HealthRestController`                                                                       | 추가 안 함                   |
 
-- 새 컨트롤러 생성 시 반드시 **어느 앱에 귀속되는지** 판단하고, 전용이면 해당 `havingValue`를 추가한다
+- 새 앱 추가 시 전용 컨트롤러에 해당 `havingValue`를 추가하여 격리한다
 
 ### API 설계 원칙
 
@@ -1097,24 +1100,19 @@ domain-core/src/main/java/com/example/domain/
 - **모든 컨트롤러**에 `@PreAuthorize` 필수 — 권한 필요 API는 역할 검증, 공개 API는 `@PreAuthorize("permitAll()")`
 - ❌ `@PreAuthorize` 없는 컨트롤러 금지 — 누락인지 의도적 공개인지 구분할 수 없으므로
 - ❌ 서비스/컨트롤러 내부 if-else 권한 체크 금지
-- 인증 필요 API에 `@SecurityRequirement(name = "Bearer Authentication")` 필수
+- 인증 필요 API는 세션 기반 인증을 사용한다 (HttpSession + 쿠키)
 - SpEL에서 패키지 의존형 `T(...)` 참조 지양 → `@Component` 메서드 호출로 캡슐화
 - 인증/인가 체크는 **`MemberGuard`** `@Component`로 통합
 - `SecurityUtils`/`SecurityContextHolder` 직접 호출 금지
 
-### JWT/토큰 보안 규칙 (CRITICAL)
+### 세션 인증 보안 규칙 (CRITICAL)
 
-- 리프레시 토큰: **암호화 저장(AES-GCM 등)**, 복호화 검증 (해시 비교 금지)
-- 사용자당 리프레시 토큰 **1개만 유효**
-- 신규 발급 시 이전 토큰 즉시 폐기
-- 복호화 실패/재사용 감지 시 토큰 전면 무효화
-- 토큰 블랙리스트는 **해시 저장**
-- 암호화/서명 키 회전 시 기존 토큰 전부 폐기
+- 인증 방식: **HttpSession + 쿠키 기반** (Thymeleaf SSR 환경)
+- `SessionCreationPolicy.IF_REQUIRED` — 인증 성공 시 세션 자동 생성
+- CSRF 활성화 (Thymeleaf 폼 보호), API 경로(`/api/**`)는 CSRF 제외
+- 로그아웃 시 세션 무효화(`invalidateHttpSession`) + 인증 정보 삭제(`clearAuthentication`)
+- 소셜 OAuth 리프레시 토큰: **AES-GCM 암호화 저장** (`SocialTokenCrypto`)
 - API 보안 기본값: 인증 필요, 공개 API만 allowlist 명시
-- **토큰 폐기 시 액세스/리프레시 양쪽 모두 블랙리스트에 등록한다** — DB 무효화만으로는 TTL 내 재사용 차단 불가
-    - 로그아웃: 액세스 토큰 블랙리스트 + 저장된 리프레시 토큰 복호화 후 블랙리스트 + DB 폐기(tokenVersion 회전)
-    - 재발급: 기존 액세스 토큰 블랙리스트(Authorization 헤더에서 추출, nullable) + 기존 리프레시 토큰 블랙리스트 + 신규 토큰 발급
-    - 복호화 실패 시 `log.warn()` 후 블랙리스트 등록 생략 (키 회전 등으로 인한 정상 상황)
 
 ---
 
@@ -1127,24 +1125,22 @@ domain-core/src/main/java/com/example/domain/
 
 ### 컨트롤러 앱 격리
 
-- [ ] 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type", havingValue = "...")` 가 선언되어 있는가?
-- [ ] 공통 컨트롤러에 불필요한 `@ConditionalOnProperty`가 추가되지 않았는가?
+- [ ] 멀티 앱 환경 시 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type", havingValue = "...")` 가 선언되어 있는가?
 
 ### 인증/인가
 
 - [ ] `@PreAuthorize` 누락으로 공개되는 API 없는가?
 
-### 토큰/세션
+### 세션/인증
 
-- [ ] 리프레시 토큰 암호화 저장 / 복호화 검증되는가?
-- [ ] 재발급 시 이전 토큰(액세스+리프레시) **양쪽 모두** 블랙리스트 등록되는가?
-- [ ] 로그아웃 시 액세스 토큰 + 저장된 리프레시 토큰 **양쪽 모두** 블랙리스트 등록되는가?
+- [ ] 인증 필요 API에서 세션 미존재 시 적절한 응답(401 또는 리다이렉트)이 반환되는가?
+- [ ] 로그아웃 시 세션이 무효화되는가?
 
 ### API 응답/버전
 
 - [ ] `RestApiController`로 응답 생성하는가?
 - [ ] Health 제외 API에 `version = ApiVersioning.*` 명시되는가?
-- [ ] Swagger 문서에서 `/api/health`, `/api/social/**` 제외 API의 `API-Version`이 `required=true`인가?
+- [ ] `/api/health`, `/api/social/**` 제외 API에 `API-Version` 헤더가 필수로 처리되는가?
 
 ### 설정/운영 규칙
 
@@ -1238,15 +1234,15 @@ domain-core/src/main/java/com/example/domain/
 | CQRS          | 물리 분리, Command=`@Transactional`, Query=`readOnly=true`                                               |
 | 조회 최적화        | QueryDSL + fetch join, DTO Projection                                                                |
 | 로깅            | traceId 포함, 민감정보 금지                                                                                  |
-| API 버전        | `version = ApiVersioning.*`, 기본 `0.0`(무효), Swagger `API-Version required=true`                       |
+| API 버전        | `version = ApiVersioning.*`, 기본 `0.0`(무효), `API-Version` 헤더 필수                                      |
 | 컨트롤러          | `RestApiController` 응답, 서비스에서 `ResponseEntity` 금지                                                    |
-| 컨트롤러 격리       | 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type")` 필수                                            |
+| 컨트롤러 격리       | 멀티 앱 시 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type")` 추가                                     |
 | 설정 변경         | 설정 변경 사유/영향 범위를 먼저 설명하고 확인 후 진행                                                                      |
 | 테스트           | 순수 단위 테스트(JUnit5+Mockito+AssertJ), `@SpringBootTest` 금지                                              |
 | Enum 계약 동기화   | `Api* == Domain name()` 유지 + 빌드 시 TS 자동 생성(`generateContractEnumTs`) + `pnpm nx test domain-core` 통과 |
 | 외부 연동         | SDK → `@HttpExchange` → `@EnableHttpServices`                                                        |
 | 보안            | `@PreAuthorize`만, 누락=공개                                                                              |
-| 리프레시 토큰       | 암호화 저장 + 복호화 검증 + 재발급 시 폐기                                                                           |
+| 인증             | HttpSession + 쿠키 기반, CSRF 활성화 (API 제외)                                                              |
 | JPA           | `LAZY` 명시, `EAGER` 금지                                                                                |
 | 멀티라인          | `"\n"` 금지, Text Block 사용                                                                             |
 | InitBinder    | DTO 1:1 매칭, 공용 이름 금지, `supports()` 방어                                                                |

@@ -8,7 +8,6 @@ import com.example.domain.account.payload.dto.AccountWithdrawCommand;
 import com.example.domain.account.payload.dto.CurrentAccountDTO;
 import com.example.domain.account.support.AccountActivityPublishPort;
 import com.example.domain.account.support.AccountMemberCommandPort;
-import com.example.domain.account.support.AccountTokenRevocationPort;
 import com.example.domain.member.enums.MemberType;
 import com.example.global.exception.GlobalException;
 
@@ -37,9 +36,6 @@ class AccountCommandServiceTest {
     @Mock
     private AccountActivityPublishPort accountActivityPublishPort;
 
-    @Mock
-    private AccountTokenRevocationPort accountTokenRevocationPort;
-
     private CurrentAccountDTO createCurrentAccount() {
         return CurrentAccountDTO.of(1L, "testUser", "testNick", AccountRole.USER, MemberType.GENERAL);
     }
@@ -56,19 +52,17 @@ class AccountCommandServiceTest {
     }
 
     @Test
-    @DisplayName("logout은 활동 로그를 발행하고 토큰을 폐기한다")
-    void logout_publishes_activity_and_revokes_token() {
+    @DisplayName("logout은 활동 로그를 발행한다")
+    void logout_publishes_activity() {
         // Arrange
         final CurrentAccountDTO currentAccount = createCurrentAccount();
-        final String accessToken = "access-token-value";
-        final AccountLogoutCommand command = AccountLogoutCommand.of(currentAccount, accessToken);
+        final AccountLogoutCommand command = AccountLogoutCommand.of(currentAccount);
 
         // Act
         accountCommandService.logout(command);
 
         // Assert
         verify(accountActivityPublishPort).publishMemberActivity(any(AccountActivityPublishCommand.class));
-        verify(accountTokenRevocationPort).revokeOnLogout(eq(currentAccount.id()), eq(accessToken));
     }
 
     // ===== withdraw =====
@@ -83,19 +77,17 @@ class AccountCommandServiceTest {
     }
 
     @Test
-    @DisplayName("withdraw는 회원을 비활성화하고 토큰을 폐기한다")
-    void withdraw_deactivates_member_and_revokes_token() {
+    @DisplayName("withdraw는 회원을 비활성화한다")
+    void withdraw_deactivates_member() {
         // Arrange
         final CurrentAccountDTO currentAccount = createCurrentAccount();
-        final String accessToken = "access-token-value";
-        final AccountWithdrawCommand command = AccountWithdrawCommand.of(currentAccount, accessToken);
+        final AccountWithdrawCommand command = AccountWithdrawCommand.of(currentAccount);
 
         // Act
         accountCommandService.withdraw(command);
 
         // Assert
         verify(accountMemberCommandPort).deactivateMember(eq(currentAccount.role()), eq(currentAccount.id()));
-        verify(accountTokenRevocationPort).revokeOnLogout(eq(currentAccount.id()), eq(accessToken));
     }
 
     // ===== updateProfile =====

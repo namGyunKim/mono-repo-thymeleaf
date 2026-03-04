@@ -31,7 +31,5 @@ app:
   logging:
     exception:
       structured-enabled: true
-  jwt:
-    secret: ${JWT_SECRET}
-    access-token-ttl: P30D
-    refresh-token-ttl: P30D
+  security:
+    encryption-secret: ${ENCRYPTION_SECRET}

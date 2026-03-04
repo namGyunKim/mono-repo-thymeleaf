@@ -18,7 +18,7 @@ on:
   workflow_call:
     inputs:
       project:
-        description: '프로젝트명 (user, admin 등)'
+        description: '프로젝트명 (예: user)'
         required: true
         type: string
       gradle-module:

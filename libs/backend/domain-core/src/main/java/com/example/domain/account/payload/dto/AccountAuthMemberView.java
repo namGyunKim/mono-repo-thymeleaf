@@ -14,10 +14,9 @@ public record AccountAuthMemberView(
         String nickName,
         AccountRole role,
         MemberType memberType,
-        MemberActiveStatus active,
-        long tokenVersion
+        MemberActiveStatus active
 ) {
-    public static AccountAuthMemberView of(final Long id, final String loginId, final String password, final String nickName, final AccountRole role, final MemberType memberType, final MemberActiveStatus active, final long tokenVersion) {
+    public static AccountAuthMemberView of(final Long id, final String loginId, final String password, final String nickName, final AccountRole role, final MemberType memberType, final MemberActiveStatus active) {
         return new AccountAuthMemberView(
                 id,
                 loginId,
@@ -25,8 +24,7 @@ public record AccountAuthMemberView(
                 nickName,
                 role,
                 memberType,
-                active,
-                tokenVersion
+                active
         );
     }
 }

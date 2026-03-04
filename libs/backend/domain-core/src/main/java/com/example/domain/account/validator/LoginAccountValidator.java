@@ -3,7 +3,6 @@ package com.example.domain.account.validator;
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.account.payload.dto.AccountLoginCandidateView;
 import com.example.domain.account.payload.dto.AccountLoginValidationQuery;
-import com.example.domain.account.payload.request.AccountAdminLoginRequest;
 import com.example.domain.account.payload.request.AccountUserLoginRequest;
 import com.example.domain.account.service.query.AccountQueryService;
 import com.example.domain.member.enums.MemberActiveStatus;
@@ -23,7 +22,6 @@ import java.util.Optional;
  *
  * <p>
  * - 일반 사용자 로그인 요청: {@link AccountUserLoginRequest}
- * - 관리자 로그인 요청: {@link AccountAdminLoginRequest}
  * <p>
  * - 계정 존재/상태/권한 등 **읽기 전용 정책 검증**만 수행합니다.
  * 비밀번호 검증은 Security의 AuthenticationProvider에 위임하고,

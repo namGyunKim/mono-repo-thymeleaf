@@ -9,14 +9,22 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class SecurityAccountAuthQueryPortAdapter implements SecurityAccountAuthQueryPort {
 
     private final AccountQueryService accountQueryService;
+    private final AccountMemberQueryPort accountMemberQueryPort;
 
     @Override
     public AccountAuthMemberView findActiveMemberForAuthByLoginId(final AccountLoginIdQuery query) {
         return accountQueryService.findActiveMemberForAuthByLoginId(query);
+    }
+
+    @Override
+    public Optional<AccountAuthMemberView> findAuthMemberById(final Long memberId) {
+        return accountMemberQueryPort.findAuthMemberById(memberId);
     }
 }

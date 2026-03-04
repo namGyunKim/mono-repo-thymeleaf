@@ -54,13 +54,13 @@ class UserMemberCommandServiceTest {
     private MemberActivityPublishPort memberActivityPublishPort;
 
     @Test
-    @DisplayName("getSupportedRoles는 USER만 반환한다")
+    @DisplayName("getSupportedRoles는 모든 AccountRole을 반환한다")
     void getSupportedRoles_returns_user() {
         // Act
         final List<AccountRole> roles = userMemberCommandService.getSupportedRoles();
 
         // Assert
-        assertThat(roles).containsExactly(AccountRole.USER);
+        assertThat(roles).containsExactlyInAnyOrder(AccountRole.values());
     }
 
     @Test

@@ -25,8 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * UserMemberQueryService / AdminMemberQueryService에서 공통으로 사용되는
- * QueryDSL + Pageable 조회 로직을 한 곳으로 모은 추상 클래스입니다.
+ * 회원 QueryDSL + Pageable 조회 로직을 한 곳으로 모은 추상 클래스입니다.
  * <p>
  * - 역할(Role)별 서비스 분리는 유지하되, 중복 코드를 줄여 유지보수 비용을 낮춥니다.
  * - USER 조회 시에만 비활성화(INACTIVE) 계정 접근을 차단하는 훅을 제공합니다.

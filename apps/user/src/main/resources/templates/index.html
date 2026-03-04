@@ -1,11 +1,27 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User API</title>
+    <title>홈</title>
 </head>
 <body>
-    <h1 th:text="'User API - ' + ${message}">User API</h1>
+    <div layout:fragment="header">
+        <div class="container-xl">
+            <h2 class="page-title">홈</h2>
+        </div>
+    </div>
+
+    <div layout:fragment="content">
+        <div class="row row-deck row-cards">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title" th:text="${message}">User App</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

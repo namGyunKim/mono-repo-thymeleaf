@@ -69,8 +69,7 @@ public class SecurityMemberAccessPortAdapter implements SecurityMemberAccessPort
                 member.getNickName(),
                 member.getRole(),
                 member.getMemberType(),
-                member.getActive(),
-                member.getTokenVersion()
+                member.getActive()
         );
     }
 }

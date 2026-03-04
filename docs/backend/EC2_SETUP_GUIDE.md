@@ -57,9 +57,9 @@ GitHub Actions (backend-cd.yml)
 
 아래 파일들을 서버의 작업 디렉토리(예: `/tmp/setup/`)에 업로드한다.
 
-| # | 원본 경로 (레포지토리)                                          | 서버 최종 배치 경로                         | 설명               |
-|---|--------------------------------------------------------|-------------------------------------|------------------|
-| 1 | `docs/backend/deployment/deploy.sh`                    | `/opt/deploy/deploy.sh`             | 범용 배포 스크립트       |
+| # | 원본 경로 (레포지토리)                                  | 서버 최종 배치 경로                     | 설명               |
+|---|------------------------------------------------|---------------------------------|------------------|
+| 1 | `docs/backend/deployment/deploy.sh`            | `/opt/deploy/deploy.sh`         | 범용 배포 스크립트       |
 | 2 | `docs/backend/deployment/user/user.env`        | `/opt/deploy/projects/user.env` | 프로젝트 환경설정        |
 | 3 | `docs/backend/deployment/user/nginx/user.conf` | `/etc/nginx/conf.d/user.conf`   | Nginx 리버스 프록시 설정 |
 
@@ -163,18 +163,18 @@ docker run:              -e DB_URL=jdbc:postgresql://...
 application-prod.yml:    url: ${DB_URL}
 ```
 
-| 변수                               | 플레이스홀더                        | 대응하는 yml 속성                  |
-|----------------------------------|-------------------------------|------------------------------|
-| `DOCKER_ENV_DB_URL`              | `<RDS_HOST>`, `<DB_NAME>`     | `spring.datasource.url`      |
-| `DOCKER_ENV_DB_USERNAME`         | `<DB_USER>`                   | `spring.datasource.username` |
-| `DOCKER_ENV_DB_PASSWORD`         | `<DB_PASSWORD>`               | `spring.datasource.password` |
-| `DOCKER_ENV_JWT_SECRET`          | `<JWT_SECRET_KEY_MIN_256BIT>` | `app.jwt.secret`             |
-| `DOCKER_ENV_S3_BUCKET`           | `<S3_BUCKET_NAME>`            | `s3.bucket`                  |
-| `DOCKER_ENV_AWS_ACCESS_KEY`      | `<AWS_ACCESS_KEY_ID>`         | `aws.access-key`             |
-| `DOCKER_ENV_AWS_SECRET_KEY`      | `<AWS_SECRET_ACCESS_KEY>`     | `aws.secret-key`             |
-| `DOCKER_ENV_GOOGLE_CLIENT_ID`    | `<GOOGLE_CLIENT_ID>`          | `social.google.clientId`     |
-| `DOCKER_ENV_GOOGLE_SECRET_KEY`   | `<GOOGLE_SECRET_KEY>`         | `social.google.secretKey`    |
-| `DOCKER_ENV_GOOGLE_REDIRECT_URI` | `<API_DOMAIN>`                | `social.google.redirectUri`  |
+| 변수                               | 플레이스홀더                    | 대응하는 yml 속성                      |
+|----------------------------------|---------------------------|----------------------------------|
+| `DOCKER_ENV_DB_URL`              | `<RDS_HOST>`, `<DB_NAME>` | `spring.datasource.url`          |
+| `DOCKER_ENV_DB_USERNAME`         | `<DB_USER>`               | `spring.datasource.username`     |
+| `DOCKER_ENV_DB_PASSWORD`         | `<DB_PASSWORD>`           | `spring.datasource.password`     |
+| `DOCKER_ENV_ENCRYPTION_SECRET`   | `<ENCRYPTION_SECRET_KEY>` | `app.security.encryption-secret` |
+| `DOCKER_ENV_S3_BUCKET`           | `<S3_BUCKET_NAME>`        | `s3.bucket`                      |
+| `DOCKER_ENV_AWS_ACCESS_KEY`      | `<AWS_ACCESS_KEY_ID>`     | `aws.access-key`                 |
+| `DOCKER_ENV_AWS_SECRET_KEY`      | `<AWS_SECRET_ACCESS_KEY>` | `aws.secret-key`                 |
+| `DOCKER_ENV_GOOGLE_CLIENT_ID`    | `<GOOGLE_CLIENT_ID>`      | `social.google.clientId`         |
+| `DOCKER_ENV_GOOGLE_SECRET_KEY`   | `<GOOGLE_SECRET_KEY>`     | `social.google.secretKey`        |
+| `DOCKER_ENV_GOOGLE_REDIRECT_URI` | `<API_DOMAIN>`            | `social.google.redirectUri`      |
 
 ---
 
@@ -289,102 +289,22 @@ GitHub 레포 → Settings → Secrets and variables → Actions에서 확인한
 
 ### user 배포 (`deploy/user` 브랜치)
 
-| Secret 이름              | 값                               | 등록 여부 |
-|------------------------|---------------------------------|-------|
+| Secret 이름              | 값                           | 등록 여부 |
+|------------------------|-----------------------------|-------|
 | `USER_API_SERVER_HOST` | user EC2의 퍼블릭 IP 또는 프라이빗 IP | [ ]   |
-
-### admin 배포 (`deploy/admin` 브랜치)
-
-| Secret 이름               | 값                                | 등록 여부 |
-|-------------------------|----------------------------------|-------|
-| `ADMIN_API_SERVER_HOST` | admin EC2의 퍼블릭 IP 또는 프라이빗 IP | [ ]   |
 
 ### 스테이지 환경 (향후 `stage/*` 브랜치 사용 시)
 
-| Secret 이름                     | 값                     | 등록 여부 |
-|-------------------------------|-----------------------|-------|
-| `STAGE_USER_API_SERVER_HOST`  | 스테이지 user EC2 IP  | [ ]   |
-| `STAGE_ADMIN_API_SERVER_HOST` | 스테이지 admin EC2 IP | [ ]   |
+| Secret 이름                    | 값                | 등록 여부 |
+|------------------------------|------------------|-------|
+| `STAGE_USER_API_SERVER_HOST` | 스테이지 user EC2 IP | [ ]   |
+
+> 새 프로젝트 추가 시 `{PROJECT}_API_SERVER_HOST` Secret을 동일 패턴으로 등록한다.
 
 > `GITHUB_TOKEN`은 GitHub Actions가 자동 제공하므로 별도 등록이 불필요하다.
 > GHCR Docker 이미지 push/pull에 사용된다.
 
 ---
 
----
-
-# AMI에서 admin 전환 가이드
-
-user 세팅이 완료된 EC2 인스턴스에서 **AMI 이미지를 생성**한 뒤,
-새 EC2 인스턴스를 만들어 admin로 전환하는 방법이다.
-
-## 전제 조건
-
-- user가 세팅 완료된 EC2의 AMI 이미지에서 새 인스턴스를 생성했다
-- admin용 ALB 타겟 그룹이 별도로 생성되어 있다
-
-## 변경할 파일 (2개)
-
-### 1. `/opt/deploy/projects/admin.env` 생성
-
-기존 `user.env`를 복사하고 아래 값만 변경한다:
-
-```bash
-cp /opt/deploy/projects/user.env /opt/deploy/projects/admin.env
-```
-
-**변경 항목**:
-
-| 변수                 | user 값                              | admin 값                              |
-|--------------------|-----------------------------------------|------------------------------------------|
-| `PROJECT`          | `user`                              | `admin`                              |
-| `IMAGE`            | `ghcr.io/namgyunkim/mono-repo/user` | `ghcr.io/namgyunkim/mono-repo/admin` |
-| `TARGET_GROUP_ARN` | user 타겟 그룹 ARN                      | **admin 타겟 그룹 ARN**                  |
-
-> 나머지 값(DB, JWT, S3, 로깅 등)은 **동일한 인프라를 공유한다면 그대로** 사용한다.
-> 별도 DB나 설정이 필요하면 해당 `DOCKER_ENV_*` 값도 변경한다.
-
-### 2. `/etc/nginx/conf.d/` Nginx 설정 교체
-
-```bash
-# user 설정 제거
-sudo rm /etc/nginx/conf.d/user.conf
-
-# admin 설정 추가 (업로드한 파일 또는 user.conf 복사 후 수정)
-sudo cp /tmp/setup/admin.conf /etc/nginx/conf.d/admin.conf
-```
-
-`admin.conf`에서 변경할 항목:
-
-| 항목            | user          | admin           |
-|---------------|-------------------|---------------------|
-| `server_name` | `api.example.com` | `admin.example.com` |
-
-변경 후 적용:
-
-```bash
-sudo nginx -t && sudo systemctl reload nginx
-```
-
-## 변경하지 않아도 되는 것
-
-| 항목                       | 이유                 |
-|--------------------------|--------------------|
-| `/opt/deploy/deploy.sh`  | 프로젝트명을 인자로 받으므로 공용 |
-| Docker / Nginx / AWS CLI | AMI에 이미 설치됨        |
-| 디렉토리 구조                  | AMI에 이미 생성됨        |
-| GHCR 로그인                 | AMI에 인증 정보 포함      |
-| cron 설정                  | AMI에 이미 등록됨        |
-
-## 첫 배포
-
-```bash
-/opt/deploy/deploy.sh admin latest
-```
-
-## 검증
-
-```bash
-docker ps --filter "name=admin"
-curl -s http://localhost:8080/api/health
-```
+> 새 프로젝트를 추가할 때는 위 절차를 동일하게 반복한다.
+> AMI 이미지를 활용하면 기본 패키지/디렉토리/GHCR 로그인을 재사용할 수 있다.

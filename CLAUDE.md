@@ -5,8 +5,10 @@
 | 영역                | 지침 문서                                             |
 |-------------------|---------------------------------------------------|
 | 백엔드 (Spring Boot) | `docs/backend/README.md`, `docs/backend/RULES.md` |
+| 프론트엔드 (Thymeleaf) | `docs/frontend/UI_UX_RULES.md`                    |
 
 > **백엔드 코드를 생성/수정할 때는 반드시 `docs/backend/RULES.md`를 먼저 읽고 모든 규칙을 준수한다.**
+> **Thymeleaf 화면을 생성/수정할 때는 반드시 `docs/frontend/UI_UX_RULES.md`를 먼저 읽고 모든 규칙을 준수한다.**
 > **코드를 추가하거나 수정할 때는 해당 영역의 지침서를 위반하지 않는지 점검하며 작업한다. 위반 사항이 발견되면 즉시 수정한다.**
 
 ---

@@ -42,16 +42,19 @@ subprojects {
         "annotationProcessor"("jakarta.annotation:jakarta.annotation-api")
         "annotationProcessor"("jakarta.persistence:jakarta.persistence-api")
 
-        "implementation"("io.jsonwebtoken:jjwt-api:0.13.0")
-        "runtimeOnly"("io.jsonwebtoken:jjwt-impl:0.13.0")
-        "runtimeOnly"("io.jsonwebtoken:jjwt-gson:0.13.0")
 
         "compileOnly"("org.projectlombok:lombok")
         "annotationProcessor"("org.projectlombok:lombok")
         "annotationProcessor"("org.springframework.boot:spring-boot-configuration-processor")
         "developmentOnly"("org.springframework.boot:spring-boot-devtools")
 
-        "implementation"("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1")
+        // Thymeleaf Layout Dialect
+        "implementation"("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0")
+
+        // WebJars — Tabler (Bootstrap 5 기반 관리자 UI 키트) + HTMX
+        "implementation"("org.webjars.npm:tabler__core:1.3.2")
+        "implementation"("org.webjars.npm:htmx.org:2.0.6")
+
         "implementation"("com.github.gavlyukovskiy:p6spy-spring-boot-starter:2.0.0") {
             exclude(group = "org.springframework.boot", module = "spring-boot-dependencies")
         }

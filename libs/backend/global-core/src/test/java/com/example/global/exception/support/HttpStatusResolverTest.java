@@ -41,11 +41,6 @@ class HttpStatusResolverTest {
     }
 
     @Test
-    void resolve_REFRESH_TOKEN_INVALID_returns_UNAUTHORIZED() {
-        assertThat(resolver.resolve(ErrorCode.REFRESH_TOKEN_INVALID)).isEqualTo(HttpStatus.UNAUTHORIZED);
-    }
-
-    @Test
     void resolve_METHOD_NOT_SUPPORTED_returns_METHOD_NOT_ALLOWED() {
         assertThat(resolver.resolve(ErrorCode.METHOD_NOT_SUPPORTED)).isEqualTo(HttpStatus.METHOD_NOT_ALLOWED);
     }

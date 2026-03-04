@@ -3,7 +3,7 @@ package com.example.domain.social.google.support;
 import com.example.domain.social.entity.SocialAccount;
 import com.example.domain.social.google.client.GoogleOauthClient;
 import com.example.global.exception.enums.ErrorCode;
-import com.example.global.security.RefreshTokenCrypto;
+import com.example.global.security.SocialTokenCrypto;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Optional;
 public class GoogleOauthTokenRevoker {
 
     private final GoogleOauthClient googleOauthClient;
-    private final RefreshTokenCrypto refreshTokenCrypto;
+    private final SocialTokenCrypto socialTokenCrypto;
 
     public void revoke(final SocialAccount socialAccount, final Long memberId, final String loginId) {
         final Optional<String> decryptedToken = resolveDecryptedRefreshToken(socialAccount, memberId, loginId);
@@ -60,7 +60,7 @@ public class GoogleOauthTokenRevoker {
             return Optional.empty();
         }
 
-        final String refreshToken = refreshTokenCrypto.decrypt(refreshTokenEncrypted);
+        final String refreshToken = socialTokenCrypto.decrypt(refreshTokenEncrypted);
         if (!StringUtils.hasText(refreshToken)) {
             log.warn(
                     "구글 토큰 revoke 스킵: refresh_token 복호화 실패 memberId={}, loginId={}",

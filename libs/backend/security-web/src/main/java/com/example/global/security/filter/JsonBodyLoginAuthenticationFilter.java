@@ -26,8 +26,7 @@ import java.util.List;
  *
  * <p>
  * - 파라미터 기반 로그인과 별개로, JSON 바디로 로그인할 수 있는 엔드포인트를 제공합니다.
- * - 요청 DTO(일반: {@link com.example.domain.account.payload.request.AccountUserLoginRequest},
- * 관리자: {@link com.example.domain.account.payload.request.AccountAdminLoginRequest})의
+ * - 요청 DTO({@link com.example.domain.account.payload.request.AccountUserLoginRequest})의
  * Bean Validation 및 {@link com.example.domain.account.validator.LoginAccountValidator}를 적용합니다.
  * - 인증 성공/실패 처리는 기존 CustomAuthSuccessHandler/CustomAuthFailureHandler에 위임합니다.
  * </p>

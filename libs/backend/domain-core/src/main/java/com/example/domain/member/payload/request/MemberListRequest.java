@@ -10,7 +10,6 @@ import com.example.domain.member.enums.MemberFilterType;
 import com.example.domain.member.enums.MemberOrderType;
 import com.example.global.utils.PaginationUtils;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -18,25 +17,18 @@ import java.util.Objects;
 
 public record MemberListRequest(
         @NotNull(message = "권한은 필수입니다.")
-        @Schema(description = "권한", example = "USER")
         ApiAccountRole role,
 
-        @Schema(description = "페이지 번호", example = "1")
         Integer page,
 
-        @Schema(description = "페이지 사이즈", example = "10")
         Integer size,
 
-        @Schema(description = "정렬 기준")
         ApiMemberOrderType order,
 
-        @Schema(description = "검색어", example = "검색어")
         String searchWord,
 
-        @Schema(description = "필터 기준")
         ApiMemberFilterType filter,
 
-        @Schema(description = "활성화 여부")
         ApiMemberActiveStatus active
 ) {
 

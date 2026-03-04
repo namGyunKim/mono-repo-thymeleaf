@@ -18,6 +18,6 @@ public class UserMemberQueryService extends AbstractQueryDslMemberQueryService {
 
     @Override
     public List<AccountRole> getSupportedRoles() {
-        return List.of(AccountRole.USER);
+        return List.of(AccountRole.values());
     }
 }

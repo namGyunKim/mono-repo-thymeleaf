@@ -65,8 +65,6 @@ public abstract class AbstractMemberCommandService implements MemberCommandServi
         }
 
         member.updatePassword(context.passwordEncoder().encode(command.password()));
-        member.rotateTokenVersion();
-        member.invalidateRefreshTokenEncrypted();
 
         context.memberActivityPublishPort().publishMemberActivity(
                 loginId,
@@ -147,8 +145,6 @@ public abstract class AbstractMemberCommandService implements MemberCommandServi
     protected void applyRoleChange(final Member member, final AccountRole newRole, final MemberActivityPublishPort memberActivityPublishPort) {
         final AccountRole oldRole = member.getRole();
         member.changeRole(newRole);
-        member.rotateTokenVersion();
-        member.invalidateRefreshTokenEncrypted();
 
         memberActivityPublishPort.publishMemberActivity(
                 member.getLoginId(),

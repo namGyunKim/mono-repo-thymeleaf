@@ -5,7 +5,6 @@ import com.example.domain.log.event.ExceptionEvent;
 import com.example.global.exception.advice.support.ExceptionAdviceSupport;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-import com.example.global.exception.JwtInterceptorException;
 import com.example.global.exception.SocialException;
 import com.example.global.payload.response.ApiErrorResponse;
 
@@ -121,33 +120,6 @@ class CustomExceptionAdviceTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(result.getBody()).isNotNull();
         assertThat(result.getBody().code()).isEqualTo(ErrorCode.SOCIAL_TOKEN_ERROR.getCode());
-    }
-
-    // --- handleJwtException ---
-
-    @Test
-    void handleJwtException_jwt_interceptor_exception_always_returns_unauthorized() {
-        // given
-        final JwtInterceptorException exception = new JwtInterceptorException(ErrorCode.AUTHENTICATION_REQUIRED);
-        final MockHttpServletRequest request = new MockHttpServletRequest();
-        final CurrentAccountDTO account = CurrentAccountDTO.ofGuest();
-
-        final ResponseEntity<ApiErrorResponse> expectedResponse =
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(ApiErrorResponse.from(ErrorCode.AUTHENTICATION_REQUIRED));
-
-        stubWithFilterLogged(expectedResponse);
-        given(support.resolveAccount(account)).willReturn(account);
-        given(support.toResponse(ErrorCode.AUTHENTICATION_REQUIRED, HttpStatus.UNAUTHORIZED))
-                .willReturn(expectedResponse);
-
-        // when
-        final ResponseEntity<ApiErrorResponse> result = advice.handleJwtException(exception, account, request);
-
-        // then
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(result.getBody()).isNotNull();
-        assertThat(result.getBody().code()).isEqualTo(ErrorCode.AUTHENTICATION_REQUIRED.getCode());
     }
 
     @Test

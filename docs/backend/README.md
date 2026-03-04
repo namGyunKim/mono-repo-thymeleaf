@@ -1,6 +1,6 @@
 # 백엔드 개발 가이드
 
-이 문서는 모노레포의 백엔드 영역(`apps/*-api`, `libs/backend/*`)에 대한 **현재 구조/실행 방법/운영 기준**을 설명합니다.
+이 문서는 모노레포의 백엔드 영역(`apps/*`, `libs/backend/*`)에 대한 **현재 구조/실행 방법/운영 기준**을 설명합니다.
 
 코딩 규칙(아키텍처/컨벤션/보안)은 [RULES.md](./RULES.md)를 기준으로 합니다.
 
@@ -10,7 +10,7 @@
 
 - 애플리케이션
     - `apps/user` (로컬 `8081`, 프로덕션 `8080`)
-    - `apps/admin` (로컬 `8082`, 프로덕션 `8080`)
+    - 모노레포 구조로 `apps/` 아래에 새 앱을 추가하여 멀티 프로젝트로 확장 가능
 - 공통 라이브러리
     - `libs/backend/common` — 순수 공유(entity, payload, utils, annotation, version)
     - `libs/backend/global-core` — 인프라 공통(security, config, exception, event, logging)
@@ -26,7 +26,7 @@
 mono-repo-thymeleaf/
 ├── apps/
 │   ├── user/                 # 사용자 API + Thymeleaf
-│   └── admin/                # 관리자 API + Thymeleaf
+│   └── (새 앱 추가 가능)       # apps/ 아래에 새 모듈을 추가하여 확장
 ├── libs/
 │   └── backend/
 │       ├── common/               # 순수 공유(entity, payload, utils, annotation, version)
@@ -36,12 +36,13 @@ mono-repo-thymeleaf/
 │       └── web-support/          # MVC/AOP/예외/API-Version 필터 등
 ├── build.gradle.kts
 ├── settings.gradle.kts
-└── docs/backend/
+├── docs/backend/
+└── docs/frontend/
 ```
 
 의존 방향(개념):
 
-`common ←(api)── global-core ← domain-core ← security-web ← web-support ← apps/*-api`
+`common ←(api)── global-core ← domain-core ← security-web ← web-support ← apps/*`
 
 ---
 
@@ -52,7 +53,9 @@ mono-repo-thymeleaf/
 - Spring Framework `7.x`
 - QueryDSL `7.1` (`io.github.openfeign.querydsl`)
 - PostgreSQL
-- Thymeleaf (SSR 뷰)
+- Thymeleaf (SSR 뷰) + Thymeleaf Layout Dialect `3.4.0`
+- Tabler `1.3.2` (Bootstrap 5 기반 UI 키트, WebJars)
+- HTMX `2.0.6` (서버 인터랙션, WebJars)
 - Gradle Wrapper `9.3.1`
 
 ---
@@ -61,10 +64,8 @@ mono-repo-thymeleaf/
 
 ```bash
 ./gradlew :apps:user:bootRun
-./gradlew :apps:admin:bootRun
 
 ./gradlew :apps:user:build
-./gradlew :apps:admin:build
 
 # 개별 라이브러리 컴파일 검증
 ./gradlew :libs:backend:common:compileJava
@@ -87,19 +88,10 @@ mono-repo-thymeleaf/
 
 ### user (로컬 `localhost:8081`, 프로덕션 `localhost:8080`)
 
-- `GET /` : 서버 안내
+- `GET /` : 인덱스 페이지 (Thymeleaf)
 - `GET /api/health` : 헬스체크
 - `POST /api/sessions` : 사용자 로그인
-- `POST /api/tokens` : 토큰 갱신
-- `GET /swagger-ui.html` : Swagger UI (`local` 프로파일에서만 활성화)
-
-### admin (로컬 `localhost:8082`, 프로덕션 `localhost:8080`)
-
-- `GET /` : 서버 안내
-- `GET /api/health` : 헬스체크
-- `POST /api/admin/sessions` : 관리자 로그인
-- `POST /api/tokens` : 토큰 갱신
-- `GET /swagger-ui.html` : Swagger UI (`local` 프로파일에서만 활성화)
+- `DELETE /api/sessions` : 사용자 로그아웃
 
 ---
 
@@ -147,22 +139,22 @@ mono-repo-thymeleaf/
 
 ## 8. 보안 아키텍처
 
-### JWT 인증 흐름
+### 세션 기반 인증
 
-- 로그인 성공 시 Access Token(헤더) + Refresh Token(DB 저장) 발급
-- Access Token은 `Authorization: Bearer` 헤더로 전달
-- Refresh Token은 SHA-256 해시 후 DB에 저장, 원본은 응답 헤더로 전달
+- 인증 방식: **HttpSession + 쿠키 기반** (Thymeleaf SSR 환경)
+- 로그인 성공 시 Spring Security가 SecurityContext를 세션에 자동 저장
+- 인증 상태는 JSESSIONID 쿠키로 유지
+- CSRF 보호 활성화 (Thymeleaf 폼), API 경로(`/api/**`)는 CSRF 제외
+- 핸들러 듀얼 패턴: API 요청 → JSON 응답, 페이지 요청 → 리다이렉트
 
-### 토큰 블랙리스트
+### 로그아웃
 
-- 로그아웃 시 `JwtLogoutHandler` → `JwtTokenRevocationCommandService`가 동작
-    - Access Token을 `BlacklistedToken` 엔티티로 블랙리스트에 등록 (SHA-256 해시 저장)
-    - 해당 회원의 Refresh Token을 DB에서 삭제
-- 매일 03:00 `BlacklistedTokenCleanupCommandService`가 만료된 블랙리스트 토큰을 정리
+- 세션 무효화(`invalidateHttpSession`) + 인증 정보 삭제(`clearAuthentication`)
+- API 로그아웃 → 204 No Content, 페이지 로그아웃 → `/login?logout` 리다이렉트
 
 ### 보안 감사 로깅
 
-- 로그인 성공/실패, 로그아웃, 토큰 폐기 등 보안 상태 변경은 반드시 INFO 레벨로 로깅한다
+- 로그인 성공/실패, 로그아웃 등 보안 상태 변경은 반드시 INFO 레벨로 로깅한다
 
 ---
 
@@ -191,8 +183,7 @@ libs/backend/common/src/test/java/com/example/global/
 └── aop/support/              # AOP 지원 테스트 (2개)
 
 libs/backend/global-core/src/test/java/com/example/global/
-├── security/                 # 보안 테스트 (5개)
-│   └── blacklist/            # 블랙리스트 테스트 (2개)
+├── security/                 # 보안 테스트 (2개)
 └── exception/support/        # 예외 처리 지원 테스트 (5개)
 
 libs/backend/security-web/src/test/java/com/example/global/
@@ -367,7 +358,7 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 | 대상               | 확인 방법                                                               |
 |------------------|---------------------------------------------------------------------|
 | 백엔드 (Java)       | `domain-core/.../contract/enums/Api*.java` 소스 코드                    |
-| Swagger UI       | 앱 실행 후 `http://localhost:{port}/swagger-ui.html` — DTO 스키마 내 허용값 표시 |
+| API 테스트          | Postman/httpie 등 클라이언트로 직접 호출                                       |
 | 프론트 (TypeScript) | `import { ApiAccountRole } from '@mono-repo/types'`                 |
 
 예외 정책:
@@ -380,8 +371,8 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 ### 대상 테이블
 
-| 테이블 | 파티션 키 | 전략 | DDL |
-|--------|-----------|------|-----|
+| 테이블          | 파티션 키        | 전략       | DDL                                                                        |
+|--------------|--------------|----------|----------------------------------------------------------------------------|
 | `member_log` | `created_at` | 월별 RANGE | [`docs/db/member_log_partitioning.sql`](../db/member_log_partitioning.sql) |
 
 ### 왜 파티셔닝하는가

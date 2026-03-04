@@ -1,25 +1,18 @@
 package com.example.domain.member.payload.dto;
 
-import com.example.global.security.payload.SecurityLogoutCommand;
-
 /**
  * 회원 비활성화(탈퇴) 요청 DTO
  */
 public record MemberDeactivateCommand(
         Long memberId,
-        Long currentAccountId,
-        SecurityLogoutCommand logoutCommand
+        Long currentAccountId
 ) {
 
     public static MemberDeactivateCommand of(final Long memberId) {
-        return of(memberId, null, null);
+        return of(memberId, null);
     }
 
     public static MemberDeactivateCommand of(final Long memberId, final Long currentAccountId) {
-        return of(memberId, currentAccountId, null);
-    }
-
-    public static MemberDeactivateCommand of(final Long memberId, final Long currentAccountId, final SecurityLogoutCommand logoutCommand) {
-        return new MemberDeactivateCommand(memberId, currentAccountId, logoutCommand);
+        return new MemberDeactivateCommand(memberId, currentAccountId);
     }
 }

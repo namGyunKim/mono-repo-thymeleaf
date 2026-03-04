@@ -21,11 +21,10 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 |-----------------------------|--------------------------------------------------|
 | `libs/backend/common`       | 순수 공유 (entity, payload, utils, annotation)       |
 | `libs/backend/global-core`  | 인프라 (security config, exception, event, logging) |
-| `libs/backend/domain-core`  | 도메인 로직 + security (JWT, token, port)             |
+| `libs/backend/domain-core`  | 도메인 로직 + security (세션 인증, port)                  |
 | `libs/backend/security-web` | 보안 웹 레이어                                         |
 | `libs/backend/web-support`  | 웹 공통 지원 레이어                                      |
 | `apps/user`             | 사용자 API 앱 (BootJar)                              |
-| `apps/admin`            | 관리자 API 앱 (BootJar)                              |
 
 ## 공통 의존성 (루트 subprojects 블록)
 
@@ -55,14 +54,6 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 | `jakarta.persistence:jakarta.persistence-api`        | BOM 관리      | annotationProcessor | Jakarta Persistence API     |
 | `com.github.gavlyukovskiy:p6spy-spring-boot-starter` | 2.0.0       | implementation      | SQL 쿼리 로깅 (P6Spy)           |
 
-### 보안 (JWT)
-
-| 의존성                         | 버전     | 스코프            | 설명            |
-|-----------------------------|--------|----------------|---------------|
-| `io.jsonwebtoken:jjwt-api`  | 0.13.0 | implementation | JWT 생성/파싱 API |
-| `io.jsonwebtoken:jjwt-impl` | 0.13.0 | runtimeOnly    | JWT 구현체       |
-| `io.jsonwebtoken:jjwt-gson` | 0.13.0 | runtimeOnly    | JWT Gson 직렬화  |
-
 ### 유틸리티
 
 | 의존성                                                 | 버전     | 스코프                               | 설명                     |
@@ -87,7 +78,6 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 | `security-web` | `implementation(global-core, domain-core)`                                          |
 | `web-support`  | `implementation(global-core, domain-core, security-web)`                            |
 | `user`     | `implementation(global-core, domain-core, security-web, web-support)` — BootJar 활성화 |
-| `admin`    | `implementation(global-core, domain-core, security-web, web-support)` — BootJar 활성화 |
 
 ## 참고사항
 
