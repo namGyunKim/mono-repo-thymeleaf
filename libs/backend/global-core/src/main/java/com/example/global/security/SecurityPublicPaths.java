@@ -19,7 +19,8 @@ public final class SecurityPublicPaths {
             "/favicon.svg",
             "/css/**",
             "/js/**",
-            "/images/**"
+            "/images/**",
+            "/webjars/**"
     };
 
     public static final String[] PUBLIC_API_URLS = {

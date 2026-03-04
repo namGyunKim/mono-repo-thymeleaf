@@ -3,6 +3,7 @@ package com.example.global.api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RootController {
 
     @GetMapping("/")
-    public String index() {
+    public String index(final Model model) {
+        model.addAttribute("message", "서버가 정상 작동 중입니다.");
         return "index";
     }
 

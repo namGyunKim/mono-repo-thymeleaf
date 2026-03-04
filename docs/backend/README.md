@@ -36,7 +36,8 @@ mono-repo-thymeleaf/
 │       └── web-support/          # MVC/AOP/예외/API-Version 필터 등
 ├── build.gradle.kts
 ├── settings.gradle.kts
-└── docs/backend/
+├── docs/backend/
+└── docs/frontend/
 ```
 
 의존 방향(개념):
@@ -52,7 +53,9 @@ mono-repo-thymeleaf/
 - Spring Framework `7.x`
 - QueryDSL `7.1` (`io.github.openfeign.querydsl`)
 - PostgreSQL
-- Thymeleaf (SSR 뷰)
+- Thymeleaf (SSR 뷰) + Thymeleaf Layout Dialect `3.4.0`
+- Tabler `1.3.2` (Bootstrap 5 기반 UI 키트, WebJars)
+- HTMX `2.0.6` (서버 인터랙션, WebJars)
 - Gradle Wrapper `9.3.1`
 
 ---
