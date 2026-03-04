@@ -205,7 +205,7 @@ mono-repo-thymeleaf/
 - URL 버전 세그먼트(`/v1`, `/api/v1`) 사용 금지
 - 예외: `/api/social/**` 콜백에 한해 URL 버저닝 허용
 - 기본값 `0.0`은 유효하지 않으며, 프론트는 `1.0` 명시 전송 필수
-- Swagger 문서에서도 `/api/health`, `/api/social/**` 제외 API는 `API-Version`을 `required=true`로 표기
+- API 테스트 시 `/api/health`, `/api/social/**` 제외 API는 `API-Version` 헤더 필수
 
 ### 마크다운 테이블 포맷팅 규칙
 
@@ -1038,6 +1038,17 @@ domain-core/src/main/java/com/example/domain/
 - Health 제외 모든 API에 `version = ApiVersioning.V1` 등 버전 매핑
 - 상태 코드: POST→`201 Created`+Location, PUT/PATCH→`200`/`204`, DELETE→`204`
 
+### 컨트롤러 네이밍 컨벤션
+
+| 접미사 | 어노테이션 | 역할 |
+|---|---|---|
+| `*ApiController` | `@RestController` | REST API (JSON 응답) |
+| `*Controller` | `@Controller` | Thymeleaf 뷰 (화면 렌더링) |
+
+- REST API 전용 컨트롤러는 반드시 `*ApiController`로 명명한다
+- Thymeleaf 화면을 반환하는 컨트롤러는 `*Controller`로 명명한다
+- 하나의 컨트롤러에서 REST와 뷰를 혼합하지 않는다
+
 ### 컨트롤러 앱 격리 규칙 (CRITICAL)
 
 두 앱(`user`, `admin`)은 동일한 `scanBasePackages = "com.example"`을 사용하므로,
@@ -1053,7 +1064,7 @@ domain-core/src/main/java/com/example/domain/
 |--------------|------------------------------------------------------------------------------------------------------------------|--------------------------|
 | **admin 전용** | `AdminMemberApiController`, `AdminLogApiController`, `AdminS3ApiController`, `AdminAccountAuthDocsApiController` | `havingValue = "admin"`  |
 | **user 전용**  | `AccountSessionApiController`, `AccountAuthDocsApiController`, `AccountApiController`, `SocialApiController`     | `havingValue = "user"`   |
-| **공통**       | `RootApiController`, `AccountAuthApiController`, `HealthRestController`                                          | 추가 안 함                   |
+| **공통**       | `RootController`, `AccountAuthApiController`, `HealthRestController`                                             | 추가 안 함                   |
 
 - 새 컨트롤러 생성 시 반드시 **어느 앱에 귀속되는지** 판단하고, 전용이면 해당 `havingValue`를 추가한다
 
@@ -1144,7 +1155,7 @@ domain-core/src/main/java/com/example/domain/
 
 - [ ] `RestApiController`로 응답 생성하는가?
 - [ ] Health 제외 API에 `version = ApiVersioning.*` 명시되는가?
-- [ ] Swagger 문서에서 `/api/health`, `/api/social/**` 제외 API의 `API-Version`이 `required=true`인가?
+- [ ] `/api/health`, `/api/social/**` 제외 API에 `API-Version` 헤더가 필수로 처리되는가?
 
 ### 설정/운영 규칙
 
@@ -1238,7 +1249,7 @@ domain-core/src/main/java/com/example/domain/
 | CQRS          | 물리 분리, Command=`@Transactional`, Query=`readOnly=true`                                               |
 | 조회 최적화        | QueryDSL + fetch join, DTO Projection                                                                |
 | 로깅            | traceId 포함, 민감정보 금지                                                                                  |
-| API 버전        | `version = ApiVersioning.*`, 기본 `0.0`(무효), Swagger `API-Version required=true`                       |
+| API 버전        | `version = ApiVersioning.*`, 기본 `0.0`(무효), `API-Version` 헤더 필수                                      |
 | 컨트롤러          | `RestApiController` 응답, 서비스에서 `ResponseEntity` 금지                                                    |
 | 컨트롤러 격리       | 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type")` 필수                                            |
 | 설정 변경         | 설정 변경 사유/영향 범위를 먼저 설명하고 확인 후 진행                                                                      |

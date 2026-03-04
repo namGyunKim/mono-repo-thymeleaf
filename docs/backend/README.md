@@ -9,8 +9,8 @@
 ## 1. 백엔드 범위
 
 - 애플리케이션
-    - `apps/user` (로컬 `8081`, 프로덕션 `8080`)
-    - `apps/admin` (로컬 `8082`, 프로덕션 `8080`)
+    - `apps/user` (로컬 `8081`, 프로덕션 `8080`) — 주력 개발 대상
+    - `apps/admin` (로컬 `8082`, 프로덕션 `8080`) — 모노레포 멀티 프로젝트 구성 예시
 - 공통 라이브러리
     - `libs/backend/common` — 순수 공유(entity, payload, utils, annotation, version)
     - `libs/backend/global-core` — 인프라 공통(security, config, exception, event, logging)
@@ -87,19 +87,17 @@ mono-repo-thymeleaf/
 
 ### user (로컬 `localhost:8081`, 프로덕션 `localhost:8080`)
 
-- `GET /` : 서버 안내
+- `GET /` : 인덱스 페이지 (Thymeleaf)
 - `GET /api/health` : 헬스체크
 - `POST /api/sessions` : 사용자 로그인
 - `POST /api/tokens` : 토큰 갱신
-- `GET /swagger-ui.html` : Swagger UI (`local` 프로파일에서만 활성화)
 
 ### admin (로컬 `localhost:8082`, 프로덕션 `localhost:8080`)
 
-- `GET /` : 서버 안내
+- `GET /` : 인덱스 페이지 (Thymeleaf)
 - `GET /api/health` : 헬스체크
 - `POST /api/admin/sessions` : 관리자 로그인
 - `POST /api/tokens` : 토큰 갱신
-- `GET /swagger-ui.html` : Swagger UI (`local` 프로파일에서만 활성화)
 
 ---
 
@@ -367,7 +365,7 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 | 대상               | 확인 방법                                                               |
 |------------------|---------------------------------------------------------------------|
 | 백엔드 (Java)       | `domain-core/.../contract/enums/Api*.java` 소스 코드                    |
-| Swagger UI       | 앱 실행 후 `http://localhost:{port}/swagger-ui.html` — DTO 스키마 내 허용값 표시 |
+| API 테스트          | Postman/httpie 등 클라이언트로 직접 호출                                       |
 | 프론트 (TypeScript) | `import { ApiAccountRole } from '@mono-repo/types'`                 |
 
 예외 정책:
