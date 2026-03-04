@@ -14,24 +14,9 @@ class LoginSuccessMessageResolverTest {
     }
 
     @Test
-    void resolve_admin_sessions_returns_admin_message() {
-        final MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI("/api/admin/sessions");
-        assertThat(resolver.resolve(request)).isEqualTo("관리자 로그인 성공");
-    }
-
-    @Test
-    void resolve_sessions_returns_general_message() {
+    void resolve_any_request_returns_default() {
         final MockHttpServletRequest request = new MockHttpServletRequest();
         request.setRequestURI("/api/sessions");
-        assertThat(resolver.resolve(request)).isEqualTo("일반 로그인 성공");
-    }
-
-    @Test
-    void resolve_with_context_path_strips_before_check() {
-        final MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setContextPath("/myapp");
-        request.setRequestURI("/myapp/api/admin/sessions");
-        assertThat(resolver.resolve(request)).isEqualTo("관리자 로그인 성공");
+        assertThat(resolver.resolve(request)).isEqualTo("로그인 성공");
     }
 }

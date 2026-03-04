@@ -5,7 +5,7 @@ package com.example.domain.member.support;
  *
  * <p>방향: member → security
  *
- * <p>AdminMemberCommandService가 MemberGuard에
+ * <p>MemberCommandService가 MemberGuard에
  * 직접 의존하지 않도록 추상화한다.
  */
 public interface MemberPermissionCheckPort {

@@ -47,7 +47,6 @@ public class SecurityConfig {
      * JSON 로그인 API 경로
      */
     private static final String AUTH_LOGIN_JSON_API_PATH = "/api/sessions";
-    private static final String ADMIN_LOGIN_JSON_API_PATH = "/api/admin/sessions";
 
     private static boolean isJsonLoginApiRequest(final HttpServletRequest request) {
         if (request == null) {
@@ -55,7 +54,7 @@ public class SecurityConfig {
         }
 
         final String path = RequestUriUtils.getPathWithinApplication(request);
-        return path.equals(AUTH_LOGIN_JSON_API_PATH) || path.equals(ADMIN_LOGIN_JSON_API_PATH);
+        return path.equals(AUTH_LOGIN_JSON_API_PATH);
     }
 
     private static boolean isLogoutRequest(final HttpServletRequest request) {

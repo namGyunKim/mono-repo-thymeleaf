@@ -25,13 +25,11 @@ public final class SecurityPublicPaths {
     public static final String[] PUBLIC_API_URLS = {
             "/api/health",
             "/api/sessions",
-            "/api/admin/sessions",
             "/api/social/**"
     };
 
     private static final String HEALTH_CHECK_PATH = "/api/health";
-    private static final String USER_LOGIN_PATH = "/api/sessions";
-    private static final String ADMIN_LOGIN_PATH = "/api/admin/sessions";
+    private static final String LOGIN_PATH = "/api/sessions";
     private static final String SOCIAL_API_BASE_PATH = "/api/social";
 
     private SecurityPublicPaths() {
@@ -46,7 +44,7 @@ public final class SecurityPublicPaths {
         if (HEALTH_CHECK_PATH.equals(normalizedPath)) {
             return true;
         }
-        if (USER_LOGIN_PATH.equals(normalizedPath) || ADMIN_LOGIN_PATH.equals(normalizedPath)) {
+        if (LOGIN_PATH.equals(normalizedPath)) {
             return true;
         }
         return SOCIAL_API_BASE_PATH.equals(normalizedPath)

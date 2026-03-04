@@ -7,7 +7,7 @@ import com.example.domain.log.enums.LogType;
  *
  * <p>방향: member → log
  *
- * <p>AdminMemberCommandService / UserMemberCommandService / AbstractMemberCommandService가
+ * <p>UserMemberCommandService / AbstractMemberCommandService가
  * LogActivityPublisher / MemberActivityCommand에 직접 의존하지 않도록 추상화한다.
  */
 public interface MemberActivityPublishPort {
