@@ -57,7 +57,7 @@ common ←── global-core ←── domain-core ←── security-web ←─
 - **구조 변경**(모듈 추가/삭제, 파일 이동, 패키지 재구성 등) 시 `docs/backend/README.md`의 구조도·테스트 현황·명령어 등을 반드시 확인하고 불일치하면 즉시 수정한다
 - 코드 변경 완료 후 **커밋은 자율 진행**, 푸시/PR은 사용자 명시 요청 시에만 진행
 
-> 모노레포 경로: `apps/user/`, `apps/admin/`, `libs/backend/*`
+> 모노레포 경로: `apps/user/`, `libs/backend/*`
 
 ### Serena 메모리 관리 규칙
 
@@ -82,8 +82,7 @@ common ←── global-core ←── domain-core ←── security-web ←─
 ```
 mono-repo-thymeleaf/
 ├── apps/
-│   ├── user/               # Spring Boot 4.0.3 + Thymeleaf (Java 25)
-│   └── admin/              # Spring Boot 4.0.3 + Thymeleaf (Java 25)
+│   └── user/               # Spring Boot 4.0.3 + Thymeleaf (Java 25)
 ├── libs/
 │   └── backend/
 │       ├── common/             # 순수 공유(entity, payload, utils, annotation, version)
@@ -114,15 +113,12 @@ mono-repo-thymeleaf/
 ```bash
 # 빌드
 ./gradlew :apps:user:build
-./gradlew :apps:admin:build
 
 # 실행
 ./gradlew :apps:user:bootRun
-./gradlew :apps:admin:bootRun
 
 # 테스트
 ./gradlew :apps:user:test
-./gradlew :apps:admin:test
 
 # 라이브러리 단위 테스트
 ./gradlew :libs:backend:common:test
@@ -235,8 +231,8 @@ mono-repo-thymeleaf/
 
 ### 모노레포 Gradle 경로 규칙
 
-- Gradle 명령 시 서브프로젝트 경로 명시: `./gradlew :apps:user:build`, `./gradlew :apps:admin:build`
-- NX 경유: `pnpm nx build user`, `pnpm nx build admin`
+- Gradle 명령 시 서브프로젝트 경로 명시: `./gradlew :apps:user:build`
+- NX 경유: `pnpm nx build user`
 
 ### 설정파일 관련 의도사항
 
@@ -1043,24 +1039,21 @@ domain-core/src/main/java/com/example/domain/
 - Thymeleaf 화면을 반환하는 컨트롤러는 `*Controller`로 명명한다
 - 하나의 컨트롤러에서 REST와 뷰를 혼합하지 않는다
 
-### 컨트롤러 앱 격리 규칙 (CRITICAL)
+### 컨트롤러 앱 격리 규칙
 
-두 앱(`user`, `admin`)은 동일한 `scanBasePackages = "com.example"`을 사용하므로,
-`domain-core`의 컨트롤러가 양쪽 앱에 모두 등록되는 것을 방지하기 위해 `@ConditionalOnProperty`로 격리한다.
+현재 `apps/user` 하나로 운영하지만, 모노레포 구조상 새 앱을 추가할 수 있다.
+멀티 앱 환경에서는 `@ConditionalOnProperty`로 컨트롤러를 격리한다.
 
 - 각 앱의 `Application` 클래스에서 `setDefaultProperties(Map.of("app.type", "..."))`로 앱 타입을 설정한다
     - `UserApiApplication`: `app.type = user`
-    - `AdminApiApplication`: `app.type = admin`
-- 앱 전용 컨트롤러에는 `@ConditionalOnProperty(name = "app.type", havingValue = "...")`를 반드시 추가한다
-- 양쪽 앱에서 공통으로 사용하는 컨트롤러는 `@ConditionalOnProperty`를 **추가하지 않는다**
+- 앱 전용 컨트롤러에는 `@ConditionalOnProperty(name = "app.type", havingValue = "...")`를 추가한다
 
-| 구분           | 대상 컨트롤러                                                                                                          | `@ConditionalOnProperty` |
-|--------------|------------------------------------------------------------------------------------------------------------------|--------------------------|
-| **admin 전용** | `AdminMemberApiController`, `AdminLogApiController`, `AdminS3ApiController`, `AdminAccountAuthDocsApiController` | `havingValue = "admin"`  |
-| **user 전용**  | `AccountSessionApiController`, `AccountAuthDocsApiController`, `AccountApiController`, `SocialApiController`     | `havingValue = "user"`   |
-| **공통**       | `RootController`, `AccountAuthApiController`, `HealthRestController`                                             | 추가 안 함                   |
+| 구분          | 대상 컨트롤러                                                                                                      | `@ConditionalOnProperty` |
+|-------------|----------------------------------------------------------------------------------------------------------------|--------------------------|
+| **user 전용** | `AccountSessionApiController`, `AccountAuthDocsApiController`, `AccountApiController`, `SocialApiController` | `havingValue = "user"`   |
+| **공통**      | `RootController`, `HealthRestController`                                                                       | 추가 안 함                   |
 
-- 새 컨트롤러 생성 시 반드시 **어느 앱에 귀속되는지** 판단하고, 전용이면 해당 `havingValue`를 추가한다
+- 새 앱 추가 시 전용 컨트롤러에 해당 `havingValue`를 추가하여 격리한다
 
 ### API 설계 원칙
 
@@ -1127,8 +1120,7 @@ domain-core/src/main/java/com/example/domain/
 
 ### 컨트롤러 앱 격리
 
-- [ ] 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type", havingValue = "...")` 가 선언되어 있는가?
-- [ ] 공통 컨트롤러에 불필요한 `@ConditionalOnProperty`가 추가되지 않았는가?
+- [ ] 멀티 앱 환경 시 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type", havingValue = "...")` 가 선언되어 있는가?
 
 ### 인증/인가
 
@@ -1239,7 +1231,7 @@ domain-core/src/main/java/com/example/domain/
 | 로깅            | traceId 포함, 민감정보 금지                                                                                  |
 | API 버전        | `version = ApiVersioning.*`, 기본 `0.0`(무효), `API-Version` 헤더 필수                                      |
 | 컨트롤러          | `RestApiController` 응답, 서비스에서 `ResponseEntity` 금지                                                    |
-| 컨트롤러 격리       | 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type")` 필수                                            |
+| 컨트롤러 격리       | 멀티 앱 시 앱 전용 컨트롤러에 `@ConditionalOnProperty(name = "app.type")` 추가                                     |
 | 설정 변경         | 설정 변경 사유/영향 범위를 먼저 설명하고 확인 후 진행                                                                      |
 | 테스트           | 순수 단위 테스트(JUnit5+Mockito+AssertJ), `@SpringBootTest` 금지                                              |
 | Enum 계약 동기화   | `Api* == Domain name()` 유지 + 빌드 시 TS 자동 생성(`generateContractEnumTs`) + `pnpm nx test domain-core` 통과 |

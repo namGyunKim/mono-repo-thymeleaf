@@ -25,7 +25,6 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 | `libs/backend/security-web` | 보안 웹 레이어                                         |
 | `libs/backend/web-support`  | 웹 공통 지원 레이어                                      |
 | `apps/user`             | 사용자 API 앱 (BootJar)                              |
-| `apps/admin`            | 관리자 API 앱 (BootJar)                              |
 
 ## 공통 의존성 (루트 subprojects 블록)
 
@@ -79,7 +78,6 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 | `security-web` | `implementation(global-core, domain-core)`                                          |
 | `web-support`  | `implementation(global-core, domain-core, security-web)`                            |
 | `user`     | `implementation(global-core, domain-core, security-web, web-support)` — BootJar 활성화 |
-| `admin`    | `implementation(global-core, domain-core, security-web, web-support)` — BootJar 활성화 |
 
 ## 참고사항
 

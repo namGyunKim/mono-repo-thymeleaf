@@ -1,6 +1,6 @@
 # 백엔드 개발 가이드
 
-이 문서는 모노레포의 백엔드 영역(`apps/*-api`, `libs/backend/*`)에 대한 **현재 구조/실행 방법/운영 기준**을 설명합니다.
+이 문서는 모노레포의 백엔드 영역(`apps/*`, `libs/backend/*`)에 대한 **현재 구조/실행 방법/운영 기준**을 설명합니다.
 
 코딩 규칙(아키텍처/컨벤션/보안)은 [RULES.md](./RULES.md)를 기준으로 합니다.
 
@@ -9,8 +9,8 @@
 ## 1. 백엔드 범위
 
 - 애플리케이션
-    - `apps/user` (로컬 `8081`, 프로덕션 `8080`) — 주력 개발 대상
-    - `apps/admin` (로컬 `8082`, 프로덕션 `8080`) — 모노레포 멀티 프로젝트 구성 예시
+    - `apps/user` (로컬 `8081`, 프로덕션 `8080`)
+    - 모노레포 구조로 `apps/` 아래에 새 앱을 추가하여 멀티 프로젝트로 확장 가능
 - 공통 라이브러리
     - `libs/backend/common` — 순수 공유(entity, payload, utils, annotation, version)
     - `libs/backend/global-core` — 인프라 공통(security, config, exception, event, logging)
@@ -26,7 +26,7 @@
 mono-repo-thymeleaf/
 ├── apps/
 │   ├── user/                 # 사용자 API + Thymeleaf
-│   └── admin/                # 관리자 API + Thymeleaf
+│   └── (새 앱 추가 가능)       # apps/ 아래에 새 모듈을 추가하여 확장
 ├── libs/
 │   └── backend/
 │       ├── common/               # 순수 공유(entity, payload, utils, annotation, version)
@@ -41,7 +41,7 @@ mono-repo-thymeleaf/
 
 의존 방향(개념):
 
-`common ←(api)── global-core ← domain-core ← security-web ← web-support ← apps/*-api`
+`common ←(api)── global-core ← domain-core ← security-web ← web-support ← apps/*`
 
 ---
 
@@ -61,10 +61,8 @@ mono-repo-thymeleaf/
 
 ```bash
 ./gradlew :apps:user:bootRun
-./gradlew :apps:admin:bootRun
 
 ./gradlew :apps:user:build
-./gradlew :apps:admin:build
 
 # 개별 라이브러리 컴파일 검증
 ./gradlew :libs:backend:common:compileJava
@@ -91,13 +89,6 @@ mono-repo-thymeleaf/
 - `GET /api/health` : 헬스체크
 - `POST /api/sessions` : 사용자 로그인
 - `DELETE /api/sessions` : 사용자 로그아웃
-
-### admin (로컬 `localhost:8082`, 프로덕션 `localhost:8080`)
-
-- `GET /` : 인덱스 페이지 (Thymeleaf)
-- `GET /api/health` : 헬스체크
-- `POST /api/admin/sessions` : 관리자 로그인
-- `DELETE /api/admin/sessions` : 관리자 로그아웃
 
 ---
 

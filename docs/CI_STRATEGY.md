@@ -12,7 +12,8 @@ feat/*  ──→  develop  ──→  deploy/*
 | `feat/*`       | 기능 개발                     | 없음                   |
 | `develop`      | 통합 브랜치 — 모든 feat이 여기로 머지됨 | Branch Protection 적용 |
 | `deploy/user`  | user 배포 트리거               | push 시 자동 배포         |
-| `deploy/admin` | admin 배포 트리거              | push 시 자동 배포         |
+
+> 새 앱 추가 시 `deploy/{app-name}` 브랜치를 생성하여 동일한 배포 패턴을 적용한다.
 
 ### main 브랜치 (예약)
 
@@ -113,7 +114,7 @@ feat/* → develop PR 생성 시:
 |--------|------------------------------------------------|
 | Runner | `ubuntu-latest`                                |
 | Java   | Temurin 21 (Gradle toolchain이 25로 자동 프로비저닝)    |
-| 명령어    | `./gradlew :apps:admin:build :apps:user:build` |
+| 명령어    | `./gradlew :apps:user:build` |
 | 포함 범위  | 컴파일, 단위 테스트, QueryDSL 코드 생성                    |
 | 평균 소요  | ~40초                                           |
 
@@ -184,5 +185,4 @@ GitHub Actions: deploy-user.yml 트리거
 ```bash
 ./gradlew test                                # 전체 테스트
 ./gradlew :apps:user:bootRun              # user 실행
-./gradlew :apps:admin:bootRun             # admin 실행
 ```
