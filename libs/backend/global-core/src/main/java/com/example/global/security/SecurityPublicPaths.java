@@ -13,7 +13,6 @@ public final class SecurityPublicPaths {
 
     public static final String[] PUBLIC_URLS = {
             "/",
-            "/login",
             "/register",
             "/favicon.ico",
             "/favicon.svg",

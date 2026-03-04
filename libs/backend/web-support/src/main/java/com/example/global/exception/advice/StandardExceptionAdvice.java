@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -49,11 +50,14 @@ public class StandardExceptionAdvice {
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleNoResourceFoundException(
+    public ResponseEntity<?> handleNoResourceFoundException(
             final NoResourceFoundException e,
             @CurrentAccount final CurrentAccountDTO account,
             final HttpServletRequest request
     ) {
+        if (!isApiRequest(request)) {
+            return redirectToIndex();
+        }
         return support.withFilterLogged(request, () -> {
             final CurrentAccountDTO resolvedAccount = support.resolveAccount(account);
             final RequestMeta meta = exceptionLogWriter.resolveRequestMeta(request);
@@ -72,11 +76,14 @@ public class StandardExceptionAdvice {
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleNoHandlerFoundException(
+    public ResponseEntity<?> handleNoHandlerFoundException(
             final NoHandlerFoundException e,
             @CurrentAccount final CurrentAccountDTO account,
             final HttpServletRequest request
     ) {
+        if (!isApiRequest(request)) {
+            return redirectToIndex();
+        }
         return support.withFilterLogged(request, () -> {
             final CurrentAccountDTO resolvedAccount = support.resolveAccount(account);
             final RequestMeta meta = exceptionLogWriter.resolveRequestMeta(request);
@@ -113,5 +120,19 @@ public class StandardExceptionAdvice {
             ));
             return support.toResponse(ErrorCode.METHOD_NOT_SUPPORTED, HttpStatus.METHOD_NOT_ALLOWED);
         });
+    }
+
+    private boolean isApiRequest(final HttpServletRequest request) {
+        if (request == null) {
+            return true;
+        }
+        final String uri = request.getRequestURI();
+        return uri != null && uri.startsWith("/api/");
+    }
+
+    private ResponseEntity<Void> redirectToIndex() {
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header(HttpHeaders.LOCATION, "/")
+                .build();
     }
 }

@@ -25,7 +25,7 @@ public class RoleBasedLogoutSuccessHandler implements LogoutSuccessHandler {
         if (isApiRequest(request)) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
         } else {
-            response.sendRedirect("/login?logout");
+            response.sendRedirect("/");
         }
     }
 

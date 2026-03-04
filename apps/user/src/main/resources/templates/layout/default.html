@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html th:fragment="layout(title, header, content, scripts)" lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title layout:title-pattern="$CONTENT_TITLE">User</title>
+    <title th:replace="${title}">User</title>
     <link th:href="@{/webjars/tabler__core/1.3.2/dist/css/tabler.min.css}" rel="stylesheet">
     <link th:href="@{/webjars/tabler__core/1.3.2/dist/css/tabler-vendors.min.css}" rel="stylesheet">
 </head>
@@ -38,15 +37,14 @@
         <!-- Page wrapper -->
         <div class="page-wrapper">
             <!-- Page header -->
-            <div class="page-header d-print-none" layout:fragment="header">
-                <div class="container-xl">
-                    <h2 class="page-title">페이지</h2>
-                </div>
+            <div class="page-header d-print-none">
+                <th:block th:replace="${header}" />
             </div>
 
             <!-- Page body -->
             <div class="page-body">
-                <div class="container-xl" layout:fragment="content">
+                <div class="container-xl">
+                    <th:block th:replace="${content}" />
                 </div>
             </div>
 
@@ -64,6 +62,6 @@
 
     <script th:src="@{/webjars/tabler__core/1.3.2/dist/js/tabler.min.js}"></script>
     <script th:src="@{/webjars/htmx.org/2.0.6/dist/htmx.min.js}"></script>
-    <section layout:fragment="scripts"></section>
+    <th:block th:replace="${scripts}" />
 </body>
 </html>

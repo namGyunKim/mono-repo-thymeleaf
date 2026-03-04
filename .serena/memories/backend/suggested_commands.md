@@ -3,13 +3,13 @@
 ## 빌드
 ```bash
 ./gradlew :apps:user:build
-./gradlew :apps:admin:build
+# ./gradlew :apps:admin:build   # admin은 settings.gradle.kts에 미포함 (추후 추가)
 ```
 
 ## 실행
 ```bash
 ./gradlew :apps:user:bootRun    # localhost:8081
-./gradlew :apps:admin:bootRun   # localhost:8082
+# ./gradlew :apps:admin:bootRun   # admin 미설정 상태
 ```
 
 ## 테스트
