@@ -1,0 +1,137 @@
+package com.example.global.security.filter.support;
+
+import com.example.domain.account.validator.LoginAccountValidator;
+import com.example.domain.account.validator.LoginRequestRoleStrategy;
+import com.example.global.exception.GlobalException;
+import com.example.global.exception.enums.ErrorCode;
+import com.example.global.payload.response.ApiErrorDetail;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+@Component
+@RequiredArgsConstructor
+public class JsonBodyLoginRequestValidator {
+
+    private static final String FALLBACK_LOGIN_OBJECT_NAME = "accountLoginRequest";
+
+    private final Validator beanValidator;
+    private final LoginAccountValidator loginAccountValidator;
+    private final List<LoginRequestRoleStrategy> loginRequestRoleStrategies;
+
+    @PostConstruct
+    public void validateDependencies() {
+        if (loginRequestRoleStrategies == null || loginRequestRoleStrategies.isEmpty()) {
+            throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR, "loginRequestRoleStrategies는 필수입니다.");
+        }
+    }
+
+    public LoginRequestValidationResult validate(final Object loginRequest) {
+        if (loginRequest == null) {
+            final List<ApiErrorDetail> errors = List.of(ApiErrorDetail.of("body", "요청 값이 비어있습니다."));
+            return LoginRequestValidationResult.of(null, null, null, null, errors);
+        }
+
+        final LoginRequestRoleStrategy strategy = resolveStrategy(loginRequest);
+        final String loginId = extractLoginId(strategy, loginRequest);
+        final String password = extractPassword(strategy, loginRequest);
+
+        final List<ApiErrorDetail> beanErrors = executeBeanValidation(loginRequest);
+        if (!beanErrors.isEmpty()) {
+            return LoginRequestValidationResult.of(loginRequest, strategy, loginId, password, beanErrors);
+        }
+
+        final List<ApiErrorDetail> customErrors = executeCustomValidation(loginRequest, strategy);
+        return LoginRequestValidationResult.of(loginRequest, strategy, loginId, password, customErrors);
+    }
+
+    private List<ApiErrorDetail> executeBeanValidation(final Object loginRequest) {
+        final Set<ConstraintViolation<Object>> violations = beanValidator.validate(loginRequest);
+        if (violations == null || violations.isEmpty()) {
+            return List.of();
+        }
+
+        final List<ApiErrorDetail> errors = new ArrayList<>();
+        for (final ConstraintViolation<Object> violation : violations) {
+            final String field = violation.getPropertyPath() != null ? violation.getPropertyPath().toString() : "";
+            final String message = violation.getMessage() != null ? violation.getMessage() : "";
+            errors.add(ApiErrorDetail.of(field, message));
+        }
+        return errors;
+    }
+
+    private List<ApiErrorDetail> executeCustomValidation(final Object loginRequest, final LoginRequestRoleStrategy strategy) {
+        final String objectName = resolveObjectName(loginRequest, strategy);
+        final DataBinder dataBinder = new DataBinder(loginRequest, objectName);
+        dataBinder.addValidators(loginAccountValidator);
+        dataBinder.validate();
+        final BindingResult bindingResult = dataBinder.getBindingResult();
+
+        if (!bindingResult.hasErrors()) {
+            return List.of();
+        }
+
+        final List<ApiErrorDetail> errors = new ArrayList<>();
+        for (final FieldError fieldError : bindingResult.getFieldErrors()) {
+            errors.add(ApiErrorDetail.of(
+                    fieldError.getField(),
+                    fieldError.getDefaultMessage() != null ? fieldError.getDefaultMessage() : ""
+            ));
+        }
+        for (final ObjectError objectError : bindingResult.getGlobalErrors()) {
+            errors.add(ApiErrorDetail.of(
+                    objectError.getObjectName(),
+                    objectError.getDefaultMessage() != null ? objectError.getDefaultMessage() : ""
+            ));
+        }
+        return errors;
+    }
+
+    private String resolveObjectName(final Object target, final LoginRequestRoleStrategy strategy) {
+        if (strategy != null) {
+            final String objectName = strategy.resolveObjectName();
+            if (objectName != null && !objectName.isBlank()) {
+                return objectName;
+            }
+        }
+
+        final String simpleName = target.getClass().getSimpleName();
+        if (simpleName == null || simpleName.isBlank()) {
+            return FALLBACK_LOGIN_OBJECT_NAME;
+        }
+
+        return Character.toLowerCase(simpleName.charAt(0)) + simpleName.substring(1);
+    }
+
+    private LoginRequestRoleStrategy resolveStrategy(final Object target) {
+        if (target == null) {
+            return null;
+        }
+        final Class<?> targetClass = target.getClass();
+        return loginRequestRoleStrategies.stream()
+                .filter(strategy -> strategy.supports(targetClass))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private String extractLoginId(final LoginRequestRoleStrategy strategy, final Object loginRequest) {
+        return strategy != null ? strategy.resolveLoginId(loginRequest) : null;
+    }
+
+    private String extractPassword(final LoginRequestRoleStrategy strategy, final Object loginRequest) {
+        return strategy != null ? strategy.resolvePassword(loginRequest) : null;
+    }
+}

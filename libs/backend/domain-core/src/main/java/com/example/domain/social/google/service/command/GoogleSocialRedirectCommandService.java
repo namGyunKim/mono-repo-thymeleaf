@@ -1,0 +1,44 @@
+package com.example.domain.social.google.service.command;
+
+import com.example.domain.account.payload.response.LoginTokenResponse;
+import com.example.domain.social.google.payload.dto.GoogleOauthLoginCommand;
+import com.example.domain.social.google.payload.dto.GoogleOauthSession;
+import com.example.domain.social.google.payload.dto.GoogleSocialRedirectCommand;
+import com.example.domain.social.google.support.GoogleOauthSessionResolver;
+import com.example.domain.social.support.SocialLoginTokenPort;
+
+import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Slf4j
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class GoogleSocialRedirectCommandService {
+
+    private final GoogleOauthSessionResolver googleOauthSessionResolver;
+    private final GoogleSocialCommandService googleSocialCommandService;
+    private final SocialLoginTokenPort socialLoginTokenPort;
+
+    // CQRS 예외: 인증 토큰 발급이므로 DTO 반환 허용
+
+    public LoginTokenResponse loginByRedirect(final GoogleSocialRedirectCommand command) {
+        final GoogleOauthSession oauthSession = googleOauthSessionResolver.resolveAndConsume(command);
+
+        final Long memberId = googleSocialCommandService.registerOrLoginBySocialCode(
+                GoogleOauthLoginCommand.of(command.code(), oauthSession.codeVerifier(), oauthSession.nonce())
+        );
+        log.info("Google 소셜 로그인 성공: memberId={}", memberId);
+
+        final LoginTokenResponse response = socialLoginTokenPort.issueTokens(memberId);
+        log.info(
+                "Google 소셜 로그인 토큰 발급 완료: memberId={}, refreshTokenIssued={}",
+                memberId,
+                response.refreshToken() != null
+        );
+        return response;
+    }
+}

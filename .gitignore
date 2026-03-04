@@ -1,0 +1,86 @@
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Backend docs
+HELP.md
+
+# compiled output
+dist
+tmp
+out-tsc
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.apt_generated
+.factorypath
+.c9/
+*.launch
+.settings/
+.springBeans
+.sts4-cache
+*.sublime-workspace
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Java / Gradle
+spy.log
+build/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+**/src/main/generated/
+
+# IntelliJ
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# MCP config (API 키 포함)
+.mcp.json
+
+# Serena MCP (memories/project.yml은 팀 공유, cache는 로컬 전용)
+# → .serena/.gitignore에서 /cache 무시 처리
+
+# Environment
+.env*
+
+# Local Spring config (prod는 플레이스홀더만 있으므로 예외)
+**/src/main/resources/application*.yml
+!**/src/main/resources/application-prod.yml
+**/src/main/resources/application*.yaml
+!**/src/main/resources/application-prod.yaml

@@ -1,0 +1,19 @@
+package com.example.global.exception.support;
+
+import com.example.domain.log.event.ExceptionEvent;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class ExceptionEventPublisher {
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public void publish(final ExceptionEvent event) {
+        applicationEventPublisher.publishEvent(event);
+    }
+}

@@ -1,0 +1,100 @@
+package com.example.domain.account.service.query;
+
+import com.example.domain.account.payload.dto.AccountAuthMemberView;
+import com.example.domain.account.payload.dto.AccountLoginCandidateView;
+import com.example.domain.account.payload.dto.AccountLoginIdQuery;
+import com.example.domain.account.payload.dto.AccountLoginIdRoleQuery;
+import com.example.domain.account.payload.dto.AccountLoginValidationQuery;
+import com.example.domain.account.payload.dto.CurrentAccountDTO;
+import com.example.domain.account.payload.dto.LoginMemberView;
+import com.example.domain.account.support.AccountMemberQueryPort;
+import com.example.domain.account.validator.AccountInputValidator;
+import com.example.domain.member.enums.MemberActiveStatus;
+import com.example.global.exception.enums.ErrorCode;
+import com.example.global.exception.GlobalException;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Optional;
+
+@Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class AccountQueryService {
+
+    private final AccountMemberQueryPort accountMemberQueryPort;
+
+    public LoginMemberView getLoginData(final CurrentAccountDTO request) {
+        validateCurrentAccount(request);
+
+        final LoginMemberView view = accountMemberQueryPort.findLoginMemberView(
+                        AccountLoginIdRoleQuery.of(request.loginId(), request.role())
+                )
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_EXIST));
+        if (view.active() != MemberActiveStatus.ACTIVE) {
+            throw new GlobalException(ErrorCode.MEMBER_INACTIVE);
+        }
+
+        return view;
+    }
+
+    public AccountAuthMemberView findActiveMemberForAuthByLoginIdAndRole(final AccountLoginIdRoleQuery request) {
+        validateLoginIdRoleQuery(request);
+
+        final AccountAuthMemberView view = accountMemberQueryPort.findAuthMember(request)
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_EXIST));
+
+        if (view.active() != MemberActiveStatus.ACTIVE) {
+            throw new GlobalException(ErrorCode.MEMBER_INACTIVE);
+        }
+        return view;
+    }
+
+    public AccountAuthMemberView findActiveMemberForAuthByLoginId(final AccountLoginIdQuery request) {
+        validateLoginIdQuery(request);
+
+        final AccountAuthMemberView view = accountMemberQueryPort.findAuthMember(request)
+                .orElseThrow(() -> new GlobalException(ErrorCode.MEMBER_NOT_EXIST));
+
+        if (view.active() != MemberActiveStatus.ACTIVE) {
+            throw new GlobalException(ErrorCode.MEMBER_INACTIVE);
+        }
+        return view;
+    }
+
+    public Optional<AccountLoginCandidateView> findLoginCandidate(final AccountLoginValidationQuery request) {
+        if (!isValidLoginValidationQuery(request)) {
+            return Optional.empty();
+        }
+        return accountMemberQueryPort.findLoginCandidate(request);
+    }
+
+    private void validateCurrentAccount(final CurrentAccountDTO request) {
+        AccountInputValidator.requireCurrentAccountBasic(request);
+    }
+
+    private void validateLoginIdRoleQuery(final AccountLoginIdRoleQuery request) {
+        AccountInputValidator.requireNonNull(request, "로그인 조회 요청 값이 비어있습니다.");
+        AccountInputValidator.requireHasText(request.loginId(), "loginId는 필수입니다.");
+        AccountInputValidator.requireNonNull(request.role(), "role은 필수입니다.");
+    }
+
+    private void validateLoginIdQuery(final AccountLoginIdQuery request) {
+        AccountInputValidator.requireNonNull(request, "로그인 조회 요청 값이 비어있습니다.");
+        AccountInputValidator.requireHasText(request.loginId(), "loginId는 필수입니다.");
+    }
+
+    private boolean isValidLoginValidationQuery(final AccountLoginValidationQuery request) {
+        if (request == null) {
+            return false;
+        }
+        if (!StringUtils.hasText(request.loginId())) {
+            return false;
+        }
+        return request.allowedRoles() != null && !request.allowedRoles().isEmpty();
+    }
+}

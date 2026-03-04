@@ -1,0 +1,89 @@
+package com.example.domain.aws.service.common;
+
+import com.example.domain.aws.enums.ImageType;
+import com.example.global.exception.enums.ErrorCode;
+import com.example.global.exception.GlobalException;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.stereotype.Component;
+
+import software.amazon.awssdk.services.s3.model.Delete;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
+import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
+import software.amazon.awssdk.services.s3.S3Client;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
+@Component
+public class S3DeleteSupport extends AbstractS3ServiceSupport {
+
+    public S3DeleteSupport(final S3Client s3Client, final S3BucketResolver s3BucketResolver, final S3KeyBuilder s3KeyBuilder, final S3UrlParser s3UrlParser) {
+        super(s3Client, s3BucketResolver, s3KeyBuilder, s3UrlParser);
+    }
+
+    public void deleteSingle(final String fileName, final ImageType imageType, final Long entityId) {
+        final String s3Key = generateS3Key(fileName, imageType, entityId);
+        final DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(s3Key)
+                .build();
+        s3Client.deleteObject(deleteObjectRequest);
+    }
+
+    public void deleteBatch(final List<String> fileNames, final ImageType imageType, final Long entityId) {
+        if (fileNames == null || fileNames.isEmpty()) {
+            return;
+        }
+
+        final List<ObjectIdentifier> objectsToDelete = buildObjectIdentifiers(fileNames, imageType, entityId);
+        executeDeleteObjects(objectsToDelete, imageType, entityId, fileNames.size());
+    }
+
+    private List<ObjectIdentifier> buildObjectIdentifiers(final List<String> fileNames, final ImageType imageType, final Long entityId) {
+        final List<ObjectIdentifier> identifiers = new ArrayList<>();
+        for (final String fileName : fileNames) {
+            final String key = generateS3Key(fileName, imageType, entityId);
+            identifiers.add(ObjectIdentifier.builder().key(key).build());
+        }
+        return identifiers;
+    }
+
+    private void executeDeleteObjects(final List<ObjectIdentifier> objectsToDelete, final ImageType imageType, final Long entityId, final int fileCount) {
+        try {
+            final DeleteObjectsRequest request = DeleteObjectsRequest.builder()
+                    .bucket(bucketName)
+                    .delete(Delete.builder().objects(objectsToDelete).build())
+                    .build();
+
+            final DeleteObjectsResponse response = s3Client.deleteObjects(request);
+            if (response.hasErrors()) {
+                log.error(
+                        """
+                                errorCode={}, exceptionName={}, S3 일부 파일 삭제 실패: bucket={}, imageType={}, entityId={}, fileCount={}, errors={}
+                                """.stripTrailing(),
+                        ErrorCode.FAILED.getCode(),
+                        "DeleteObjectsPartialFailure",
+                        bucketName, imageType, entityId, fileCount, response.errors()
+                );
+                throw new GlobalException(ErrorCode.FAILED, "S3 일부 파일 삭제에 실패했습니다.");
+            }
+        } catch (final GlobalException e) {
+            throw e;
+        } catch (final Exception e) {
+            log.error(
+                    """
+                            errorCode={}, exceptionName={}, S3 일괄 삭제 중 오류 발생: bucket={}, imageType={}, entityId={}, fileCount={}
+                            """.stripTrailing(),
+                    ErrorCode.FAILED.getCode(),
+                    e.getClass().getSimpleName(),
+                    bucketName, imageType, entityId, fileCount, e
+            );
+            throw new GlobalException(ErrorCode.FAILED, "S3 일괄 삭제에 실패했습니다.");
+        }
+    }
+}

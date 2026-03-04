@@ -1,0 +1,32 @@
+package com.example.global.resolver;
+
+import com.example.domain.security.guard.MemberGuard;
+import com.example.global.annotation.CurrentAccount;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.ModelAndViewContainer;
+
+@Component
+@RequiredArgsConstructor
+public class CurrentAccountResolver implements HandlerMethodArgumentResolver {
+
+    private final MemberGuard memberGuard;
+
+    @Override
+    public boolean supportsParameter(final MethodParameter parameter) {
+        return parameter.hasParameterAnnotation(CurrentAccount.class);
+    }
+
+    @Override
+    public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
+                                  final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory) {
+
+        return memberGuard.getCurrentAccountOrGuest();
+    }
+}

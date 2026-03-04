@@ -1,0 +1,67 @@
+package com.example.domain.log.service.command.event;
+
+import com.example.domain.log.entity.MemberLog;
+import com.example.domain.log.event.MemberActivityEvent;
+import com.example.domain.log.payload.dto.MemberLogCreateCommand;
+import com.example.domain.log.repository.MemberLogRepository;
+import com.example.global.exception.BaseAppException;
+import com.example.global.exception.enums.ErrorCode;
+
+import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.transaction.event.TransactionPhase;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class MemberLogEventListener {
+
+    private final MemberLogRepository memberLogRepository;
+
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void handleMemberActivityEvent(final MemberActivityEvent event) {
+        try {
+            final MemberLogCreateCommand command = MemberLogCreateCommand.from(event);
+            final MemberLog logEntity = MemberLog.from(command);
+            memberLogRepository.save(logEntity);
+
+            log.info(
+                    "회원 활동 로그 저장 완료: loginId={}, logType={}",
+                    command.loginId(),
+                    command.logType()
+            );
+        } catch (final Exception e) {
+            logSaveError(e, event);
+        }
+    }
+
+    private void logSaveError(final Exception e, final MemberActivityEvent event) {
+        final String errorCode = resolveErrorCode(e);
+        log.error(
+                "errorCode={}, 로그 저장 중 오류 발생: exceptionName={}, loginId={}, memberId={}, logType={}, message={}",
+                errorCode,
+                e.getClass().getSimpleName(),
+                event.loginId(),
+                event.memberId(),
+                event.logType(),
+                e.getMessage(),
+                e
+        );
+    }
+
+    private String resolveErrorCode(final Exception exception) {
+        if (exception instanceof BaseAppException baseAppException
+                && baseAppException.getErrorCode() != null) {
+            return baseAppException.getErrorCode().getCode();
+        }
+        return ErrorCode.FAILED.getCode();
+    }
+}

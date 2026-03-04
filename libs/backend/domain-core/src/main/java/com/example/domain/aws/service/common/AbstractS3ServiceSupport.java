@@ -1,0 +1,99 @@
+package com.example.domain.aws.service.common;
+
+import com.example.domain.aws.enums.ImageType;
+import com.example.domain.aws.payload.dto.S3UrlParts;
+import com.example.global.exception.enums.ErrorCode;
+import com.example.global.exception.GlobalException;
+
+import jakarta.annotation.PostConstruct;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
+import software.amazon.awssdk.services.s3.S3Client;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+
+public abstract class AbstractS3ServiceSupport {
+
+    protected final S3Client s3Client;
+    private final S3BucketResolver s3BucketResolver;
+    private final S3KeyBuilder s3KeyBuilder;
+    private final S3UrlParser s3UrlParser;
+    protected String bucketName;
+    @Value("${aws.region}")
+    protected String region;
+
+    protected AbstractS3ServiceSupport(final S3Client s3Client, final S3BucketResolver s3BucketResolver, final S3KeyBuilder s3KeyBuilder, final S3UrlParser s3UrlParser) {
+        this.s3Client = s3Client;
+        this.s3BucketResolver = s3BucketResolver;
+        this.s3KeyBuilder = s3KeyBuilder;
+        this.s3UrlParser = s3UrlParser;
+    }
+
+    @PostConstruct
+    public void init() {
+        final S3BucketSelection selection = s3BucketResolver.resolve();
+        this.bucketName = selection.bucketName();
+        logBucket(selection.localBucket());
+    }
+
+    private void logBucket(final boolean localBucket) {
+        final String messageTemplate = localBucket ?
+                "로컬 프로필이 감지되어 로컬 버킷({})을 사용합니다." :
+                "운영 버킷({})을 사용합니다.";
+        LoggerFactory.getLogger(getClass())
+                .info(messageTemplate, this.bucketName);
+    }
+
+    protected String generateFinalUploadFileName(final ImageType imageType, final String originalFilename) {
+        return s3KeyBuilder.generateFinalUploadFileName(imageType, originalFilename);
+    }
+
+    protected void validateExtension(final String originalFilename, final ImageType imageType) {
+        final String fileExtension = getFileExtension(originalFilename);
+        imageType.validateExtension(fileExtension);
+    }
+
+    protected String getFileExtension(final String filename) {
+        if (filename == null) {
+            return "";
+        }
+        final String clean = filename.split("\\?")[0];
+        final int lastDot = clean.lastIndexOf('.');
+        if (lastDot == -1 || lastDot == clean.length() - 1) {
+            return "";
+        }
+        return clean.substring(lastDot + 1).toLowerCase(Locale.ROOT);
+    }
+
+    protected String generateS3Key(final String fileName, final ImageType imageType, final Long entityId) {
+        return s3KeyBuilder.generateS3Key(fileName, imageType, entityId);
+    }
+
+    protected String buildPublicImageUrl(final String fileName, final ImageType imageType, final Long entityId) {
+        if (fileName == null || fileName.isBlank()) {
+            throw new GlobalException(ErrorCode.INVALID_PARAMETER, "S3 이미지 URL 조회 요청 값이 비어있습니다.");
+        }
+        return s3KeyBuilder.buildPublicImageUrl(fileName, imageType, entityId, bucketName, region);
+    }
+
+    protected S3UrlParts parseS3Url(final String s3Url) {
+        return s3UrlParser.parseS3Url(s3Url, region);
+    }
+
+    protected String extractFilenameFromContentDisposition(final String contentDisposition) {
+        return s3UrlParser.extractFilenameFromContentDisposition(contentDisposition);
+    }
+
+    protected String buildContentDisposition(final String originalFilename) {
+        final String encodedOriginalFilename = encodeFilename(originalFilename);
+        return "attachment; filename*=\"UTF-8''%s\"".formatted(encodedOriginalFilename);
+    }
+
+    protected String encodeFilename(final String originalFilename) {
+        return URLEncoder.encode(originalFilename, StandardCharsets.UTF_8).replace("+", "%20");
+    }
+}
