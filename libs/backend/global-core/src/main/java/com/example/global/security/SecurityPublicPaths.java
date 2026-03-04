@@ -6,18 +6,18 @@ import org.springframework.util.StringUtils;
  * 보안 공개 경로 정책 상수
  *
  * <p>
- * - SecurityConfig와 SwaggerConfig가 동일한 공개 경로 기준을 공유하도록 관리합니다.
+ * - SecurityConfig가 참조하는 공개 경로 기준을 관리합니다.
  * </p>
  */
 public final class SecurityPublicPaths {
 
     public static final String[] PUBLIC_URLS = {
-            // Swagger UI (/swagger-ui.html -> /swagger-ui/index.html)
-            "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**",
-            "/sw.js",
             "/",
             "/favicon.ico",
-            "/favicon.svg"
+            "/favicon.svg",
+            "/css/**",
+            "/js/**",
+            "/images/**"
     };
 
     public static final String[] PUBLIC_API_URLS = {

@@ -8,9 +8,6 @@ import com.example.global.api.RestApiController;
 import com.example.global.security.jwt.AccessTokenResolver;
 import com.example.global.version.ApiVersioning;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -23,9 +20,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "SessionApiController", description = "세션 관련 REST API")
 @ConditionalOnProperty(name = "app.type", havingValue = "user")
-@SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("/api/sessions")
 @RequiredArgsConstructor
@@ -35,7 +30,6 @@ public class AccountSessionApiController {
     private final RestApiController restApiController;
     private final AccessTokenResolver accessTokenResolver;
 
-    @Operation(summary = "로그아웃")
     @DeleteMapping(value = "/me", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isAuthenticated()")
     public ResponseEntity<Void> logout(@CurrentAccount final CurrentAccountDTO currentAccount, final HttpServletRequest request) {

@@ -2,17 +2,8 @@ package com.example.domain.account.api;
 
 import com.example.domain.account.payload.request.AccountUserLoginRequest;
 import com.example.global.api.RestApiController;
-import com.example.global.payload.response.ApiErrorResponse;
-import com.example.global.security.SecurityHeaders;
 import com.example.global.version.ApiVersioning;
 
-import io.swagger.v3.oas.annotations.headers.Header;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
 
@@ -35,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
  * - 본 컨트롤러는 "문서 스키마 제공" 목적이며, 정상적인 구성에서는 호출되지 않습니다.
  * </p>
  */
-@Tag(name = "Auth", description = "로그인 API (Spring Security Filter 기반)")
 @PreAuthorize("permitAll()")
 @ConditionalOnProperty(name = "app.type", havingValue = "user")
 @RestController
@@ -44,45 +34,6 @@ public class AccountAuthDocsApiController {
 
     private final RestApiController restApiController;
 
-    @Operation(
-            summary = "일반 사용자 로그인 (JSON 바디)",
-            description = """
-                    Spring Security 인증 필터에서 처리됩니다.
-                    요청 바디(JSON)로 loginId/password를 전달합니다. (서버에서 USER 권한 로그인만 허용)
-                    응답 바디 없이 토큰은 응답 헤더로만 반환합니다.
-                    - 응답 헤더:
-                      - Authorization: Bearer {accessToken}
-                      - X-Refresh-Token: {refreshToken}
-                    """
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "로그인 성공",
-                    headers = {
-                            @Header(
-                                    name = SecurityHeaders.AUTHORIZATION,
-                                    description = "Bearer 접두사가 포함된 액세스 토큰",
-                                    schema = @Schema(type = "string", example = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
-                            ),
-                            @Header(
-                                    name = SecurityHeaders.REFRESH_TOKEN,
-                                    description = "Bearer 접두사가 없는 리프레시 토큰",
-                                    schema = @Schema(type = "string", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
-                            )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "요청 값 검증 실패",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "인증 실패(아이디/비밀번호 불일치 등)",
-                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
-            )
-    })
     @PostMapping(
             value = "/api/sessions",
             version = ApiVersioning.V1,

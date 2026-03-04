@@ -51,7 +51,6 @@ subprojects {
         "annotationProcessor"("org.springframework.boot:spring-boot-configuration-processor")
         "developmentOnly"("org.springframework.boot:spring-boot-devtools")
 
-        "implementation"("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1")
         "implementation"("com.github.gavlyukovskiy:p6spy-spring-boot-starter:2.0.0") {
             exclude(group = "org.springframework.boot", module = "spring-boot-dependencies")
         }

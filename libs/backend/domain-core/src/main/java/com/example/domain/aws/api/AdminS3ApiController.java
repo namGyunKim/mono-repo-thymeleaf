@@ -16,9 +16,6 @@ import com.example.global.api.RestApiController;
 import com.example.global.payload.response.RestApiResponse;
 import com.example.global.version.ApiVersioning;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
 
@@ -36,19 +33,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Tag(name = "AdminS3ApiController", description = "관리자 전용 S3 업로드/삭제 테스트 REST API")
 @ConditionalOnProperty(name = "app.type", havingValue = "admin")
 @RestController
 @RequestMapping("/api/admin/aws/s3")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("@memberGuard.hasAnyAdminRole()")
 public class AdminS3ApiController {
 
     private final AdminS3CommandService adminS3CommandService;
     private final RestApiController restApiController;
 
-    @Operation(summary = "S3 단일 이미지 업로드")
     @PostMapping(value = "/images", params = "file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, version = ApiVersioning.V1)
     public ResponseEntity<RestApiResponse<S3ImageUploadResponse>> uploadImage(@CurrentAccount final CurrentAccountDTO currentAccount, @Valid @ModelAttribute("s3ImageUploadRequest") final S3ImageUploadRequest s3ImageUploadRequest) {
         final S3ImageUploadResult result = adminS3CommandService.uploadProfileImage(
@@ -66,7 +60,6 @@ public class AdminS3ApiController {
         );
     }
 
-    @Operation(summary = "S3 다중 이미지 업로드")
     @PostMapping(value = "/images", params = "files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, version = ApiVersioning.V1)
     public ResponseEntity<RestApiResponse<S3ImagesUploadResponse>> uploadImages(@CurrentAccount final CurrentAccountDTO currentAccount, @Valid @ModelAttribute("s3ImagesUploadRequest") final S3ImagesUploadRequest s3ImagesUploadRequest) {
         final S3ImagesUploadResponse response = S3ImagesUploadResponse.from(
@@ -83,7 +76,6 @@ public class AdminS3ApiController {
         );
     }
 
-    @Operation(summary = "S3 멤버 이미지 삭제 (회원 이미지 ID 기준)")
     @DeleteMapping(value = "/images", version = ApiVersioning.V1)
     public ResponseEntity<Void> deleteImages(@Valid @RequestBody final S3ImageDeleteRequest s3ImageDeleteRequest) {
         adminS3CommandService.deleteProfileImage(

@@ -9,9 +9,6 @@ import com.example.global.api.RestApiController;
 import com.example.global.payload.response.RestApiResponse;
 import com.example.global.version.ApiVersioning;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.Valid;
 
@@ -28,12 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.WebDataBinder;
 
-@Tag(name = "AdminLogApiController", description = "관리자 전용 시스템 로그 REST API")
 @ConditionalOnProperty(name = "app.type", havingValue = "admin")
 @RestController
 @RequestMapping("/api/admin/logs")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("@memberGuard.hasAnyAdminRole()")
 public class AdminLogApiController {
 
@@ -46,7 +41,6 @@ public class AdminLogApiController {
         binder.addValidators(memberLogRequestPolicyValidator);
     }
 
-    @Operation(summary = "회원 활동 로그 목록 조회")
     @GetMapping(value = "/members", version = ApiVersioning.V1)
     public ResponseEntity<RestApiResponse<Page<MemberLogResponse>>> memberLogList(@Valid @ModelAttribute("memberLogRequest") final MemberLogRequest memberLogRequest) {
         final Page<MemberLogResponse> logPage = memberLogQueryService.getMemberLogs(MemberLogQuery.from(memberLogRequest));

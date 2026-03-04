@@ -15,9 +15,6 @@ import com.example.global.payload.response.RestApiResponse;
 import com.example.global.security.jwt.AccessTokenResolver;
 import com.example.global.version.ApiVersioning;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -34,9 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "AccountApiController", description = "계정 관련 REST API")
 @ConditionalOnProperty(name = "app.type", havingValue = "user")
-@SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("/api/accounts")
 @RequiredArgsConstructor
@@ -47,7 +42,6 @@ public class AccountApiController {
     private final RestApiController restApiController;
     private final AccessTokenResolver accessTokenResolver;
 
-    @Operation(summary = "내 프로필 조회")
     @GetMapping(value = "/me", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isAuthenticated()")
     public ResponseEntity<RestApiResponse<LoginMemberResponse>> profile(@CurrentAccount final CurrentAccountDTO currentAccount) {
@@ -56,7 +50,6 @@ public class AccountApiController {
         return restApiController.ok(response);
     }
 
-    @Operation(summary = "내 프로필 수정")
     @PutMapping(value = "/me", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isAuthenticated() and @memberGuard.canAccessSelf(#currentAccount)")
     public ResponseEntity<RestApiResponse<IdResponse>> profileUpdate(@CurrentAccount final CurrentAccountDTO currentAccount, @Valid @RequestBody final AccountProfileUpdateRequest accountProfileUpdateRequest) {
@@ -68,7 +61,6 @@ public class AccountApiController {
         return restApiController.ok(updateResponse);
     }
 
-    @Operation(summary = "내 계정 탈퇴(비활성화)")
     @DeleteMapping(value = "/me", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isAuthenticated() and @memberGuard.canAccessSelf(#currentAccount)")
     public ResponseEntity<Void> withdraw(@CurrentAccount final CurrentAccountDTO currentAccount, final HttpServletRequest request) {

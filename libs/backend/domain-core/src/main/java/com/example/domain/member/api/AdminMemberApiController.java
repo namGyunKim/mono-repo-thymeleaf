@@ -27,9 +27,6 @@ import com.example.global.security.jwt.AccessTokenResolver;
 import com.example.global.security.payload.SecurityLogoutCommand;
 import com.example.global.version.ApiVersioning;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -54,12 +51,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@Tag(name = "AdminMemberApiController", description = "관리자 전용 회원 관리 REST API (전략 패턴 적용)")
 @ConditionalOnProperty(name = "app.type", havingValue = "admin")
 @RestController
 @RequestMapping("/api/admin/members")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "Bearer Authentication")
 @PreAuthorize("@memberGuard.hasAnyAdminRole()")
 public class AdminMemberApiController {
 
@@ -84,7 +79,6 @@ public class AdminMemberApiController {
         binder.addValidators(memberListRequestPolicyValidator);
     }
 
-    @Operation(summary = "회원 생성")
     @PostMapping(version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.hasAnyAdminRole() and @memberGuard.canManageRole(#memberCreateRequest.toDomainRole())")
     public ResponseEntity<RestApiResponse<IdResponse>> createMember(@Valid @RequestBody final MemberCreateRequest memberCreateRequest) {
@@ -101,7 +95,6 @@ public class AdminMemberApiController {
         );
     }
 
-    @Operation(summary = "회원 목록 조회")
     @GetMapping(version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.hasAnyAdminRole() and @memberGuard.canManageRole(#memberListRequest.toDomainRole())")
     public ResponseEntity<RestApiResponse<Page<MemberListResponse>>> getMemberList(@Valid @ModelAttribute("memberListRequest") final MemberListRequest memberListRequest) {
@@ -111,7 +104,6 @@ public class AdminMemberApiController {
         return restApiController.ok(memberPage);
     }
 
-    @Operation(summary = "회원 상세 조회")
     @GetMapping(value = "/{id}", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.hasAnyAdminRole() and @memberGuard.canAccessMember(#id)")
     public ResponseEntity<RestApiResponse<MemberDetailResponse>> getMemberDetail(@PathVariable final Long id) {
@@ -121,7 +113,6 @@ public class AdminMemberApiController {
         return restApiController.ok(response);
     }
 
-    @Operation(summary = "회원 정보 수정")
     @PutMapping(value = "/{id}", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.hasAnyAdminRole() and @memberGuard.canAccessMember(#id)")
     public ResponseEntity<RestApiResponse<IdResponse>> updateMember(@PathVariable final Long id, @Valid @RequestBody final MemberUpdateRequest memberUpdateRequest) {
@@ -134,7 +125,6 @@ public class AdminMemberApiController {
         return restApiController.ok(updateResponse);
     }
 
-    @Operation(summary = "회원 탈퇴/비활성화")
     @DeleteMapping(value = "/{id}", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.hasAnyAdminRole() and @memberGuard.canAccessMember(#id)")
     public ResponseEntity<Void> deactivateMember(@PathVariable final Long id, @CurrentAccount final CurrentAccountDTO currentAccount, final HttpServletRequest request) {
@@ -150,7 +140,6 @@ public class AdminMemberApiController {
         return restApiController.noContent();
     }
 
-    @Operation(summary = "회원 등급 변경")
     @PatchMapping(value = "/{id}", version = ApiVersioning.V1)
     @PreAuthorize("@memberGuard.isSuperAdmin()")
     public ResponseEntity<RestApiResponse<IdResponse>> updateMemberRole(@PathVariable final Long id, @Valid @RequestBody final MemberRoleUpdateRequest memberRoleUpdateRequest) {
