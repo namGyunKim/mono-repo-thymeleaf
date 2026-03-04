@@ -686,12 +686,12 @@ public record LoginRequest(
 Spring Data JPA 2025.1부터 파생 쿼리가 Criteria API 대신 **JPQL 문자열로 변환**되어 Hibernate의 **Query Structure Caching** 혜택을 받는다.
 동일 쿼리 재실행 시 파싱/컴파일을 건너뛰므로 처리량이 약 **25% 향상**된다 (인메모리 DB 기준 최대 3.5배).
 
-| 상황 | 선택 | 이유 |
-|---|---|---|
-| 조건 1~2개, 정적 조회 | 파생 쿼리 (`findByLoginId`) | Query Structure Caching 자동 적용, 코드 간결 |
-| JOIN/서브쿼리/복잡한 조건 | `@Query` JPQL | 파생 쿼리로 표현 불가하거나 가독성 저하 |
-| 동적 조건 조합 | QueryDSL | 런타임 조건 분기 필요 |
-| DTO Projection | `@Query` JPQL 또는 QueryDSL | 파생 쿼리는 엔티티 반환만 지원 |
+| 상황               | 선택                        | 이유                                   |
+|------------------|---------------------------|--------------------------------------|
+| 조건 1~2개, 정적 조회   | 파생 쿼리 (`findByLoginId`)   | Query Structure Caching 자동 적용, 코드 간결 |
+| JOIN/서브쿼리/복잡한 조건 | `@Query` JPQL             | 파생 쿼리로 표현 불가하거나 가독성 저하               |
+| 동적 조건 조합         | QueryDSL                  | 런타임 조건 분기 필요                         |
+| DTO Projection   | `@Query` JPQL 또는 QueryDSL | 파생 쿼리는 엔티티 반환만 지원                    |
 
 > 파생 쿼리로 충분한 경우 `@Query`로 재작성하지 않는다 — 캐싱 효율이 동일하면서 메서드 시그니처만으로 의도가 드러나는 파생 쿼리가 유지보수에 유리하다.
 
@@ -818,8 +818,10 @@ libs/backend/domain-core/src/main/java/com/example/domain/
 1. **인터페이스**: `getSupportedXxx()` 메서드를 선언하여 구현체가 자신이 담당하는 타입을 반환하게 한다
 2. **추상 클래스**: 공통 로직(수정, 비활성화, 검증 등)을 Template Method로 구현한다. 차이점은 abstract/protected 메서드로 위임
 3. **구체 클래스**: `getSupportedXxx()`를 오버라이드하여 담당 타입을 반환하고, 차이점만 구현한다
-4. **팩토리**: `@PostConstruct`에서 `ApplicationContext.getBeansOfType()`으로 빈을 수집하고, `getSupportedXxx()` 반환값으로 `EnumMap`에 등록한다
-5. **프록시 대응**: `@Transactional` 등으로 JDK Dynamic Proxy가 적용될 수 있으므로 `instanceof` 분기 대신 반드시 인터페이스의 `getSupportedXxx()` 메서드를 사용한다
+4. **팩토리**: `@PostConstruct`에서 `ApplicationContext.getBeansOfType()`으로 빈을 수집하고, `getSupportedXxx()` 반환값으로 `EnumMap`에
+   등록한다
+5. **프록시 대응**: `@Transactional` 등으로 JDK Dynamic Proxy가 적용될 수 있으므로 `instanceof` 분기 대신 반드시 인터페이스의 `getSupportedXxx()` 메서드를
+   사용한다
 
 #### 새 타입/역할 추가 시 체크리스트
 

@@ -371,8 +371,8 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 ### 대상 테이블
 
-| 테이블 | 파티션 키 | 전략 | DDL |
-|--------|-----------|------|-----|
+| 테이블          | 파티션 키        | 전략       | DDL                                                                        |
+|--------------|--------------|----------|----------------------------------------------------------------------------|
 | `member_log` | `created_at` | 월별 RANGE | [`docs/db/member_log_partitioning.sql`](../db/member_log_partitioning.sql) |
 
 ### 왜 파티셔닝하는가
