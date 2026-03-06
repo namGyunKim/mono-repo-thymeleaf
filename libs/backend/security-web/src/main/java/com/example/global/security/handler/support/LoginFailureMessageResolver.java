@@ -29,7 +29,7 @@ public class LoginFailureMessageResolver {
             case DisabledException _ -> "계정 비활성화";
             case AccountExpiredException _ -> "계정 만료";
             case CredentialsExpiredException _ -> "비밀번호 만료";
-            default -> "로그인 실패(" + exception.getClass().getSimpleName() + ")";
+            default -> "로그인 실패(%s)".formatted(exception.getClass().getSimpleName());
         };
     }
 }
