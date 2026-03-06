@@ -5,10 +5,9 @@ on:
     branches:
       - develop
     paths-ignore:
+      - '*.md'
       - '**/*.md'
-      - 'docs/**'
       - '.serena/**'
-      - 'CLAUDE.md'
   workflow_dispatch:
 
 permissions:
