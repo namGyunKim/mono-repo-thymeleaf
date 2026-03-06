@@ -92,13 +92,12 @@ on:
     paths-ignore:
       - '*.md'
       - '**/*.md'
-      - 'docs/**'
       - '.serena/**'
   workflow_dispatch:
 ```
 
-- 문서 전용 변경(`*.md`, `docs/**`)과 AI 메모리 변경(`.serena/**`)만 있는 PR은 backend CI를 실행하지 않는다.
-- 루트와 하위 디렉토리를 포함한 모든 `.md` 파일 변경은 CI 제외 대상으로 본다.
+- 루트와 하위 디렉토리를 포함한 모든 `.md` 파일 변경은 backend CI 제외 대상으로 본다.
+- AI 메모리 변경(`.serena/**`)만 있는 PR도 backend CI를 실행하지 않는다.
 
 ### Job 구조
 
