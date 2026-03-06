@@ -27,7 +27,7 @@ subprojects {
     }
 
     dependencies {
-        "implementation"(platform("software.amazon.awssdk:bom:2.41.23"))
+        "implementation"(platform("software.amazon.awssdk:bom:2.42.7"))
 
         "implementation"("org.springframework.boot:spring-boot-starter-webmvc")
         "implementation"("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -49,8 +49,8 @@ subprojects {
         "developmentOnly"("org.springframework.boot:spring-boot-devtools")
 
         // WebJars — Tabler (Bootstrap 5 기반 관리자 UI 키트) + HTMX
-        "implementation"("org.webjars.npm:tabler__core:1.3.2")
-        "implementation"("org.webjars.npm:htmx.org:2.0.6")
+        "implementation"("org.webjars.npm:tabler__core:1.4.0")
+        "implementation"("org.webjars.npm:htmx.org:2.0.7")
 
         "implementation"("com.github.gavlyukovskiy:p6spy-spring-boot-starter:2.0.0") {
             exclude(group = "org.springframework.boot", module = "spring-boot-dependencies")
@@ -62,5 +62,6 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
     }
 }

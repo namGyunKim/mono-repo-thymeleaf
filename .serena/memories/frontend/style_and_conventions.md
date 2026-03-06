@@ -1,20 +1,20 @@
 # 프론트엔드 (Thymeleaf) 코딩 규칙
 
 ## 기술 스택
-- **CSS/UI**: Tabler 1.3.2 (Bootstrap 5 기반) — WebJars로 관리
-- **인터랙션**: HTMX 2.0.6 — JS 없이 서버 인터랙션
+- **CSS/UI**: Tabler 1.4.0 (Bootstrap 5 기반) — WebJars로 관리
+- **인터랙션**: HTMX 2.0.7 — JS 없이 서버 인터랙션
 - **템플릿**: Thymeleaf (SSR) + Fragment 기반 레이아웃
 - **의존성**: WebJars (npm) — CDN 사용 금지
 
 ## WebJars 경로
 ```html
 <!-- Tabler CSS -->
-<link th:href="@{/webjars/tabler__core/1.3.2/dist/css/tabler.min.css}" rel="stylesheet">
-<link th:href="@{/webjars/tabler__core/1.3.2/dist/css/tabler-vendors.min.css}" rel="stylesheet">
+<link th:href="@{/webjars/tabler__core/1.4.0/dist/css/tabler.min.css}" rel="stylesheet">
+<link th:href="@{/webjars/tabler__core/1.4.0/dist/css/tabler-vendors.min.css}" rel="stylesheet">
 <!-- Tabler JS -->
-<script th:src="@{/webjars/tabler__core/1.3.2/dist/js/tabler.min.js}"></script>
+<script th:src="@{/webjars/tabler__core/1.4.0/dist/js/tabler.min.js}"></script>
 <!-- HTMX -->
-<script th:src="@{/webjars/htmx.org/2.0.6/dist/htmx.min.js}"></script>
+<script th:src="@{/webjars/htmx.org/2.0.7/dist/htmx.min.js}"></script>
 ```
 
 ## 디자인 철학

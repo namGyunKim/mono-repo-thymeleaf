@@ -162,6 +162,31 @@ EOF
 
 ---
 
+## Gradle 빌드 최적화
+
+`gradle.properties`에서 아래 옵션을 활성화하여 빌드 성능을 개선한다.
+
+| 옵션 | 설명 |
+|---|---|
+| `org.gradle.parallel=true` | 독립 모듈 병렬 빌드 |
+| `org.gradle.caching=true` | Build Cache 활성화 (입력 동일 시 결과 재사용) |
+| `org.gradle.configuration-cache=true` | Configuration Cache 활성화 (구성 단계 스킵) |
+
+### 테스트 병렬 실행
+
+`build.gradle.kts`의 Test 블록에서 `maxParallelForks`를 설정하여 테스트를 병렬 실행한다.
+
+```kotlin
+tasks.withType<Test> {
+    useJUnitPlatform()
+    maxParallelForks = Runtime.getRuntime().availableProcessors()
+}
+```
+
+> **주의**: 테스트 간 공유 상태(DB, 파일시스템 등)가 있으면 병렬 실행 시 충돌할 수 있다. 현재 프로젝트는 순수 단위 테스트 기반이므로 안전하다.
+
+---
+
 ## 배포 전략
 
 배포는 CI와 분리되어 있다. 배포 전용 브랜치에 push하면 해당 프로젝트가 자동 배포된다.
