@@ -3,7 +3,9 @@
 Spring Boot + Thymeleaf 기반의 **모노레포 베이스 프로젝트**입니다.
 새 프로젝트를 시작할 때 이 템플릿을 복제하여 바로 개발에 착수할 수 있도록 설계되었습니다.
 
-![Index Page](docs/images/index-screenshot.png)
+![Tech Stack](docs/images/index-screenshot1.png)
+![Architecture](docs/images/index-screenshot2.png)
+![Domains](docs/images/index-screenshot3.png)
 
 ---
 
