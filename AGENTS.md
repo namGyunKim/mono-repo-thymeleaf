@@ -1,6 +1,6 @@
 # 문서 동기화 규칙 (CRITICAL)
 
-- `CLAUDE.md`를 수정할 때는 동일한 변경을 `AGENTS.md`에도 반드시 반영한다.
+- `AGENTS.md`를 수정할 때는 동일한 변경을 `CLAUDE.md`에도 반드시 반영한다.
 
 ---
 
