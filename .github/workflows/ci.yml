@@ -5,9 +5,11 @@ on:
     branches:
       - develop
     paths-ignore:
+      - '*.md'
       - '**/*.md'
       - 'docs/**'
       - '.serena/**'
+      - 'AGENTS.md'
       - 'CLAUDE.md'
   workflow_dispatch:
 
