@@ -32,8 +32,8 @@ Spring Boot + Thymeleaf 기반의 **모노레포 베이스 프로젝트**입니�
 |-----------------|-------------------------|----------------|
 | Template Engine | Thymeleaf (SSR)         | Spring Boot 내장 |
 | Layout          | Thymeleaf Fragment (순수) | —              |
-| UI Kit          | Tabler (Bootstrap 5)    | 1.3.2          |
-| Interaction     | HTMX                    | 2.0.6          |
+| UI Kit          | Tabler (Bootstrap 5)    | 1.4.0          |
+| Interaction     | HTMX                    | 2.0.7          |
 | Dependency      | WebJars (npm)           | —              |
 
 ---

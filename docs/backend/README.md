@@ -54,8 +54,8 @@ mono-repo-thymeleaf/
 - QueryDSL `7.1` (`io.github.openfeign.querydsl`)
 - PostgreSQL
 - Thymeleaf (SSR 뷰) + 파라미터 Fragment 레이아웃 (순수 Thymeleaf)
-- Tabler `1.3.2` (Bootstrap 5 기반 UI 키트, WebJars)
-- HTMX `2.0.6` (서버 인터랙션, WebJars)
+- Tabler `1.4.0` (Bootstrap 5 기반 UI 키트, WebJars)
+- HTMX `2.0.7` (서버 인터랙션, WebJars)
 - Gradle Wrapper `9.3.1`
 
 ---

@@ -20,8 +20,8 @@
 
 | 영역           | 기술                          | 버전             | 용도                                   |
 |--------------|-----------------------------|----------------|--------------------------------------|
-| CSS/UI 프레임워크 | **Tabler** (Bootstrap 5 기반) | 1.3.2          | UI 컴포넌트, 레이아웃, 그리드                   |
-| 인터랙션         | **HTMX**                    | 2.0.6          | JS 없이 서버 인터랙션 (부분 페이지 갱신)            |
+| CSS/UI 프레임워크 | **Tabler** (Bootstrap 5 기반) | 1.4.0          | UI 컴포넌트, 레이아웃, 그리드                   |
+| 인터랙션         | **HTMX**                    | 2.0.7          | JS 없이 서버 인터랙션 (부분 페이지 갱신)            |
 | 템플릿 엔진       | **Thymeleaf**               | Spring Boot 내장 | SSR HTML 렌더링                         |
 | 레이아웃         | **Thymeleaf 파라미터 Fragment** | —              | `th:fragment` + `th:replace` 기반 레이아웃 |
 | 의존성 관리       | **WebJars** (npm)           | —              | 정적 라이브러리를 JAR로 관리                    |
@@ -34,14 +34,14 @@
 
 ```html
 <!-- Tabler CSS -->
-<link th:href="@{/webjars/tabler__core/1.3.2/dist/css/tabler.min.css}" rel="stylesheet">
-<link th:href="@{/webjars/tabler__core/1.3.2/dist/css/tabler-vendors.min.css}" rel="stylesheet">
+<link th:href="@{/webjars/tabler__core/1.4.0/dist/css/tabler.min.css}" rel="stylesheet">
+<link th:href="@{/webjars/tabler__core/1.4.0/dist/css/tabler-vendors.min.css}" rel="stylesheet">
 
 <!-- Tabler JS -->
-<script th:src="@{/webjars/tabler__core/1.3.2/dist/js/tabler.min.js}"></script>
+<script th:src="@{/webjars/tabler__core/1.4.0/dist/js/tabler.min.js}"></script>
 
 <!-- HTMX -->
-<script th:src="@{/webjars/htmx.org/2.0.6/dist/htmx.min.js}"></script>
+<script th:src="@{/webjars/htmx.org/2.0.7/dist/htmx.min.js}"></script>
 ```
 
 - WebJar 버전 업그레이드 시 `build.gradle.kts`와 **모든 레이아웃 템플릿의 경로**를 함께 수정한다

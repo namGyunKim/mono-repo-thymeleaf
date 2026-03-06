@@ -65,7 +65,7 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 
 | 의존성                          | 버전      | 스코프            | 설명               |
 |------------------------------|---------|----------------|------------------|
-| `software.amazon.awssdk:bom` | 2.41.23 | platform (BOM) | AWS SDK v2 버전 관리 |
+| `software.amazon.awssdk:bom` | 2.42.7 | platform (BOM) | AWS SDK v2 버전 관리 |
 | `software.amazon.awssdk:s3`  | BOM 관리  | implementation | AWS S3 클라이언트     |
 
 ## 모듈별 추가 선언

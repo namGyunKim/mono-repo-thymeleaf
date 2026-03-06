@@ -15,7 +15,7 @@
 | Spring Framework | 7.x                                   |                                      |
 | 빌드               | Gradle                                | 9.3.1 (Wrapper)                      |
 | ORM              | JPA + QueryDSL                        | 7.1 (`io.github.openfeign.querydsl`) |
-| 뷰                | Thymeleaf + Tabler 1.3.2 + HTMX 2.0.6 | SSR (WebJars, Fragment 레이아웃)       |
+| 뷰                | Thymeleaf + Tabler 1.4.0 + HTMX 2.0.7 | SSR (WebJars, Fragment 레이아웃)       |
 | DB               | PostgreSQL                            |                                      |
 | 인증               | HttpSession + Spring Security (세션 기반) |                                      |
 | JSON             | Jackson 3 (`tools.jackson.*`)         |                                      |
