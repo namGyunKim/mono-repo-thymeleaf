@@ -4,10 +4,6 @@ on:
   pull_request:
     branches:
       - develop
-    paths-ignore:
-      - '*.md'
-      - '**/*.md'
-      - '.serena/**'
   workflow_dispatch:
 
 permissions:
@@ -19,12 +15,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for backend changes
+        id: changes
+        run: |
+          CHANGED=$(git diff --name-only origin/develop...HEAD | grep -v -E '\.md$|^\.serena/' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/setup-java@v4
+        if: steps.changes.outputs.skip == 'false'
         with:
           distribution: 'temurin'
           java-version: '21'
 
       - uses: gradle/actions/setup-gradle@v4
+        if: steps.changes.outputs.skip == 'false'
 
       - run: ./gradlew :apps:user:build
+        if: steps.changes.outputs.skip == 'false'

@@ -89,15 +89,11 @@ Squash merge를 사용하므로 **PR 제목 = develop에 남는 최종 커밋 �
 on:
   pull_request:
     branches: [ develop ]
-    paths-ignore:
-      - '*.md'
-      - '**/*.md'
-      - '.serena/**'
   workflow_dispatch:
 ```
 
-- 루트와 하위 디렉토리를 포함한 모든 `.md` 파일 변경은 backend CI 제외 대상으로 본다.
-- AI 메모리 변경(`.serena/**`)만 있는 PR도 backend CI를 실행하지 않는다.
+- PR은 항상 CI 워크플로우를 트리거한다 (Branch Protection required check와의 충돌 방지).
+- 문서(`.md`)나 `.serena/**`만 변경된 PR은 job 내부에서 감지하여 빌드를 스킵하되, **job 자체는 성공으로 보고**한다.
 
 ### Job 구조
 
