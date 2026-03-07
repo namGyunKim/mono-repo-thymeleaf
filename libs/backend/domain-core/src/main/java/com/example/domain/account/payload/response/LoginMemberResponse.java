@@ -1,9 +1,7 @@
 package com.example.domain.account.payload.response;
 
 import com.example.domain.account.payload.dto.LoginMemberView;
-import com.example.domain.contract.enums.ApiAccountRole;
 import com.example.domain.contract.enums.ApiMemberActiveStatus;
-import com.example.domain.contract.enums.ApiMemberType;
 import com.example.domain.member.payload.response.MemberAuthorizationResponse;
 import com.example.domain.member.payload.response.MemberIdentityResponse;
 
