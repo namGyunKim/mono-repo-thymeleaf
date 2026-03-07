@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
+
 /**
  * 회원 이미지 엔티티
  *
@@ -30,7 +32,9 @@ import org.springframework.util.StringUtils;
 @Table(name = "member_image", comment = "회원 이미지")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberImage extends BaseTimeEntity {
+public class MemberImage extends BaseTimeEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
