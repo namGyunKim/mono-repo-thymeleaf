@@ -39,8 +39,11 @@ mono-repo-thymeleaf/
 ├── infra/docker/      # Dockerfile
 ├── .github/workflows/ # CI/CD (ci.yml, backend-cd.yml, deploy-user.yml, stage-user.yml)
 ├── docs/
-│   ├── backend/       # RULES.md, README.md, BACKEND_DEPENDENCIES.md, 배포 가이드
-│   └── frontend/      # UI_UX_RULES.md
+│   ├── backend/       # RULES.md (§1-§8), README.md, BACKEND_DEPENDENCIES.md, 배포 가이드
+│   ├── frontend/      # UI_UX_RULES.md
+│   └── CI_STRATEGY.md # CI/CD, 브랜치 전략, Branch Protection
+├── CLAUDE.md           # AI 행동 규칙 정본 + 문서 정본 체계
+├── AGENTS.md           # CLAUDE.md 동기화 미러
 ├── build.gradle.kts
 └── settings.gradle.kts
 ```
@@ -83,7 +86,9 @@ common ← global-core ← domain-core ← security-web ← web-support ← apps
 
 ## Git 전략
 
-- **브랜치**: feature → PR → CI → Squash Merge → develop → main
+- **브랜치**: `feat/*` → PR → CI → Squash Merge → `develop` (기본 브랜치)
+- **main 브랜치**: 예약 상태 — 실서버 운영 시 프로덕션 용도로 도입 예정
+- **배포**: `deploy/user` 브랜치에 push 시 자동 배포
 - **커밋**: Conventional Commits (한국어), Co-Authored-By 금지
 - **직접 push 금지**: develop, main 브랜치
 - **PR 생성 후**: auto-merge 설정, 즉시 develop 체크아웃
@@ -98,7 +103,20 @@ common ← global-core ← domain-core ← security-web ← web-support ← apps
 | `stage-user.yml`  | —                         | user 앱 스테이징                  |
 
 - CI Java 버전: 21 (Temurin) — 빌드 호환용, 프로젝트 Toolchain은 Java 25
-- CI는 `.md`, `docs/`, `.serena/`, `CLAUDE.md` 변경 시 스킵
+- CI는 `.md`, `.serena/**` 등 문서/설정만 변경된 PR은 job 내부에서 감지하여 빌드 스킵 (job 자체는 성공 보고)
+
+## 문서 정본 체계
+
+| 주제                         | 정본                             | 충돌 시                           |
+|----------------------------|--------------------------------|--------------------------------|
+| AI 행동 규칙, Git 워크플로우, 권한 설정 | `CLAUDE.md`                    | → `AGENTS.md` 동기화              |
+| 백엔드 코딩 규칙, 아키텍처, API 규칙    | `docs/backend/RULES.md`        | → `README.md` 갱신               |
+| 프론트엔드 UI/UX                | `docs/frontend/UI_UX_RULES.md` | —                              |
+| CI/CD, 브랜치 전략              | `docs/CI_STRATEGY.md`          | → `CLAUDE.md` 갱신               |
+| 백엔드 의존성 목록                 | `build.gradle.kts` (코드)        | → `BACKEND_DEPENDENCIES.md` 갱신 |
+| Port/Adapter 목록            | 코드 (`support/` 패키지)            | → `RULES.md` 갱신                |
+
+> 코드와 문서 충돌 시 **코드가 정본**. 단, 코드가 규칙 위반이면 코드를 수정.
 
 ## 컨트롤러 컨벤션
 

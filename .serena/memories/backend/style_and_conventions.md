@@ -1,5 +1,7 @@
 # 백엔드 코딩 규칙 & 컨벤션
 
+> 상세 규칙: `docs/backend/RULES.md` (§1 아키텍처 ~ §8 치트시트)
+
 ## 핵심 개발 철학 (13대 원칙)
 
 SRP, Clean Code, CQRS, DDD + Vertical Slicing, Hexagonal Architecture,

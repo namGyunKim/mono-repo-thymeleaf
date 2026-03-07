@@ -65,8 +65,8 @@
 # 작업 시작
 git checkout develop && git pull
 
-# feature 브랜치 생성
-git checkout -b feature/기능명
+# feature 브랜치 생성 (네이밍: feat/be-xxx 백엔드, feat/xxx 공통)
+git checkout -b feat/be-기능명
 
 # PR 전 rebase
 git fetch origin && git rebase origin/develop
