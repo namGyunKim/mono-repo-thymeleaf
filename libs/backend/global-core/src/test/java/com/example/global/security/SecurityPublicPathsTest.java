@@ -1,7 +1,8 @@
 package com.example.global.security;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class SecurityPublicPathsTest {
 

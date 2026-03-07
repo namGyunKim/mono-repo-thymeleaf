@@ -2,7 +2,6 @@ package com.example.domain.member.validator;
 
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.member.payload.request.MemberCreateRequest;
-
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

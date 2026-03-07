@@ -1,9 +1,9 @@
 package com.example.global.exception.support;
 
 import com.example.global.exception.enums.ErrorCode;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.Test;
 
 class ExceptionMessageResolverTest {
 

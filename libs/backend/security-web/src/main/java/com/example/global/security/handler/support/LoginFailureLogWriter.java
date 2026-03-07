@@ -4,11 +4,8 @@ import com.example.global.exception.support.FilterLogTemplates;
 import com.example.global.payload.response.ApiErrorDetail;
 import com.example.global.utils.ClientIpExtractor;
 import com.example.global.utils.LoginLoggingUtils;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
 
 import java.util.List;

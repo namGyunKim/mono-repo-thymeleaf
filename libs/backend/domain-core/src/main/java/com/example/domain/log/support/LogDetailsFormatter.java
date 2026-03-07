@@ -1,7 +1,6 @@
 package com.example.domain.log.support;
 
 import com.example.domain.log.enums.LogType;
-
 import org.springframework.util.StringUtils;
 
 /**

@@ -31,7 +31,7 @@ public final class ExceptionEventFormatter {
                 Request Method : %s
                 Client IP : %s
                 %s%screateDate : %s
-
+                
                 %s
                 %s%s
                 logEnd=== === === === === === === === === === === === === === === === === === === === === === === === logEnd

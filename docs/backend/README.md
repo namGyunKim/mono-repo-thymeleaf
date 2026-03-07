@@ -48,6 +48,8 @@ mono-repo-thymeleaf/
 
 ## 3. 기술 기준
 
+> 버전 하한 고정 정책 및 Java 25/Spring 7/Boot 4 문법 우선 지침은 [RULES.md §1.4](./RULES.md#14-기술-스택-하한-critical) 참조
+
 - Java `25` (Gradle Toolchain)
 - Spring Boot `4.0.3`
 - Spring Framework `7.x`
@@ -97,11 +99,11 @@ mono-repo-thymeleaf/
 
 ## 6. API 버저닝 규칙 요약
 
+> 상세 규칙은 [RULES.md §4.1](./RULES.md#41-api-version-헤더-규칙-critical) 참조
+
 - 기본 정책: `/api/**` 요청은 `API-Version` 헤더 필수
 - 예외: `/api/health`, `/api/social/**`
 - URL 버저닝(`/v1`, `/api/v1`)은 사용하지 않음
-
-상세 규칙과 예외 처리 원칙은 [RULES.md](./RULES.md)의 CRITICAL 규칙을 따릅니다.
 
 ---
 
@@ -168,6 +170,8 @@ mono-repo-thymeleaf/
 ---
 
 ## 10. 테스트 전략
+
+> 테스트 코드 작성 규칙 상세는 [RULES.md §6.2](./RULES.md#62-테스트-코드-작성-규칙-critical) 참조
 
 ### 기본 원칙
 
@@ -355,11 +359,11 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 ### Enum 확인 경로
 
-| 대상               | 확인 방법                                                               |
-|------------------|---------------------------------------------------------------------|
-| 백엔드 (Java)       | `domain-core/.../contract/enums/Api*.java` 소스 코드                    |
-| API 테스트          | Postman/httpie 등 클라이언트로 직접 호출                                       |
-| 프론트 (TypeScript) | `import { ApiAccountRole } from '@mono-repo/types'`                 |
+| 대상               | 확인 방법                                               |
+|------------------|-----------------------------------------------------|
+| 백엔드 (Java)       | `domain-core/.../contract/enums/Api*.java` 소스 코드    |
+| API 테스트          | Postman/httpie 등 클라이언트로 직접 호출                       |
+| 프론트 (TypeScript) | `import { ApiAccountRole } from '@mono-repo/types'` |
 
 예외 정책:
 

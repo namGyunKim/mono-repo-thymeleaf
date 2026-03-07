@@ -2,7 +2,6 @@ package com.example.domain.member.service.command;
 
 import com.example.domain.member.support.MemberActivityPublishPort;
 import com.example.domain.member.support.MemberUniquenessSupport;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**

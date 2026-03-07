@@ -6,9 +6,7 @@ import com.example.domain.account.service.command.AccountCommandService;
 import com.example.global.annotation.CurrentAccount;
 import com.example.global.api.RestApiController;
 import com.example.global.version.ApiVersioning;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

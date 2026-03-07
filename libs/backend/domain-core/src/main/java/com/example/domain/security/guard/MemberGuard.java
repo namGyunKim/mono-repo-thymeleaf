@@ -6,9 +6,7 @@ import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.security.guard.support.CurrentAccountProvider;
 import com.example.domain.security.guard.support.MemberAccessTargetResolver;
 import com.example.domain.security.guard.support.MemberStatusChecker;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

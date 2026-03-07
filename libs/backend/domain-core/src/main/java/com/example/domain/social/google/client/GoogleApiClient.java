@@ -2,7 +2,6 @@ package com.example.domain.social.google.client;
 
 import com.example.domain.social.google.payload.response.GoogleTokenResponse;
 import com.example.domain.social.google.payload.response.GoogleUserInfoResponse;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;

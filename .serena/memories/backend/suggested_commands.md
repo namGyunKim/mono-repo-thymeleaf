@@ -1,18 +1,21 @@
 # 백엔드 빌드/테스트/실행 명령
 
 ## 빌드
+
 ```bash
 ./gradlew :apps:user:build
 # ./gradlew :apps:admin:build   # admin은 settings.gradle.kts에 미포함 (추후 추가)
 ```
 
 ## 실행
+
 ```bash
 ./gradlew :apps:user:bootRun    # localhost:8081
 # ./gradlew :apps:admin:bootRun   # admin 미설정 상태
 ```
 
 ## 테스트
+
 ```bash
 # 전체 테스트
 ./gradlew test
@@ -32,6 +35,7 @@
 ```
 
 ## 컴파일 검증 (개별 라이브러리)
+
 ```bash
 ./gradlew :libs:backend:common:compileJava
 ./gradlew :libs:backend:global-core:compileJava
@@ -41,6 +45,7 @@
 ```
 
 ## 의존성 점검
+
 ```bash
 ./gradlew -q dependencies --configuration runtimeClasspath
 ./gradlew -q dependencyInsight --dependency <artifact> --configuration runtimeClasspath
@@ -49,11 +54,13 @@
 ```
 
 ## Enum 계약 TS 생성
+
 ```bash
 ./gradlew :libs:backend:domain-core:generateContractEnumTs
 ```
 
 ## Git 워크플로우
+
 ```bash
 # 작업 시작
 git checkout develop && git pull
@@ -70,5 +77,6 @@ git checkout develop
 ```
 
 ## 헬스체크 URL
+
 - user: GET http://localhost:8081/api/health
 - admin: GET http://localhost:8082/api/health

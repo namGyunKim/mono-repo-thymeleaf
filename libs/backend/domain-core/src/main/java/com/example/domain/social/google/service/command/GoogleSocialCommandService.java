@@ -6,7 +6,6 @@ import com.example.domain.social.google.payload.dto.GoogleSocialUnlinkCommand;
 import com.example.domain.social.google.support.GoogleOauthProcessor;
 import com.example.domain.social.google.support.GoogleSocialMemberRegistrar;
 import com.example.domain.social.google.support.GoogleSocialUnlinkHandler;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

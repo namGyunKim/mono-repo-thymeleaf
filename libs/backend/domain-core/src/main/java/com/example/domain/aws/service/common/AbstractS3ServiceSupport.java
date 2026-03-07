@@ -2,14 +2,11 @@ package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.enums.ImageType;
 import com.example.domain.aws.payload.dto.S3UrlParts;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import jakarta.annotation.PostConstruct;
-
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-
 import software.amazon.awssdk.services.s3.S3Client;
 
 import java.net.URLEncoder;

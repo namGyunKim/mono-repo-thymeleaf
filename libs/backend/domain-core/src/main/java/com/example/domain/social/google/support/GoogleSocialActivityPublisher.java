@@ -2,9 +2,7 @@ package com.example.domain.social.google.support;
 
 import com.example.domain.log.enums.LogType;
 import com.example.domain.social.support.SocialActivityPublishPort;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

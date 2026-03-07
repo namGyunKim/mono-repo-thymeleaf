@@ -1,11 +1,9 @@
 package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.payload.dto.S3ImageUrlQuery;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import org.springframework.stereotype.Component;
-
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Component

@@ -3,7 +3,6 @@ package com.example.domain.social.repository;
 import com.example.domain.social.entity.SocialAccount;
 import com.example.domain.social.payload.dto.SocialAccountKeyQuery;
 import com.example.domain.social.payload.dto.SocialAccountMemberProviderQuery;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

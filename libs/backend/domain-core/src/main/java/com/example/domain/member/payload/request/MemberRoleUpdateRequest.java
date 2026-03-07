@@ -2,7 +2,6 @@ package com.example.domain.member.payload.request;
 
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.contract.enums.ApiAccountRole;
-
 import jakarta.validation.constraints.NotNull;
 
 public record MemberRoleUpdateRequest(

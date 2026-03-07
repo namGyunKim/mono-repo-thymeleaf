@@ -13,21 +13,12 @@ import com.example.global.api.RestApiController;
 import com.example.global.payload.response.IdResponse;
 import com.example.global.payload.response.RestApiResponse;
 import com.example.global.version.ApiVersioning;
-
-
 import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @ConditionalOnProperty(name = "app.type", havingValue = "user")
 @RestController

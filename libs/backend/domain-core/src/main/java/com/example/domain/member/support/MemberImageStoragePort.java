@@ -1,7 +1,7 @@
 package com.example.domain.member.support;
 
-import com.example.domain.member.payload.dto.MemberImagesStorageDeleteCommand;
 import com.example.domain.member.payload.dto.MemberImageStorageDeleteCommand;
+import com.example.domain.member.payload.dto.MemberImagesStorageDeleteCommand;
 
 /**
  * member 도메인에서 외부 이미지 저장소(S3 등)의 회원 이미지를 관리하는 포트.

@@ -2,7 +2,6 @@ package com.example.domain.account.validator;
 
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.account.payload.request.AccountUserLoginRequest;
-
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 

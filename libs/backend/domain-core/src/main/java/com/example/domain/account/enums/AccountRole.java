@@ -1,10 +1,9 @@
 package com.example.domain.account.enums;
 
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
+import com.example.global.exception.enums.ErrorCode;
 import com.example.global.utils.EnumParser;
 import com.fasterxml.jackson.annotation.JsonCreator;
-
 import lombok.Getter;
 
 @Getter

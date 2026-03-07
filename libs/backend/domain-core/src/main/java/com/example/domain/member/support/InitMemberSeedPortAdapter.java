@@ -7,9 +7,7 @@ import com.example.domain.member.enums.MemberType;
 import com.example.domain.member.payload.dto.MemberCreateCommand;
 import com.example.domain.member.payload.dto.MemberRoleExistsQuery;
 import com.example.domain.member.service.MemberStrategyFactory;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

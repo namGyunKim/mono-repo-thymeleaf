@@ -1,14 +1,8 @@
 package com.example.domain.aws.service.query;
 
 import com.example.domain.aws.payload.dto.S3ImageUrlQuery;
-import com.example.domain.aws.service.common.AbstractS3ServiceSupport;
-import com.example.domain.aws.service.common.S3BucketResolver;
-import com.example.domain.aws.service.common.S3ImageUrlSupport;
-import com.example.domain.aws.service.common.S3KeyBuilder;
-import com.example.domain.aws.service.common.S3UrlParser;
-
+import com.example.domain.aws.service.common.*;
 import org.springframework.transaction.annotation.Transactional;
-
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Transactional(readOnly = true)

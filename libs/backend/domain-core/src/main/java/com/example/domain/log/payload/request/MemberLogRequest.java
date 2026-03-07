@@ -3,10 +3,7 @@ package com.example.domain.log.payload.request;
 import com.example.domain.contract.enums.ApiLogType;
 import com.example.domain.log.enums.LogType;
 import com.example.global.utils.PaginationUtils;
-
-
 import jakarta.validation.constraints.Min;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;

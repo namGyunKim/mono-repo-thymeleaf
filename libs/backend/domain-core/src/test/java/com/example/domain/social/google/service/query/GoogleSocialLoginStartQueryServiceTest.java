@@ -4,19 +4,18 @@ import com.example.domain.social.google.payload.dto.GoogleOauthSession;
 import com.example.domain.social.google.support.GoogleOauthAuthorizeUrlBuilder;
 import com.example.domain.social.google.support.GoogleOauthSessionKeys;
 import com.example.global.exception.SocialException;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.Test;
 import static org.mockito.BDDMockito.given;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.Mock;
 
 @ExtendWith(MockitoExtension.class)
 class GoogleSocialLoginStartQueryServiceTest {

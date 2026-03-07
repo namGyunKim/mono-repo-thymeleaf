@@ -2,7 +2,6 @@ package com.example.global.api;
 
 import com.example.global.payload.response.ApiErrorResponse;
 import com.example.global.payload.response.RestApiResponse;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -7,9 +7,7 @@ import com.example.domain.social.payload.dto.SocialAccountKeyQuery;
 import com.example.domain.social.payload.dto.SocialAccountMemberProviderQuery;
 import com.example.domain.social.repository.SocialAccountRepository;
 import com.example.global.security.SocialTokenCrypto;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

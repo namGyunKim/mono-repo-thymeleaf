@@ -2,9 +2,7 @@ package com.example.global.exception.support;
 
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.version.ApiVersioning;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 @Component

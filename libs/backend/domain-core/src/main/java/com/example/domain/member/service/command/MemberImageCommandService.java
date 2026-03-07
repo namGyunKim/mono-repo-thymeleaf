@@ -8,11 +8,9 @@ import com.example.domain.member.payload.dto.MemberImageStorageDeleteCommand;
 import com.example.domain.member.repository.MemberImageRepository;
 import com.example.domain.member.repository.MemberRepository;
 import com.example.domain.member.support.MemberImageStoragePort;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

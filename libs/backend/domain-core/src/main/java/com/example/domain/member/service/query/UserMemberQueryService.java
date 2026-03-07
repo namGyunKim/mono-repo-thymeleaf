@@ -2,7 +2,6 @@ package com.example.domain.member.service.query;
 
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.member.repository.MemberRepository;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

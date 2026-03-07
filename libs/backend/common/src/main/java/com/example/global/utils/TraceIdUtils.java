@@ -1,7 +1,6 @@
 package com.example.global.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.slf4j.MDC;
 
 import java.util.UUID;

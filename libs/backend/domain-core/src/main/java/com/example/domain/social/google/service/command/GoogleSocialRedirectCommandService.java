@@ -5,10 +5,8 @@ import com.example.domain.social.google.payload.dto.GoogleOauthSession;
 import com.example.domain.social.google.payload.dto.GoogleSocialRedirectCommand;
 import com.example.domain.social.google.support.GoogleOauthSessionResolver;
 import com.example.domain.social.support.SocialLoginTokenPort;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

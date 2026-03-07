@@ -1,13 +1,11 @@
 package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.enums.ImageType;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
-import javax.imageio.ImageIO;
-
+import com.example.global.exception.enums.ErrorCode;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

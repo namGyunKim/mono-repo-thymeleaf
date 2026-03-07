@@ -116,7 +116,7 @@ deploy.sh가 타겟을 등록/해제할 대상이다. 프로젝트마다 별도�
 | 항목                    | 설정                |
 |-----------------------|-------------------|
 | Target type           | **Instances**     |
-| 타겟 그룹 이름              | `user-tg`     |
+| 타겟 그룹 이름              | `user-tg`         |
 | Protocol / Port       | **HTTP / 80**     |
 | VPC                   | EC2가 속한 VPC       |
 | Health check protocol | HTTP              |
@@ -151,11 +151,11 @@ ALB가 트래픽을 올바른 타겟 그룹으로 라우팅하도록 규칙을 �
 
 **EC2 → 로드밸런서 → ALB 선택 → 리스너 (HTTPS:443) → 규칙 관리:**
 
-| 조건 (IF)                           | 액션 (THEN)                 |
-|-----------------------------------|---------------------------|
-| Host header = `api.example.com`   | Forward to `user-tg`  |
+| 조건 (IF)                              | 액션 (THEN)                |
+|--------------------------------------|--------------------------|
+| Host header = `api.example.com`      | Forward to `user-tg`     |
 | Host header = `{새 프로젝트}.example.com` | Forward to `{새 프로젝트}-tg` |
-| 기본 규칙                             | Fixed response 404        |
+| 기본 규칙                                | Fixed response 404       |
 
 > 호스트 기반 라우팅으로 하나의 ALB에서 여러 프로젝트를 처리한다.
 > 경로 기반(`/api/*`)도 가능하지만, 프로젝트별 도메인 분리를 권장한다.
@@ -166,9 +166,9 @@ ALB가 트래픽을 올바른 타겟 그룹으로 라우팅하도록 규칙을 �
 
 **Route 53 → 호스팅 영역 → 레코드 생성:**
 
-| 레코드 이름              | 타입 | 라우팅         | 대상     |
-|---------------------|----|-------------|--------|
-| `api.example.com`   | A  | Alias → ALB | ALB 선택 |
+| 레코드 이름            | 타입 | 라우팅         | 대상     |
+|-------------------|----|-------------|--------|
+| `api.example.com` | A  | Alias → ALB | ALB 선택 |
 
 ### 요약 — AWS에서 확인할 것
 
@@ -258,9 +258,9 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 
 ### 파일
 
-| 서버 경로                               | 원본                                                             | 비고                                             |
-|-------------------------------------|----------------------------------------------------------------|------------------------------------------------|
-| `/opt/deploy/deploy.sh`             | [`deploy.sh`](deploy.sh)                                       | 모든 서버 동일                                       |
+| 서버 경로                           | 원본                                             | 비고                                             |
+|---------------------------------|------------------------------------------------|------------------------------------------------|
+| `/opt/deploy/deploy.sh`         | [`deploy.sh`](deploy.sh)                       | 모든 서버 동일                                       |
 | `/opt/deploy/projects/user.env` | [`user/user.env`](user/user.env)               | `IMAGE`, `SPRING_PROFILES`, `TARGET_GROUP_ARN` |
 | `/etc/nginx/conf.d/user.conf`   | [`user/nginx/user.conf`](user/nginx/user.conf) | `server_name` 수정                               |
 
@@ -277,8 +277,8 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 
 ### 프로젝트별 파일
 
-| 프로젝트 | 디렉토리                                           |
-|------|------------------------------------------------|
+| 프로젝트 | 디렉토리                                     |
+|------|------------------------------------------|
 | user | [`docs/backend/deployment/user/`](user/) |
 
 > 새 프로젝트 추가 시 동일 구조로 `{project}/` 디렉토리를 생성한다.
@@ -375,8 +375,8 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 
 ### 프로젝트별 파일
 
-| 파일                                                             | 배치 위치                                   |
-|----------------------------------------------------------------|-----------------------------------------|
+| 파일                                             | 배치 위치                               |
+|------------------------------------------------|-------------------------------------|
 | [`user/deploy-user.yml`](user/deploy-user.yml) | `.github/workflows/deploy-user.yml` |
 | [`user/stage-user.yml`](user/stage-user.yml)   | `.github/workflows/stage-user.yml`  |
 | [`user/user.env`](user/user.env)               | 서버 `/opt/deploy/projects/user.env`  |
@@ -391,12 +391,12 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 1. **`docs/backend/deployment/`의 원본 파일을 먼저 수정**한다
 2. 수정한 내용을 실제 배치 위치에 동일하게 반영한다
 
-| 원본 (docs)                        | 배치 위치                                    |
-|----------------------------------|------------------------------------------|
-| `backend-cd.yml`                 | `.github/workflows/backend-cd.yml`       |
-| `user/deploy-user.yml`   | `.github/workflows/deploy-user.yml`  |
-| `user/stage-user.yml`    | `.github/workflows/stage-user.yml`   |
-| `backend.Dockerfile`             | `infra/docker/backend.Dockerfile`        |
+| 원본 (docs)              | 배치 위치                               |
+|------------------------|-------------------------------------|
+| `backend-cd.yml`       | `.github/workflows/backend-cd.yml`  |
+| `user/deploy-user.yml` | `.github/workflows/deploy-user.yml` |
+| `user/stage-user.yml`  | `.github/workflows/stage-user.yml`  |
+| `backend.Dockerfile`   | `infra/docker/backend.Dockerfile`   |
 
 > 원본과 배치 파일은 항상 동일한 내용을 유지해야 한다. 배치 위치만 직접 수정하면 원본과 불일치가 발생한다.
 
@@ -408,9 +408,9 @@ user 서버 세팅 기준. 다른 프로젝트는 해당 프로젝트 디렉토�
 
 프로젝트 전용 브랜치에 push하면 해당 프로젝트만 배포된다. 변경된 파일과 무관하게 항상 동작한다.
 
-| 브랜치                | 배포 대상     |
-|--------------------|-----------|
-| `deploy/user`  | user  |
+| 브랜치           | 배포 대상 |
+|---------------|-------|
+| `deploy/user` | user  |
 
 > 새 프로젝트 추가 시 `deploy/{project}` 브랜치를 생성한다.
 

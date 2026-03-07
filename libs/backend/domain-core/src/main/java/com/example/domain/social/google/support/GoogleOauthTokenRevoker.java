@@ -4,10 +4,8 @@ import com.example.domain.social.entity.SocialAccount;
 import com.example.domain.social.google.client.GoogleOauthClient;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.security.SocialTokenCrypto;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

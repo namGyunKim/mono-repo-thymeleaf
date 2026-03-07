@@ -1,8 +1,6 @@
 package com.example.global.utils;
 
 import com.example.global.payload.response.ApiErrorDetail;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
@@ -10,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class LoginLoggingUtilsTest {
 

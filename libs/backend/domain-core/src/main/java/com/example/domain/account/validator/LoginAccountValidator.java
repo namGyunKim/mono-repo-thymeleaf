@@ -7,9 +7,7 @@ import com.example.domain.account.payload.request.AccountUserLoginRequest;
 import com.example.domain.account.service.query.AccountQueryService;
 import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.member.enums.MemberType;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

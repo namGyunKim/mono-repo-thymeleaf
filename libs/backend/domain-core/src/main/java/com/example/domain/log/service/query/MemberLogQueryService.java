@@ -5,12 +5,10 @@ import com.example.domain.log.payload.dto.MemberLogSearchQuery;
 import com.example.domain.log.payload.dto.MemberLogView;
 import com.example.domain.log.payload.response.MemberLogResponse;
 import com.example.domain.log.repository.MemberLogRepository;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
+import com.example.global.exception.enums.ErrorCode;
 import com.example.global.utils.PaginationUtils;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

@@ -1,8 +1,6 @@
 package com.example.global.exception.support;
 
 import com.example.global.payload.response.ApiErrorDetail;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -10,6 +8,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ValidationErrorMapperTest {
 

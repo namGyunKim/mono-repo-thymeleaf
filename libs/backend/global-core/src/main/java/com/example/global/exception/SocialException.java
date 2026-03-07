@@ -2,7 +2,9 @@ package com.example.global.exception;
 
 import com.example.global.exception.enums.ErrorCode;
 
-/** 소셜 로그인 예외 처리 */
+/**
+ * 소셜 로그인 예외 처리
+ */
 public class SocialException extends BaseAppException {
 
     public SocialException(final ErrorCode errorCode) {

@@ -1,11 +1,11 @@
 package com.example.domain.log.repository;
 
-import static com.example.domain.log.entity.QMemberLog.memberLog;
 import com.example.domain.log.payload.dto.MemberLogSearchQuery;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-
 import org.springframework.util.StringUtils;
+
+import static com.example.domain.log.entity.QMemberLog.memberLog;
 
 /**
  * QueryDSL 기반 회원 로그 검색 조건 조립

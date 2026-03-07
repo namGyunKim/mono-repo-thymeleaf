@@ -10,13 +10,11 @@ import com.example.domain.member.payload.response.MemberDetailResponse;
 import com.example.domain.member.payload.response.MemberListResponse;
 import com.example.domain.member.repository.MemberRepository;
 import com.example.domain.member.repository.MemberSpecification;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
+import com.example.global.exception.enums.ErrorCode;
 import com.example.global.utils.PaginationUtils;
 import com.querydsl.core.types.Predicate;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

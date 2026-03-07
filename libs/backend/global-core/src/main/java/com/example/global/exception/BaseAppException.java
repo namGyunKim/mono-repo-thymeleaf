@@ -1,7 +1,6 @@
 package com.example.global.exception;
 
 import com.example.global.exception.enums.ErrorCode;
-
 import lombok.Getter;
 
 import java.io.PrintWriter;

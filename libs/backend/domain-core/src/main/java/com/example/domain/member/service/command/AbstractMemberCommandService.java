@@ -12,9 +12,8 @@ import com.example.domain.member.payload.dto.MemberUpdateCommand;
 import com.example.domain.member.support.MemberActivityPublishPort;
 import com.example.domain.member.support.MemberImageStoragePort;
 import com.example.domain.member.support.MemberUniquenessSupport;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 

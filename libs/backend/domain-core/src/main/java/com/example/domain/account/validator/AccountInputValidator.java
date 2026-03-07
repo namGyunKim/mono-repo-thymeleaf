@@ -1,8 +1,8 @@
 package com.example.domain.account.validator;
 
 import com.example.domain.account.payload.dto.CurrentAccountDTO;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
+import com.example.global.exception.enums.ErrorCode;
 
 /**
  * Account 도메인 입력값 검증 유틸리티

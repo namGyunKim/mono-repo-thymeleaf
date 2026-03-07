@@ -6,16 +6,14 @@ import com.example.domain.log.payload.dto.MemberLogCreateCommand;
 import com.example.domain.log.repository.MemberLogRepository;
 import com.example.global.exception.BaseAppException;
 import com.example.global.exception.enums.ErrorCode;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Component

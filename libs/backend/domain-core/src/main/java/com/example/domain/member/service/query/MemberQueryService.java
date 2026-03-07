@@ -6,7 +6,6 @@ import com.example.domain.member.payload.dto.MemberListQuery;
 import com.example.domain.member.payload.dto.MemberRoleExistsQuery;
 import com.example.domain.member.payload.response.MemberDetailResponse;
 import com.example.domain.member.payload.response.MemberListResponse;
-
 import org.springframework.data.domain.Page;
 
 import java.util.List;

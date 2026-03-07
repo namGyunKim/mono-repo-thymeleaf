@@ -1,10 +1,9 @@
 package com.example.domain.account.validator;
 
 import com.example.global.exception.GlobalException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AccountInputValidatorTest {
 

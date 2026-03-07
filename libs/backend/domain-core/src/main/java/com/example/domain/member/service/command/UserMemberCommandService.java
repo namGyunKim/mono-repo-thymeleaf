@@ -13,11 +13,9 @@ import com.example.domain.member.support.MemberActivityPublishPort;
 import com.example.domain.member.support.MemberImageStoragePort;
 import com.example.domain.member.support.MemberSocialCleanupPort;
 import com.example.domain.member.support.MemberUniquenessSupport;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

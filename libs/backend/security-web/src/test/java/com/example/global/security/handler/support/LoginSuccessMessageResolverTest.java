@@ -1,8 +1,9 @@
 package com.example.global.security.handler.support;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class LoginSuccessMessageResolverTest {
 

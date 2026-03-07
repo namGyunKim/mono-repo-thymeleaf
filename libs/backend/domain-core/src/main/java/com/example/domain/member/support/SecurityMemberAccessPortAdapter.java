@@ -7,9 +7,7 @@ import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.member.repository.MemberRepository;
 import com.example.domain.security.guard.support.MemberAccessTarget;
 import com.example.domain.security.guard.support.SecurityMemberAccessPort;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 import java.util.List;

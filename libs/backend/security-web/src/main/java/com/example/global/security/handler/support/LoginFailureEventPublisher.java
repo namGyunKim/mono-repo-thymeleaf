@@ -3,9 +3,7 @@ package com.example.global.security.handler.support;
 import com.example.domain.log.enums.LogType;
 import com.example.domain.security.port.SecurityLoginActivityPublishPort;
 import com.example.global.utils.LoginLoggingUtils;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

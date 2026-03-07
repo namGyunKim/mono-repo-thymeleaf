@@ -5,14 +5,12 @@ import com.example.domain.aws.payload.dto.S3ImageDeleteCommand;
 import com.example.domain.aws.payload.dto.S3SingleImageDeleteCommand;
 import com.example.domain.aws.service.command.S3MemberCommandService;
 import com.example.domain.member.enums.MemberUploadDirect;
-import com.example.domain.member.payload.dto.MemberImagesStorageDeleteCommand;
 import com.example.domain.member.payload.dto.MemberImageStorageDeleteCommand;
+import com.example.domain.member.payload.dto.MemberImagesStorageDeleteCommand;
 import com.example.domain.member.support.MemberImageStoragePort;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

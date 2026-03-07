@@ -2,18 +2,15 @@ package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.enums.ImageType;
 import com.example.domain.aws.payload.dto.S3UrlParts;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
-
+import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.model.MetadataDirective;
-import software.amazon.awssdk.services.s3.S3Client;
 
 import java.util.concurrent.TimeUnit;
 

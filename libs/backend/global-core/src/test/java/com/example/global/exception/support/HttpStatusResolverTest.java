@@ -1,10 +1,10 @@
 package com.example.global.exception.support;
 
 import com.example.global.exception.enums.ErrorCode;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class HttpStatusResolverTest {
 

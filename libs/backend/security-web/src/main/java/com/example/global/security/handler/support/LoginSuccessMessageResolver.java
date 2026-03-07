@@ -1,7 +1,6 @@
 package com.example.global.security.handler.support;
 
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 /**

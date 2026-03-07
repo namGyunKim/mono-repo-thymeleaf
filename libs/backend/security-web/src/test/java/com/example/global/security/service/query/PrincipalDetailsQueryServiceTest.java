@@ -1,11 +1,5 @@
 package com.example.global.security.service.query;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.account.payload.dto.AccountAuthMemberView;
 import com.example.domain.account.payload.dto.AccountLoginIdQuery;
@@ -15,7 +9,6 @@ import com.example.domain.security.guard.PrincipalDetails;
 import com.example.domain.security.port.SecurityAccountAuthQueryPort;
 import com.example.global.exception.GlobalException;
 import com.example.global.exception.enums.ErrorCode;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PrincipalDetailsQueryServiceTest {

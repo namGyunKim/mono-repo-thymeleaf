@@ -1,7 +1,6 @@
 package com.example.domain.member.service.query;
 
 import com.example.domain.account.enums.AccountRole;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

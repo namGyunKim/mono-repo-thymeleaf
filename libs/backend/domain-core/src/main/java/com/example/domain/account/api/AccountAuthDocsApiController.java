@@ -3,12 +3,8 @@ package com.example.domain.account.api;
 import com.example.domain.account.payload.request.AccountUserLoginRequest;
 import com.example.global.api.RestApiController;
 import com.example.global.version.ApiVersioning;
-
-
 import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

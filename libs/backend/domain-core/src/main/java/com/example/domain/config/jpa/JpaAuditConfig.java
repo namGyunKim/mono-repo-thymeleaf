@@ -1,9 +1,7 @@
 package com.example.domain.config.jpa;
 
 import com.example.domain.security.guard.MemberGuard;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

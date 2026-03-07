@@ -1,20 +1,14 @@
 package com.example.global.config.security;
 
+import com.example.global.security.SecurityPublicPaths;
 import com.example.global.security.filter.JsonBodyLoginAuthenticationFilter;
 import com.example.global.security.filter.support.JsonBodyLoginErrorWriter;
 import com.example.global.security.filter.support.JsonBodyLoginRequestParser;
 import com.example.global.security.filter.support.JsonBodyLoginRequestValidator;
-import com.example.global.security.handler.CustomAccessDeniedHandler;
-import com.example.global.security.handler.CustomAuthenticationEntryPoint;
-import com.example.global.security.handler.CustomAuthFailureHandler;
-import com.example.global.security.handler.CustomAuthSuccessHandler;
-import com.example.global.security.handler.RoleBasedLogoutSuccessHandler;
-import com.example.global.security.SecurityPublicPaths;
+import com.example.global.security.handler.*;
 import com.example.global.security.service.query.PrincipalDetailsQueryService;
 import com.example.global.utils.RequestUriUtils;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +20,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;

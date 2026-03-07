@@ -5,11 +5,9 @@ import com.example.domain.member.enums.MemberUploadDirect;
 import com.example.domain.member.payload.dto.MemberImageDeleteCommand;
 import com.example.domain.member.payload.dto.MemberImageRegisterCommand;
 import com.example.domain.member.service.command.MemberImageCommandService;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

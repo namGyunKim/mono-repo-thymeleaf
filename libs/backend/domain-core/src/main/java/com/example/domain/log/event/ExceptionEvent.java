@@ -8,7 +8,6 @@ import com.example.global.payload.response.ApiErrorDetail;
 import com.example.global.utils.ClientIpExtractor;
 import com.example.global.utils.SensitiveLogMessageSanitizer;
 import com.example.global.utils.TraceIdUtils;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.LocalDateTime;

@@ -5,11 +5,8 @@ import com.example.domain.log.event.ExceptionEvent;
 import com.example.domain.security.guard.MemberGuard;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.utils.SensitiveLogMessageSanitizer;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

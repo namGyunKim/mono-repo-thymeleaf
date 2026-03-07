@@ -3,11 +3,11 @@ package com.example.domain.member.validator;
 import com.example.domain.contract.enums.ApiAccountRole;
 import com.example.domain.contract.enums.ApiMemberType;
 import com.example.domain.member.payload.request.MemberCreateRequest;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberCreateRequestPolicyValidatorTest {
 

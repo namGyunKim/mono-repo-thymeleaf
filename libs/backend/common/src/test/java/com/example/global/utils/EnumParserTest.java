@@ -1,13 +1,14 @@
 package com.example.global.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class EnumParserTest {
 
-    private enum TestColor { RED, GREEN, BLUE }
+    private enum TestColor {RED, GREEN, BLUE}
 
     @Test
     void toNameMap_null_returns_empty_map() {

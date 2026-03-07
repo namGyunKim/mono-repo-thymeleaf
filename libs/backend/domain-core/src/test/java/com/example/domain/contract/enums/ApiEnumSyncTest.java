@@ -6,14 +6,14 @@ import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.member.enums.MemberFilterType;
 import com.example.domain.member.enums.MemberOrderType;
 import com.example.domain.member.enums.MemberType;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.function.Function;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ApiEnumSyncTest {
 

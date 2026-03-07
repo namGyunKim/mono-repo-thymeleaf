@@ -1,15 +1,12 @@
 package com.example.domain.social.google.support;
 
 import com.example.domain.social.google.payload.response.GoogleTokenResponse;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.SocialException;
-
-import lombok.extern.slf4j.Slf4j;
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 

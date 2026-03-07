@@ -3,14 +3,11 @@ package com.example.domain.social.google.service.query;
 import com.example.domain.social.google.payload.dto.GoogleOauthSession;
 import com.example.domain.social.google.support.GoogleOauthAuthorizeUrlBuilder;
 import com.example.domain.social.google.support.GoogleOauthSessionKeys;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.SocialException;
-
+import com.example.global.exception.enums.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
