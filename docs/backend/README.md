@@ -169,7 +169,15 @@ mono-repo-thymeleaf/
 
 ---
 
-## 10. 테스트 전략
+## 10. 프록시 헤더 전략
+
+- `server.forward-headers-strategy: native` — AWS ALB 등 리버스 프록시 환경에서 HTTPS 리다이렉트 문제를 해결한다
+- Spring Boot가 `X-Forwarded-*` 헤더를 신뢰하여 원본 프로토콜/호스트를 정확히 인식한다
+- 이 설정은 `application.yml`에 명시되어 있다
+
+---
+
+## 11. 테스트 전략
 
 > 테스트 코드 작성 규칙 상세는 [RULES.md §6.2](./RULES.md#62-테스트-코드-작성-규칙-critical) 참조
 
@@ -228,16 +236,16 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 | 모듈           | 테스트 파일 수 | 테스트 메서드 수 |
 |--------------|----------|-----------|
-| common       | 14       | ~95       |
-| global-core  | 10       | ~80       |
-| security-web | 2        | ~10       |
-| domain-core  | 14       | ~85       |
-| web-support  | 0        | 0         |
-| **합계**       | **40**   | **~270**  |
+| common       | 14       | 123       |
+| global-core  | 6        | 43        |
+| security-web | 6        | 41        |
+| domain-core  | 18       | 82        |
+| web-support  | 2        | 11        |
+| **합계**       | **46**   | **300**   |
 
 ---
 
-## 11. Serena 메모리 공유 (AI 온보딩)
+## 12. Serena 메모리 공유 (AI 온보딩)
 
 `.serena/memories/` 디렉토리에 팀 공통 프로젝트 컨텍스트를 저장하여, AI 도구(Serena MCP)가 일관된 품질로 작업할 수 있도록 한다.
 
@@ -268,7 +276,7 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 ---
 
-## 12. 문서 역할 분리
+## 13. 문서 역할 분리
 
 - 이 문서: 구조/실행/운영 기준(개요)
 - [RULES.md](./RULES.md): 코드 작성 및 리뷰 시 반드시 지켜야 하는 세부 규칙
@@ -278,7 +286,7 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 ---
 
-## 13. API 계약 Enum 전략
+## 14. API 계약 Enum 전략
 
 백엔드는 **도메인 Enum**과 **API 계약 Enum**을 분리해서 운영합니다.
 
@@ -371,7 +379,7 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 ---
 
-## 14. 데이터베이스 파티셔닝
+## 15. 데이터베이스 파티셔닝
 
 ### 대상 테이블
 

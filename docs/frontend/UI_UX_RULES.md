@@ -60,6 +60,9 @@
 
 ### HTMX 사용 규칙
 
+> **현재 상태**: `htmx.min.js`는 레이아웃에 로드되어 있으나, 현재 템플릿에서 HTMX 속성을 사용하는 곳은 없다.
+> 아래 규칙은 HTMX를 도입하는 시점부터 적용한다.
+
 - **JS 최소화**: 가능한 모든 서버 인터랙션은 HTMX 속성으로 처리
 - **Fragment 반환**: HTMX 요청에 대한 컨트롤러 응답은 전체 페이지가 아닌 **Thymeleaf fragment** 반환
 
@@ -118,6 +121,22 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 }
 ```
 
+> **현재 상태**: `app.css` 파일이 아직 생성되지 않았으며, 현재는 **Tabler 유틸리티 클래스**로 스타일링한다.
+> 아래 CSS 변수는 커스텀 테마 도입 시 적용할 **목표 설계**이다.
+
+### Tabler 색상 클래스 (현재 사용 중)
+
+Tabler 유틸리티 클래스 기반으로 색상을 적용한다:
+
+| 용도    | 클래스 패턴           | 예시                                          |
+|-------|------------------|---------------------------------------------|
+| 배경    | `bg-{color}`     | `bg-blue`, `bg-azure`, `bg-teal`            |
+| 연한 배경 | `bg-{color}-lt`  | `bg-blue-lt`, `bg-purple-lt`                |
+| 텍스트   | `text-{color}`   | `text-blue`, `text-secondary`, `text-muted` |
+| 상태    | `status-{color}` | `status-green`                              |
+
+사용 가능 색상: `blue`, `azure`, `teal`, `indigo`, `purple`, `orange`, `cyan`, `green`
+
 ### 색상 사용 원칙
 
 - 배경: `--color-bg` (페이지), `--color-surface` (카드/섹션)
@@ -156,6 +175,9 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
     --font-bold: 700;
 }
 ```
+
+> **현재 상태**: Pretendard 웹폰트는 아직 로드하지 않으며, 브라우저 시스템 폰트(`-apple-system` 등)로 폴백된다.
+> Pretendard 도입 시 WebJars 또는 self-hosted 방식으로 로드한다 (CDN 금지).
 
 ### 타이포그래피 원칙
 
@@ -278,6 +300,15 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 - 색상: 상태 색상의 연한 배경 + 진한 텍스트
 ```
 
+### 구현 상태 (현재 사용 중인 컴포넌트)
+
+| 상태    | 컴포넌트                                                              | 비고                |
+|-------|-------------------------------------------------------------------|-------------------|
+| ✅ 구현됨 | Navbar, Cards, Badges, Avatars, Tabs, List Groups, Alerts, Tables | `index.html`에서 사용 |
+| ⏳ 미구현 | Forms, Modals, Toasts, Sidebar, Breadcrumbs, Drawers              | 해당 페이지 추가 시 구현    |
+
+> 새 컴포넌트를 추가할 때 이 테이블을 갱신한다.
+
 ---
 
 ## 레이아웃
@@ -304,11 +335,21 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 
 ## 아이콘
 
-- 라이브러리: **Lucide Icons** (가볍고, 일관된 스트로크)
-- CDN: `<script src="https://unpkg.com/lucide@latest"></script>`
-- 크기: 텍스트와 함께 사용 시 `16px ~ 20px`
+- 방식: **Tabler 인라인 SVG** (Tabler 아이콘 세트 기반)
+- 크기: 텍스트와 함께 사용 시 `16px ~ 24px`
+- 속성: `stroke="currentColor"`, `fill="none"`, `stroke-width="2"`
 - 색상: `currentColor` (텍스트 색상 따름)
 - **아이콘 단독 사용 금지** — 반드시 텍스트 레이블 병행 (툴팁 최소)
+- ❌ CDN 사용 금지 — WebJars 정책과 동일하게 외부 CDN 의존을 피한다
+
+```html
+<!-- ✅ Tabler 인라인 SVG -->
+<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+     stroke-linecap="round" stroke-linejoin="round">
+  <path d="..."/>
+</svg>
+```
 
 ---
 
@@ -540,25 +581,40 @@ CSS 변수로 정의하며, **다크 모드**는 추후 확장 시 변수만 덮
 
 ## 파일 구조 컨벤션
 
-```
-src/main/resources/
-├── static/
-│   ├── css/
-│   │   └── app.css          # 전역 스타일 (CSS 변수 정의 포함)
-│   ├── js/
-│   │   └── app.js           # 전역 스크립트
+### 현재 구조
+
+```text
+apps/user/src/main/resources/
+├── static/                    # (커스텀 CSS/JS/이미지 추가 시 생성)
+│   ├── css/                   # 전역 스타일 (CSS 변수 정의 포함)
+│   ├── js/                    # 전역 스크립트
 │   └── images/
 ├── templates/
 │   ├── layout/
-│   │   └── default.html     # Thymeleaf 레이아웃 템플릿
-│   ├── fragments/
-│   │   ├── header.html
-│   │   ├── sidebar.html
-│   │   └── footer.html
-│   ├── index.html
-│   └── {도메인}/
+│   │   └── default.html       # Thymeleaf 파라미터 Fragment 레이아웃
+│   ├── index.html             # 인덱스 페이지
+│   └── {도메인}/               # 도메인별 페이지 (추가 시)
 │       └── {기능}.html
 ```
+
+> `static/` 디렉토리는 커스텀 CSS/JS가 필요할 때 생성한다. 현재는 Tabler/HTMX WebJars만 사용한다.
+
+### 향후 확장 구조 (페이지 증가 시)
+
+```text
+templates/
+├── layout/
+│   └── default.html
+├── fragments/                  # 공통 fragment (페이지 3개 이상일 때 분리)
+│   ├── header.html
+│   ├── sidebar.html
+│   └── footer.html
+├── index.html
+└── {도메인}/
+    └── {기능}.html
+```
+
+> 현재는 `layout/default.html`에 헤더/푸터가 포함되어 있다. 페이지가 3개 이상으로 늘어나면 `fragments/`로 분리한다.
 
 ### 네이밍 규칙
 
@@ -576,3 +632,30 @@ src/main/resources/
 - 인라인 스타일 금지: 모든 스타일은 CSS 파일에 작성
 - 인라인 스크립트 최소화: 이벤트 바인딩은 JS 파일에서 처리
 - `th:text`와 `th:utext` 구분: HTML 이스케이프 필요 시 `th:text`, 마크다운 렌더링 등 `th:utext`
+
+### 레이아웃 파라미터 Fragment 패턴
+
+레이아웃은 4개 파라미터 Fragment로 구성한다:
+
+```html
+<!-- layout/default.html -->
+<html th:fragment="layout(title, header, content, scripts)">
+  <head><title th:replace="${title}">기본 제목</title></head>
+  <body>
+    <div th:replace="${header}">헤더 영역</div>
+    <div th:replace="${content}">콘텐츠 영역</div>
+    <script th:replace="${scripts}">스크립트 영역</script>
+  </body>
+</html>
+
+<!-- 페이지에서 사용 -->
+<html th:replace="~{layout/default :: layout(~{::title}, ~{::header}, ~{::content}, ~{::scripts})}">
+  <title th:fragment="title">페이지 제목</title>
+  <th:block th:fragment="header">...</th:block>
+  <th:block th:fragment="content">...</th:block>
+  <th:block th:fragment="scripts">...</th:block>
+</html>
+```
+
+- 모든 페이지는 `layout/default.html`의 `layout` fragment를 사용한다
+- 각 페이지는 `title`, `header`, `content`, `scripts` 4개 fragment를 인라인으로 정의한다

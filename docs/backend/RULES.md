@@ -369,6 +369,19 @@ log.info("회원 생성 완료: memberId=" + memberId + ", role=" + role);
 - ❌ `"\n"` escape 금지
 - ✅ Text Block(`""" ... """`) + `formatted(...)` 사용
 
+#### 정적 리소스 캐싱 전략 (`WebConfig`)
+
+`WebConfig.addResourceHandlers()`에서 3종류의 리소스 핸들러를 등록한다.
+
+| 핸들러            | 경로            | 캐시 정책                                                  | 비고                                                          |
+|----------------|---------------|--------------------------------------------------------|-------------------------------------------------------------|
+| Service Worker | `/sw.js`      | `Cache-Control: no-cache`                              | 브라우저 업데이트 정책상 항상 최신 체크                                      |
+| WebJars        | `/webjars/**` | prod: `max-age=365d`, local: `no-store`                | `WebJarsResourceResolver` 존재 시 버전 생략 경로 지원                  |
+| Static         | `/**`         | prod: `max-age=365d` + Content Hash, local: `no-store` | `VersionResourceResolver` + `CssLinkResourceTransformer` 적용 |
+
+- **local 프로필**: `resourceChain(false)` — 해시/버전 캐시 비활성화로 개발 중 즉시 반영
+- **prod 프로필**: `resourceChain(true)` — Content 기반 해시 버전(`output-{hash}.css`)으로 장기 캐시 + 캐시 무효화
+
 #### 기술 스택 부가 규칙
 
 - 외부 연동 우선순위: 공식 SDK → `@HttpExchange` → `@EnableHttpServices`
@@ -531,6 +544,61 @@ public record LoginRequest(
 - `exists`/`count`는 전용 쿼리로 처리
 - Enum 변경 시 DB 제약조건 동기화 + ALTER SQL 함께 제공
 
+#### Soft Delete 패턴 (`_LEAVE_` 타임스탬프 맹글링)
+
+Unique 제약조건이 걸린 컬럼의 논리 삭제 시, 값을 `{원래값}_LEAVE_{yyyyMMddHHmmss}` 형태로 변환하여 Unique 충돌을 회피한다.
+
+```java
+// Member.withdraw() 예시
+final String nowStr = LocalDateTime.now()
+        .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+this.loginId = "%s_LEAVE_%s".formatted(this.loginId, nowStr);
+this.nickName = "%s_LEAVE_%s".formatted(this.nickName, nowStr);
+this.active = MemberActiveStatus.INACTIVE;
+```
+
+- 조회 시 `_LEAVE_` 접미사가 있는 데이터는 탈퇴 처리된 것으로 간주한다
+- 새로운 Unique 컬럼에 Soft Delete를 적용할 때 이 패턴을 동일하게 따른다
+
+#### JPA 컬렉션 필드 규칙
+
+```java
+// ✅ 올바른 선언
+@OneToMany(...)
+private List<MemberImage> memberImages = new ArrayList<>();
+
+// ❌ final 금지 — Hibernate가 PersistentCollection으로 교체 불가
+private final List<MemberImage> memberImages = new ArrayList<>();
+
+// ❌ transient 금지 — JPA 영속 대상에서 제외됨
+private transient List<MemberImage> memberImages = new ArrayList<>();
+```
+
+- Hibernate는 지연 로딩 시 컬렉션 필드를 `PersistentCollection`으로 **교체(replace)** 한다
+- `final`이면 교체가 불가능하여 런타임 오류가 발생한다
+- `transient`이면 JPA 매핑 대상에서 제외되어 데이터가 누락된다
+
+#### Entity Serializable 규칙
+
+HttpSession 기반 인증을 사용하므로, 세션에 저장될 수 있는 모든 엔티티는 `Serializable`을 구현한다.
+
+```java
+// BaseTimeEntity가 Serializable을 구현하므로, 이를 상속하는 엔티티는 자동으로 Serializable
+public abstract class BaseTimeEntity implements Serializable {
+    // ...
+}
+
+// 엔티티마다 serialVersionUID 선언 필수
+public class Member extends BaseTimeEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+    // ...
+}
+```
+
+- `BaseTimeEntity`가 `Serializable`을 구현하지만, 엔티티 클래스에서도 **명시적으로 `implements Serializable` 선언**한다
+- `serialVersionUID`는 반드시 선언한다 (JVM 기본 생성 UID는 클래스 변경 시 역직렬화 실패 원인)
+- 복합 키 클래스(`@IdClass`, `@EmbeddedId`)도 반드시 `Serializable` 구현 + `serialVersionUID` 선언
+
 #### Repository 메서드 네이밍 규칙
 
 | 접두사              | 반환 타입                           | 용도                | 예시                           |
@@ -609,6 +677,20 @@ libs/backend/domain-core/src/main/java/com/example/domain/
     └── support
 ```
 
+#### `support/` 패키지 클래스 분류
+
+`support/` 패키지에는 역할이 다른 세 종류의 클래스가 공존한다. 네이밍으로 역할을 구분한다.
+
+| 분류                 | 네이밍 패턴         | 역할                               | 예시                              |
+|--------------------|----------------|----------------------------------|---------------------------------|
+| **Port 인터페이스**     | `*Port`        | 도메인 간 계약 (인터페이스)                 | `AccountMemberQueryPort`        |
+| **PortAdapter 구현** | `*PortAdapter` | Port 구현체, 다른 도메인의 서비스를 위임 호출     | `AccountMemberQueryPortAdapter` |
+| **도메인 내부 Support** | `*Support`     | 도메인 내부 재사용 로직 (Validator 등에서 활용) | `MemberUniquenessSupport`       |
+| **인프라 Support**    | `*Support`     | 횡단 관심사 유틸리티 (`web-support` 모듈)   | `ExceptionAdviceSupport`        |
+
+- Port/PortAdapter는 **도메인 간 의존 방향을 제어**하기 위한 패턴이다 (→ §3.3)
+- 도메인 내부 `*Support`는 해당 도메인의 `support/` 패키지에 위치하며, 외부 도메인에서 직접 참조하지 않는다
+
 #### 도메인별 특수 구조 (AI 참고용)
 
 모든 도메인이 위 표준 레이아웃을 100% 따르지는 않는다.
@@ -682,24 +764,20 @@ libs/backend/domain-core/src/main/java/com/example/domain/
 |------------------------------------|-------------------------------------------|--------------------|
 | `AccountMemberQueryPort`           | `AccountMemberQueryPortAdapter`           | account → member   |
 | `AccountMemberCommandPort`         | `AccountMemberCommandPortAdapter`         | account → member   |
-| `AccountTokenRevocationPort`       | `AccountTokenRevocationPortAdapter`       | account → security |
-| `AccountTokenRefreshPort`          | `AccountTokenRefreshPortAdapter`          | account → security |
 | `AccountActivityPublishPort`       | `AccountActivityPublishPortAdapter`       | account → log      |
-| `MemberTokenRevocationPort`        | `MemberTokenRevocationPortAdapter`        | member → security  |
 | `MemberPermissionCheckPort`        | `MemberPermissionCheckPortAdapter`        | member → security  |
 | `MemberActivityPublishPort`        | `MemberActivityPublishPortAdapter`        | member → log       |
-| `SecurityMemberTokenPort`          | `SecurityMemberTokenPortAdapter`          | security → member  |
+| `MemberSocialCleanupPort`          | `MemberSocialCleanupPortAdapter`          | member → social    |
+| `MemberImageStoragePort`           | `S3MemberImageStoragePortAdapter`         | member → aws       |
+| `SecurityAccountAuthQueryPort`     | `SecurityAccountAuthQueryPortAdapter`     | security → account |
 | `SecurityMemberAccessPort`         | `SecurityMemberAccessPortAdapter`         | security → member  |
+| `SecurityLoginActivityPublishPort` | `SecurityLoginActivityPublishPortAdapter` | security → log     |
 | `SocialMemberRegistrationPort`     | `SocialMemberRegistrationPortAdapter`     | social → member    |
 | `SocialLoginTokenPort`             | `SocialLoginTokenPortAdapter`             | social → security  |
 | `SocialActivityPublishPort`        | `SocialActivityPublishPortAdapter`        | social → log       |
-| `MemberSocialCleanupPort`          | `MemberSocialCleanupPortAdapter`          | member → social    |
 | `InitMemberSeedPort`               | `InitMemberSeedPortAdapter`               | init → member      |
 | `LogAuthenticationCheckPort`       | `LogAuthenticationCheckPortAdapter`       | log → security     |
-| `SecurityAccountAuthQueryPort`     | `SecurityAccountAuthQueryPortAdapter`     | security → account |
-| `SecurityLoginActivityPublishPort` | `SecurityLoginActivityPublishPortAdapter` | security → log     |
 | `MemberImageCommandPort`           | `MemberImageCommandPortAdapter`           | aws → member       |
-| `MemberImageStoragePort`           | `S3MemberImageStoragePortAdapter`         | member → aws       |
 
 #### Shared Kernel (도메인 간 공유 허용 타입)
 
@@ -790,6 +868,12 @@ BaseAppException (추상)
 - `RuntimeException`을 직접 `throw`하지 않는다 — 항상 `GlobalException.of(ErrorCode.XXX)` 패턴 사용
 - **예외: `common` 모듈의 저수준 유틸리티** (`OAuthPkceUtils`, `TokenHashUtils` 등)는 `GlobalException`에 의존할 수 없으므로
   `IllegalStateException`을 허용한다 — `common` 모듈은 `global-core`보다 하위 계층이라 `ErrorCode`를 참조할 수 없기 때문
+
+#### ExceptionAdvice 순서 전략
+
+- `CustomExceptionAdvice`에 `@Order(Ordered.HIGHEST_PRECEDENCE)`를 적용하여 비즈니스 예외를 최우선으로 처리한다
+- 여러 `@RestControllerAdvice`가 존재할 때, 비즈니스 예외(`BaseAppException`)가 Spring 기본 핸들러에 먼저 잡히지 않도록 보장한다
+- 새로운 `@RestControllerAdvice` 추가 시 `@Order` 값을 명시하여 처리 순서를 관리한다
 
 ### 3.6 이벤트 기반 로깅
 
@@ -937,6 +1021,27 @@ domain-core/src/main/java/com/example/domain/
 - 목록 조회: 쿼리 파라미터로 검색/필터/정렬/페이징
 - 페이징: `page`는 1부터, `size` 최대치 제한 (`PaginationUtils` 정책)
 
+#### Thymeleaf 뷰 컨트롤러 작성 원칙
+
+- `@Controller` + `@PreAuthorize` 필수 (REST API 컨트롤러와 동일)
+- 뷰 이름(String)을 반환한다 — `ResponseEntity` 사용 금지
+- `Model`에 데이터를 바인딩하여 Thymeleaf에 전달한다
+- HTMX 부분 갱신 요청에는 fragment만 반환한다 (전체 페이지 아님)
+- REST API 메서드와 같은 클래스에 혼합하지 않는다 (→ §4.3 컨트롤러 네이밍 컨벤션)
+
+```java
+@PreAuthorize("permitAll()")
+@Controller
+public class RootController {
+
+    @GetMapping("/")
+    public String index(final Model model) {
+        model.addAttribute("message", "서버가 정상 작동 중입니다.");
+        return "index";  // templates/index.html
+    }
+}
+```
+
 ### 4.4 검증 & 예외 처리 (CRITICAL)
 
 #### 예외 처리
@@ -954,13 +1059,46 @@ domain-core/src/main/java/com/example/domain/
 - ✅ 방어적 `supports(...)` 필수
 - ❌ 컨트롤러에서 Validator 직접 호출 금지 — `@InitBinder` 등록 + `@Valid`/`@Validated` 자동 검증
 
-#### 검증 책임 분리
+#### 검증 책임 분리 (3단계 파이프라인)
 
-| 영역                            | 대상                                       |
-|-------------------------------|------------------------------------------|
-| Request DTO (Bean Validation) | `@NotBlank`, `@Min`, `@Email` 등 단순 필드 검증 |
-| InitBinder Validator          | 교차 필드, 조건부 필수값, 옵션 조합, 트리밍               |
-| Service 계층                    | DB/트랜잭션 상태 의존 검증                         |
+요청 검증은 아래 3단계를 순서대로 통과한다:
+
+| 단계 | 영역                            | 대상                                                    | 실행 시점         |
+|----|-------------------------------|-------------------------------------------------------|---------------|
+| 1  | Request DTO (Bean Validation) | `@NotBlank`, `@Min`, `@Email` 등 단순 필드 검증              | 바인딩 직후        |
+| 2  | InitBinder Validator          | 교차 필드, 조건부 필수값, 정책 규칙, DB 중복 체크                       | `@Valid` 검증 시 |
+| 3  | Service Guard Clause          | `requireNonNull`, `requireCurrentAccountFull` 등 사전 조건 | 서비스 메서드 진입부   |
+
+- 1단계 실패 시 2단계의 DB 조회를 스킵하는 **최적화 패턴**을 적용한다 (→ `MemberCreateValidator` 참고)
+- 3단계는 `AccountInputValidator` 같은 **정적 유틸리티 Validator**로 Guard Clause를 캡슐화한다
+
+#### Validator 네이밍 컨벤션
+
+InitBinder Validator는 역할에 따라 두 가지 카테고리로 구분한다:
+
+| 카테고리           | 네이밍                       | DB 의존               | 역할             | 예시                                   |
+|----------------|---------------------------|---------------------|----------------|--------------------------------------|
+| 비즈니스 Validator | `*Validator`              | O (Support/Port 경유) | 중복 체크, 존재 여부 등 | `MemberCreateValidator`              |
+| 정책 Validator   | `*RequestPolicyValidator` | X (순수 규칙 검증)        | 역할 조합, 조건부 필수값 | `MemberCreateRequestPolicyValidator` |
+
+```java
+// 비즈니스 Validator — DB 조회 필요
+@Component
+@RequiredArgsConstructor
+public class MemberCreateValidator implements Validator {
+    private final MemberUniquenessSupport memberUniquenessSupport; // DB 경유
+    // 1단계 에러가 없을 때만 DB 조회 실행
+}
+
+// 정책 Validator — 순수 규칙 검증
+@Component
+public class MemberCreateRequestPolicyValidator implements Validator {
+    // DB 의존 없이 역할/조합 규칙만 검증
+}
+```
+
+- 하나의 `@InitBinder`에 여러 Validator를 등록할 수 있다: `binder.addValidators(policyValidator, businessValidator)`
+- Validator는 `validator/` 패키지에 배치한다
 
 ---
 
@@ -975,6 +1113,17 @@ domain-core/src/main/java/com/example/domain/
 - SpEL에서 패키지 의존형 `T(...)` 참조 지양 → `@Component` 메서드 호출로 캡슐화
 - 인증/인가 체크는 **`MemberGuard`** `@Component`로 통합
 - `SecurityUtils`/`SecurityContextHolder` 직접 호출 금지
+
+#### MemberGuard 메서드 네이밍 패턴
+
+| 접두사      | 역할       | 예시                                                        |
+|----------|----------|-----------------------------------------------------------|
+| `is*()`  | 상태 확인    | `isAuthenticated()`, `isSuperAdmin()`                     |
+| `has*()` | 권한 보유 확인 | `hasAnyAdminRole()`                                       |
+| `can*()` | 행위 가능 여부 | `canAccessMember()`, `canAccessSelf()`, `canManageRole()` |
+
+- `@PreAuthorize` SpEL에서 `@memberGuard.isAuthenticated()`, `@memberGuard.canAccessSelf(#id)` 형태로 호출한다
+- Guard 내부의 복잡한 권한 로직은 `private` 헬퍼 메서드로 분리한다
 
 ### 세션 인증 보안 규칙 (CRITICAL)
 
@@ -1019,6 +1168,27 @@ domain-core/src/main/java/com/example/domain/
 - 테스트 패키지는 대상 클래스의 패키지 경로와 동일하게 유지
 - 테스트 클래스명: `{대상클래스명}Test`
 - 테스트 메서드명: `{메서드명}_{시나리오}_{기대결과}` (snake_case)
+- **`@Nested` + `@DisplayName` 권장**: 테스트 메서드가 5개 이상이면 `@Nested` 내부 클래스로 논리적 그룹핑한다
+
+```java
+@ExtendWith(MockitoExtension.class)
+class MemberCreateValidatorTest {
+
+    @Nested
+    @DisplayName("validate 메서드")
+    class Validate {
+        @Test void validate_validRequest_noErrors() { ... }
+        @Test void validate_duplicateLoginId_rejectsField() { ... }
+    }
+
+    @Nested
+    @DisplayName("supports 메서드")
+    class Supports {
+        @Test void supports_correctClass_returnsTrue() { ... }
+        @Test void supports_wrongClass_returnsFalse() { ... }
+    }
+}
+```
 
 #### Mockito 사용 규칙
 
