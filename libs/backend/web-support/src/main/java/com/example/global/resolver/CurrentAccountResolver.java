@@ -2,9 +2,7 @@ package com.example.global.resolver;
 
 import com.example.domain.security.guard.MemberGuard;
 import com.example.global.annotation.CurrentAccount;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

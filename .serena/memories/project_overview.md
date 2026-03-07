@@ -15,7 +15,7 @@
 | Spring Framework | 7.x                                   |                                      |
 | 빌드               | Gradle                                | 9.3.1 (Wrapper)                      |
 | ORM              | JPA + QueryDSL                        | 7.1 (`io.github.openfeign.querydsl`) |
-| 뷰                | Thymeleaf + Tabler 1.4.0 + HTMX 2.0.7 | SSR (WebJars, Fragment 레이아웃)       |
+| 뷰                | Thymeleaf + Tabler 1.4.0 + HTMX 2.0.7 | SSR (WebJars, Fragment 레이아웃)         |
 | DB               | PostgreSQL                            |                                      |
 | 인증               | HttpSession + Spring Security (세션 기반) |                                      |
 | JSON             | Jackson 3 (`tools.jackson.*`)         |                                      |
@@ -53,17 +53,17 @@ common ← global-core ← domain-core ← security-web ← web-support ← apps
 
 ## 도메인 목록
 
-| 도메인      | 역할          | 특이사항                             |
-|----------|-------------|----------------------------------|
-| account  | 계정 인증/조합    | entity/repository 없음, member에 위임 |
-| member   | 회원 관리       | CRUD + 프로필 + 권한                  |
-| security | Guard/세션 인증 | 횡단 관심사, port/adapter 분리          |
-| social   | 소셜 로그인      | google/ 서브도메인 구조                 |
-| aws      | S3 파일 업로드   | 외부 인프라 연동 전용                     |
-| log      | 활동 로그       | 이벤트 리스너 기반, 파티셔닝(member_log)     |
-| init     | 로컬 시드 데이터   | @Profile("local") 전용             |
+| 도메인      | 역할          | 특이사항                               |
+|----------|-------------|------------------------------------|
+| account  | 계정 인증/조합    | entity/repository 없음, member에 위임   |
+| member   | 회원 관리       | CRUD + 프로필 + 권한                    |
+| security | Guard/세션 인증 | 횡단 관심사, port/adapter 분리            |
+| social   | 소셜 로그인      | google/ 서브도메인 구조                   |
+| aws      | S3 파일 업로드   | 외부 인프라 연동 전용                       |
+| log      | 활동 로그       | 이벤트 리스너 기반, 파티셔닝(member_log)       |
+| init     | 로컬 시드 데이터   | @Profile("local") 전용               |
 | contract | Enum 계약     | TS 코드 생성용 (generateContractEnumTs) |
-| config   | 도메인 공통 설정   | 도메인 모듈 내부 Bean 설정               |
+| config   | 도메인 공통 설정   | 도메인 모듈 내부 Bean 설정                  |
 
 ## 코드 규모
 
@@ -90,12 +90,12 @@ common ← global-core ← domain-core ← security-web ← web-support ← apps
 
 ## CI/CD
 
-| 워크플로우             | 트리거                        | 주요 동작                       |
-|--------------------|---------------------------|-------------------------------|
-| `ci.yml`           | PR → develop (md/docs 제외) | `./gradlew :apps:user:build` |
-| `backend-cd.yml`   | —                         | 백엔드 CD                       |
-| `deploy-user.yml`  | —                         | user 앱 배포                    |
-| `stage-user.yml`   | —                         | user 앱 스테이징                  |
+| 워크플로우             | 트리거                       | 주요 동작                        |
+|-------------------|---------------------------|------------------------------|
+| `ci.yml`          | PR → develop (md/docs 제외) | `./gradlew :apps:user:build` |
+| `backend-cd.yml`  | —                         | 백엔드 CD                       |
+| `deploy-user.yml` | —                         | user 앱 배포                    |
+| `stage-user.yml`  | —                         | user 앱 스테이징                  |
 
 - CI Java 버전: 21 (Temurin) — 빌드 호환용, 프로젝트 Toolchain은 Java 25
 - CI는 `.md`, `docs/`, `.serena/`, `CLAUDE.md` 변경 시 스킵

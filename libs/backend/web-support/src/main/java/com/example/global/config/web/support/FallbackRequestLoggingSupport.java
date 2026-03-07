@@ -1,9 +1,7 @@
 package com.example.global.config.web.support;
 
 import jakarta.servlet.http.HttpServletRequest;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

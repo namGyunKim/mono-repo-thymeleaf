@@ -1,9 +1,10 @@
 package com.example.global.aop.support;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.util.ContentCachingResponseWrapper;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ControllerResponseInfoResolverTest {
 

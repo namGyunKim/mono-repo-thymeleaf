@@ -4,9 +4,7 @@ import com.example.global.api.RestApiController;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.payload.response.ApiErrorDetail;
 import com.example.global.payload.response.ApiErrorResponse;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

@@ -6,10 +6,8 @@ import com.example.domain.log.payload.dto.ExceptionLogCreateCommand;
 import com.example.domain.log.repository.ExceptionLogRepository;
 import com.example.global.exception.BaseAppException;
 import com.example.global.exception.enums.ErrorCode;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

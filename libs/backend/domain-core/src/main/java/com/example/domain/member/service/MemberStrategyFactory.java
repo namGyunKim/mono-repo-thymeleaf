@@ -5,14 +5,11 @@ import com.example.domain.member.entity.Member;
 import com.example.domain.member.repository.MemberRepository;
 import com.example.domain.member.service.command.MemberCommandService;
 import com.example.domain.member.service.query.MemberQueryService;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import jakarta.annotation.PostConstruct;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 

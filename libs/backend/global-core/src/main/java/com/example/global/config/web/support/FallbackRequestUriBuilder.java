@@ -1,9 +1,7 @@
 package com.example.global.config.web.support;
 
 import com.example.global.utils.LoggingSanitizerPolicy;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 import java.util.Enumeration;

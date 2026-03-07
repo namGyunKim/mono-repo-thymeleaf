@@ -1,9 +1,7 @@
 package com.example.global.logging;
 
 import com.example.global.utils.ClientIpExtractor;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

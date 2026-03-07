@@ -3,10 +3,8 @@ package com.example.domain.init.service.command;
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.init.support.InitMemberSeedCommand;
 import com.example.domain.init.support.InitMemberSeedPort;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;

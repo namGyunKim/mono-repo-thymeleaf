@@ -4,9 +4,7 @@ import com.example.domain.member.support.MemberSocialCleanupPort;
 import com.example.domain.social.google.payload.dto.GoogleSocialUnlinkCommand;
 import com.example.domain.social.google.support.GoogleSocialUnlinkHandler;
 import com.example.domain.social.repository.SocialAccountRepository;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 /**

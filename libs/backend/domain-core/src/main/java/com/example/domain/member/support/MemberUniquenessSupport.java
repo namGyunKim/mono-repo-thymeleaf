@@ -4,9 +4,7 @@ import com.example.domain.member.payload.dto.MemberLoginIdDuplicateCheckQuery;
 import com.example.domain.member.payload.dto.MemberNickNameDuplicateCheckQuery;
 import com.example.domain.member.payload.dto.MemberNickNameExclusiveDuplicateCheckQuery;
 import com.example.domain.member.repository.MemberRepository;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;

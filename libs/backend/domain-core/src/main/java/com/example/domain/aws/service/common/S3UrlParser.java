@@ -1,9 +1,8 @@
 package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.payload.dto.S3UrlParts;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;

@@ -1,13 +1,13 @@
 package com.example.domain.log.validator;
 
 import com.example.domain.log.payload.request.MemberLogRequest;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberLogRequestPolicyValidatorTest {
 

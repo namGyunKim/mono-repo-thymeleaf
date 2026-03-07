@@ -1,10 +1,8 @@
 package com.example.global.config.async;
 
 import com.example.global.security.SecurityContextManager;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +14,8 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.core.context.SecurityContext;
 
-import java.util.concurrent.Executors;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Configuration

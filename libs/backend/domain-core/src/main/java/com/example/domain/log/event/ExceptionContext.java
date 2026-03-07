@@ -3,7 +3,6 @@ package com.example.domain.log.event;
 import com.example.domain.account.payload.dto.CurrentAccountDTO;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.payload.response.ApiErrorDetail;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;

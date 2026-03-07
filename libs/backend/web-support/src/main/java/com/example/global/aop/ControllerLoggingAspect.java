@@ -4,17 +4,14 @@ import com.example.domain.security.guard.MemberGuard;
 import com.example.global.aop.support.ControllerLoggingSupport;
 import com.example.global.config.web.RequestLoggingAttributes;
 import com.example.global.utils.ClientIpExtractor;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.web.context.request.RequestContextHolder;

@@ -1,7 +1,6 @@
 package com.example.domain.log.entity;
 
 import com.example.domain.log.payload.dto.ExceptionLogCreateCommand;
-
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

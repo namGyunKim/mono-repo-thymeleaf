@@ -2,30 +2,26 @@ package com.example.global.exception.advice;
 
 import com.example.domain.account.payload.dto.CurrentAccountDTO;
 import com.example.domain.log.event.ExceptionEvent;
-import com.example.global.exception.advice.support.ExceptionAdviceSupport;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
 import com.example.global.exception.SocialException;
+import com.example.global.exception.advice.support.ExceptionAdviceSupport;
+import com.example.global.exception.enums.ErrorCode;
 import com.example.global.payload.response.ApiErrorResponse;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.function.Supplier;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 /**
  * {@link CustomExceptionAdvice} 단위 테스트

@@ -3,9 +3,7 @@ package com.example.global.security.handler.support;
 import com.example.global.payload.response.ApiErrorDetail;
 import com.example.global.security.filter.JsonBodyLoginAuthenticationFilter;
 import com.example.global.utils.LoginLoggingUtils;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 

@@ -10,21 +10,13 @@ import com.example.domain.social.payload.response.SocialRedirectResponse;
 import com.example.global.api.RestApiController;
 import com.example.global.payload.response.RestApiResponse;
 import com.example.global.version.ApiVersioning;
-
-
 import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 소셜 로그인 REST API 컨트롤러

@@ -5,17 +5,14 @@ import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.support.FilterLogTemplates;
 import com.example.global.utils.ClientIpExtractor;
 import com.example.global.utils.SensitiveLogMessageSanitizer;
-
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.ServletException;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.core.annotation.Order;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 

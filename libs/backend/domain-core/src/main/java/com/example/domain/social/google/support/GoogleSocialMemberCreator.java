@@ -4,17 +4,15 @@ import com.example.domain.member.entity.Member;
 import com.example.domain.member.enums.MemberType;
 import com.example.domain.social.google.payload.response.GoogleUserInfoResponse;
 import com.example.domain.social.support.SocialMemberRegistrationPort;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor

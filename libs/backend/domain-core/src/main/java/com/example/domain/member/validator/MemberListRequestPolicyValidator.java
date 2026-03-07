@@ -5,7 +5,6 @@ import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.member.enums.MemberFilterType;
 import com.example.domain.member.enums.MemberOrderType;
 import com.example.domain.member.payload.request.MemberListRequest;
-
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

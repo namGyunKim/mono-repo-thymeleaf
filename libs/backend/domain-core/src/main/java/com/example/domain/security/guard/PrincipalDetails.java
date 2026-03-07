@@ -3,9 +3,8 @@ package com.example.domain.security.guard;
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.account.payload.dto.AccountAuthMemberView;
 import com.example.domain.member.enums.MemberType;
-
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

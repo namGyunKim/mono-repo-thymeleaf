@@ -1,7 +1,6 @@
 package com.example.domain.log.validator;
 
 import com.example.domain.log.payload.request.MemberLogRequest;
-
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

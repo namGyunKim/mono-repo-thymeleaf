@@ -3,17 +3,14 @@ package com.example.global.security.filter.support;
 import com.example.domain.account.payload.request.AccountUserLoginRequest;
 import com.example.global.payload.response.ApiErrorDetail;
 import jakarta.servlet.http.HttpServletRequest;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 

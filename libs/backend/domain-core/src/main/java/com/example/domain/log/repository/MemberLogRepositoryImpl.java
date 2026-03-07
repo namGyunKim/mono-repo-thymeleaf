@@ -1,20 +1,19 @@
 package com.example.domain.log.repository;
 
-import static com.example.domain.log.entity.QMemberLog.memberLog;
 import com.example.domain.log.payload.dto.MemberLogSearchQuery;
 import com.example.domain.log.payload.dto.MemberLogView;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.example.domain.log.entity.QMemberLog.memberLog;
 
 @Repository
 @RequiredArgsConstructor

@@ -166,10 +166,10 @@ EOF
 
 `gradle.properties`에서 아래 옵션을 활성화하여 빌드 성능을 개선한다.
 
-| 옵션 | 설명 |
-|---|---|
-| `org.gradle.parallel=true` | 독립 모듈 병렬 빌드 |
-| `org.gradle.caching=true` | Build Cache 활성화 (입력 동일 시 결과 재사용) |
+| 옵션                                    | 설명                                 |
+|---------------------------------------|------------------------------------|
+| `org.gradle.parallel=true`            | 독립 모듈 병렬 빌드                        |
+| `org.gradle.caching=true`             | Build Cache 활성화 (입력 동일 시 결과 재사용)   |
 | `org.gradle.configuration-cache=true` | Configuration Cache 활성화 (구성 단계 스킵) |
 
 ### 테스트 병렬 실행

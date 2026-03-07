@@ -4,9 +4,7 @@ import com.example.domain.account.enums.AccountRole;
 import com.example.domain.account.payload.dto.CurrentAccountDTO;
 import com.example.domain.security.guard.PrincipalDetails;
 import com.example.global.security.SecurityContextManager;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

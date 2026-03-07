@@ -2,9 +2,7 @@ package com.example.global.config.web;
 
 import com.example.global.resolver.CurrentAccountResolver;
 import com.example.global.version.ApiVersioning;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.CacheControl;
@@ -18,8 +16,8 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.resource.ResourceResolver;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
 
-import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @RequiredArgsConstructor

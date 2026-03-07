@@ -1,7 +1,6 @@
 package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.enums.ImageType;
-
 import org.springframework.stereotype.Component;
 
 import java.net.URLEncoder;

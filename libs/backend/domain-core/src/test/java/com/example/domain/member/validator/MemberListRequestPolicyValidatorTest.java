@@ -5,11 +5,11 @@ import com.example.domain.contract.enums.ApiMemberActiveStatus;
 import com.example.domain.contract.enums.ApiMemberFilterType;
 import com.example.domain.contract.enums.ApiMemberOrderType;
 import com.example.domain.member.payload.request.MemberListRequest;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MemberListRequestPolicyValidatorTest {
 

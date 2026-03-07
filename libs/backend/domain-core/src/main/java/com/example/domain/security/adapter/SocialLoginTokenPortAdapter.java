@@ -1,14 +1,12 @@
 package com.example.domain.security.adapter;
 
-import com.example.domain.security.port.SecurityAccountAuthQueryPort;
 import com.example.domain.account.payload.dto.AccountAuthMemberView;
 import com.example.domain.security.guard.PrincipalDetails;
+import com.example.domain.security.port.SecurityAccountAuthQueryPort;
 import com.example.domain.social.support.SocialLoginTokenPort;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

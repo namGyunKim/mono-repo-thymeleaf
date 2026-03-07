@@ -3,12 +3,9 @@ package com.example.global.security.handler;
 import com.example.domain.security.guard.PrincipalDetails;
 import com.example.global.security.handler.support.LoginSuccessEventPublisher;
 import com.example.global.security.handler.support.LoginSuccessMessageResolver;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

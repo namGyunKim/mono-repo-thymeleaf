@@ -9,8 +9,6 @@ import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.member.enums.MemberFilterType;
 import com.example.domain.member.enums.MemberOrderType;
 import com.example.global.utils.PaginationUtils;
-
-
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;

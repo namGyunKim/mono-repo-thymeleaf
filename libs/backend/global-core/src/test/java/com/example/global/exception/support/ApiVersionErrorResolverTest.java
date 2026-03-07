@@ -2,10 +2,10 @@ package com.example.global.exception.support;
 
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.version.ApiVersioning;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ApiVersionErrorResolverTest {
 

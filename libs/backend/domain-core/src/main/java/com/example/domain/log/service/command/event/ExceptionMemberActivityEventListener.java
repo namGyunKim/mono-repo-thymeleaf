@@ -7,9 +7,7 @@ import com.example.domain.log.payload.dto.MemberActivityPayload;
 import com.example.domain.log.support.LogAuthenticationCheckPort;
 import com.example.domain.log.support.LogDetailsFormatter;
 import com.example.global.utils.SensitiveLogMessageSanitizer;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

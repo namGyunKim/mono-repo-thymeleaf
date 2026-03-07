@@ -1,19 +1,12 @@
 package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.enums.ImageType;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
-
-import software.amazon.awssdk.services.s3.model.Delete;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
-import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
-import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.util.ArrayList;
 import java.util.List;

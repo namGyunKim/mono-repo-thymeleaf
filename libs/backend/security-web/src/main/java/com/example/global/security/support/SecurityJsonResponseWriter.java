@@ -1,9 +1,7 @@
 package com.example.global.security.support;
 
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.http.MediaType;
-
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;

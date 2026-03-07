@@ -3,7 +3,6 @@ package com.example.domain.log.event;
 import com.example.global.event.ErrorMeta;
 import com.example.global.exception.BaseAppException;
 import com.example.global.exception.enums.ErrorCode;
-
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.servlet.NoHandlerFoundException;

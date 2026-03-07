@@ -6,12 +6,10 @@ import com.example.domain.social.google.payload.dto.GoogleOauthResult;
 import com.example.domain.social.google.payload.dto.GoogleTokenRequestCommand;
 import com.example.domain.social.google.payload.response.GoogleTokenResponse;
 import com.example.domain.social.google.payload.response.GoogleUserInfoResponse;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.SocialException;
-
-import lombok.extern.slf4j.Slf4j;
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

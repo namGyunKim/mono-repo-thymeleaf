@@ -2,7 +2,6 @@ package com.example.domain.member.repository;
 
 import com.example.domain.member.entity.MemberImage;
 import com.example.domain.member.payload.dto.MemberImageQuery;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

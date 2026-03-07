@@ -2,9 +2,7 @@ package com.example.domain.security.guard.support;
 
 import com.example.domain.account.enums.AccountRole;
 import com.example.domain.member.enums.MemberActiveStatus;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 import java.util.List;

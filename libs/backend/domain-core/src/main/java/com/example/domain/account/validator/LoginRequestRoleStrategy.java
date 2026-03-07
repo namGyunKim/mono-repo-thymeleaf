@@ -1,7 +1,6 @@
 package com.example.domain.account.validator;
 
 import com.example.domain.account.enums.AccountRole;
-
 import org.springframework.lang.Nullable;
 
 import java.util.List;

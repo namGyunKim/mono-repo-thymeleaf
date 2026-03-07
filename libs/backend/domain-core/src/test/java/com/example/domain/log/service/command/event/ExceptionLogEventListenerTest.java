@@ -5,7 +5,6 @@ import com.example.domain.log.event.ExceptionEvent;
 import com.example.domain.log.repository.ExceptionLogRepository;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.payload.response.ApiErrorDetail;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

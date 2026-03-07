@@ -1,19 +1,19 @@
 package com.example.domain.member.repository;
 
 import com.example.domain.account.enums.AccountRole;
-import static com.example.domain.member.entity.QMember.member;
 import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.member.enums.MemberFilterType;
 import com.example.domain.member.payload.dto.MemberListQuery;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-
 import org.springframework.util.StringUtils;
 
-import java.util.function.Function;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+
+import static com.example.domain.member.entity.QMember.member;
 
 /**
  * QueryDSL을 이용한 동적 쿼리 조건(Predicate) 생성

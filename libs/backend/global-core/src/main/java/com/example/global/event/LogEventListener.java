@@ -1,15 +1,15 @@
 package com.example.global.event;
 
 import com.example.global.exception.support.EventLogTemplates;
-
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
-/** 로그 이벤트 리스너 */
+/**
+ * 로그 이벤트 리스너
+ */
 @Slf4j
 @Component
 public class LogEventListener {

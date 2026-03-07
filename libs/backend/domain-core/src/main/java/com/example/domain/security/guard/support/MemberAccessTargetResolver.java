@@ -1,7 +1,6 @@
 package com.example.domain.security.guard.support;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

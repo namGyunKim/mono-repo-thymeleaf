@@ -1,21 +1,18 @@
 package com.example.domain.aws.service.common;
 
 import com.example.domain.aws.enums.ImageType;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.GlobalException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * S3 파일 업로드 오케스트레이션을 담당하는 클래스

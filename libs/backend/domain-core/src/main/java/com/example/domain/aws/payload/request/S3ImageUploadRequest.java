@@ -1,7 +1,6 @@
 package com.example.domain.aws.payload.request;
 
 import jakarta.validation.constraints.NotNull;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public record S3ImageUploadRequest(

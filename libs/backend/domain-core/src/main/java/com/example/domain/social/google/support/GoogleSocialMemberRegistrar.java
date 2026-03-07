@@ -5,11 +5,9 @@ import com.example.domain.member.entity.Member;
 import com.example.domain.member.enums.MemberActiveStatus;
 import com.example.domain.social.entity.SocialAccount;
 import com.example.domain.social.google.payload.response.GoogleUserInfoResponse;
-import com.example.global.exception.enums.ErrorCode;
 import com.example.global.exception.SocialException;
-
+import com.example.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

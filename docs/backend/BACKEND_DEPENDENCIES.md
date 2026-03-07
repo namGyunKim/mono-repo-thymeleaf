@@ -24,7 +24,7 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 | `libs/backend/domain-core`  | 도메인 로직 + security (세션 인증, port)                  |
 | `libs/backend/security-web` | 보안 웹 레이어                                         |
 | `libs/backend/web-support`  | 웹 공통 지원 레이어                                      |
-| `apps/user`             | 사용자 API 앱 (BootJar)                              |
+| `apps/user`                 | 사용자 API 앱 (BootJar)                              |
 
 ## 공통 의존성 (루트 subprojects 블록)
 
@@ -63,10 +63,10 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 
 ### AWS
 
-| 의존성                          | 버전      | 스코프            | 설명               |
-|------------------------------|---------|----------------|------------------|
+| 의존성                          | 버전     | 스코프            | 설명               |
+|------------------------------|--------|----------------|------------------|
 | `software.amazon.awssdk:bom` | 2.42.7 | platform (BOM) | AWS SDK v2 버전 관리 |
-| `software.amazon.awssdk:s3`  | BOM 관리  | implementation | AWS S3 클라이언트     |
+| `software.amazon.awssdk:s3`  | BOM 관리 | implementation | AWS S3 클라이언트     |
 
 ## 모듈별 추가 선언
 
@@ -77,7 +77,7 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 | `domain-core`  | `implementation(global-core)` + `generateContractEnumTs` 코드 생성 태스크                  |
 | `security-web` | `implementation(global-core, domain-core)`                                          |
 | `web-support`  | `implementation(global-core, domain-core, security-web)`                            |
-| `user`     | `implementation(global-core, domain-core, security-web, web-support)` — BootJar 활성화 |
+| `user`         | `implementation(global-core, domain-core, security-web, web-support)` — BootJar 활성화 |
 
 ## 참고사항
 

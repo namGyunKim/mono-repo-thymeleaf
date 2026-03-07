@@ -1,7 +1,6 @@
 package com.example.domain.log.support;
 
 import com.example.global.payload.response.ApiErrorDetail;
-
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

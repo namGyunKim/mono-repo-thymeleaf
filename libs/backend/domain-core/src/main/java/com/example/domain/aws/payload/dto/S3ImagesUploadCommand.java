@@ -1,7 +1,6 @@
 package com.example.domain.aws.payload.dto;
 
 import com.example.domain.aws.enums.ImageType;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

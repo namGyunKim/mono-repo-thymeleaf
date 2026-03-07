@@ -5,8 +5,6 @@ import com.example.domain.contract.enums.ApiAccountRole;
 import com.example.domain.contract.enums.ApiMemberType;
 import com.example.domain.member.enums.MemberType;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

@@ -2,10 +2,8 @@ package com.example.domain.social.google.support;
 
 import com.example.domain.social.entity.SocialAccount;
 import com.example.domain.social.google.payload.dto.GoogleSocialUnlinkCommand;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

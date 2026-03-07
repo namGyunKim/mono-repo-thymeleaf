@@ -4,9 +4,7 @@ import com.example.domain.account.payload.dto.AccountActivityPublishCommand;
 import com.example.domain.account.support.AccountActivityPublishPort;
 import com.example.domain.log.payload.dto.MemberActivityCommand;
 import com.example.domain.log.service.command.LogActivityPublisher;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

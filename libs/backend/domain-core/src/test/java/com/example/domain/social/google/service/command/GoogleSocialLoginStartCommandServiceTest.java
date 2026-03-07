@@ -1,19 +1,18 @@
 package com.example.domain.social.google.service.command;
 
 import com.example.domain.social.google.support.GoogleOauthSessionKeys;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import static org.mockito.BDDMockito.given;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)

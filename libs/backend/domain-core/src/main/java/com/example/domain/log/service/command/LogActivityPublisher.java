@@ -5,9 +5,7 @@ import com.example.domain.log.payload.dto.MemberActivityCommand;
 import com.example.domain.log.payload.dto.MemberActivityPayload;
 import com.example.domain.log.support.LogDetailsFormatter;
 import com.example.global.logging.ClientIpResolver;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

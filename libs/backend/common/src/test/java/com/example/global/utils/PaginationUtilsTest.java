@@ -1,9 +1,10 @@
 package com.example.global.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class PaginationUtilsTest {
 

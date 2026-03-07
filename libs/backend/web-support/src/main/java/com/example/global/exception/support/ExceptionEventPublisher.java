@@ -1,9 +1,7 @@
 package com.example.global.exception.support;
 
 import com.example.domain.log.event.ExceptionEvent;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

@@ -5,11 +5,9 @@ import com.example.domain.account.payload.dto.AccountProfileUpdateCommand;
 import com.example.domain.account.support.AccountMemberCommandPort;
 import com.example.domain.member.payload.dto.MemberDeactivateCommand;
 import com.example.domain.member.payload.dto.MemberUpdateCommand;
-import com.example.domain.member.service.command.MemberCommandService;
 import com.example.domain.member.service.MemberStrategyFactory;
-
+import com.example.domain.member.service.command.MemberCommandService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
 
 @Component

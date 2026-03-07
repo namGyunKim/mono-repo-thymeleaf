@@ -2,7 +2,6 @@ package com.example.domain.member.enums;
 
 import com.example.global.utils.EnumParser;
 import com.fasterxml.jackson.annotation.JsonCreator;
-
 import lombok.Getter;
 
 import java.util.List;

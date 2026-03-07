@@ -2,14 +2,15 @@ package com.example.global.config.p6spy;
 
 import com.p6spy.engine.logging.Category;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
-
 import org.hibernate.engine.jdbc.internal.FormatStyle;
 
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-/** P6spy SQL 포맷 설정 */
+/**
+ * P6spy SQL 포맷 설정
+ */
 public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
 
     private static final DateTimeFormatter LOG_TIME_FORMATTER = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm:ss");

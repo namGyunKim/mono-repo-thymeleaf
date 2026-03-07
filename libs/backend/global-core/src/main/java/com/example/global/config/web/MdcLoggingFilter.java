@@ -2,18 +2,12 @@ package com.example.global.config.web;
 
 import com.example.global.logging.RequestContextScope;
 import com.example.global.utils.TraceIdUtils;
-
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-
 import org.slf4j.MDC;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

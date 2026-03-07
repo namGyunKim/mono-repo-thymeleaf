@@ -4,7 +4,6 @@ import com.example.domain.account.payload.dto.CurrentAccountDTO;
 import com.example.domain.log.event.ExceptionEvent;
 import com.example.global.exception.enums.ErrorCode;
 import com.example.global.payload.response.ApiErrorDetail;
-
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

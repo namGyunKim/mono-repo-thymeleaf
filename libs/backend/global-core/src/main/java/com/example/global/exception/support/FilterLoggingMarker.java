@@ -1,9 +1,7 @@
 package com.example.global.exception.support;
 
 import com.example.global.config.web.RequestLoggingAttributes;
-
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 @Component

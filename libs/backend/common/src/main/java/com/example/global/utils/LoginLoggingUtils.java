@@ -1,7 +1,6 @@
 package com.example.global.utils;
 
 import com.example.global.payload.response.ApiErrorDetail;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;

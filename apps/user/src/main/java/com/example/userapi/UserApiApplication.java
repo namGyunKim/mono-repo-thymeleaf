@@ -1,11 +1,11 @@
 package com.example.userapi;
 
-import java.util.Map;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import java.util.Map;
 
 @SpringBootApplication(scanBasePackages = "com.example")
 @AutoConfigurationPackage(basePackages = "com.example")

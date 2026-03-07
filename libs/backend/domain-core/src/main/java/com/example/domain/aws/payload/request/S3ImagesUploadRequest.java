@@ -1,7 +1,6 @@
 package com.example.domain.aws.payload.request;
 
 import jakarta.validation.constraints.NotEmpty;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
