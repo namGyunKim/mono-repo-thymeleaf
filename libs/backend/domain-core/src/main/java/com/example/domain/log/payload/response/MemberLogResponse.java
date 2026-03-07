@@ -1,34 +1,24 @@
 package com.example.domain.log.payload.response;
 
-import com.example.domain.contract.enums.ApiLogType;
 import com.example.domain.log.payload.dto.MemberLogView;
-import com.example.global.utils.DateTimeFormatUtils;
 
+/**
+ * 회원 활동 로그 응답 — 로그 ID + 행위자 + 이벤트 상세로 구성
+ */
 public record MemberLogResponse(
         Long id,
-        String loginId,     // 대상 회원 ID
-        String executorId,  // 수행자 ID (기존 executorId 대신 createdBy 매핑)
-        ApiLogType logType, // 로그 유형
-        String details,     // 상세 내용
-        String clientIp,    // IP 주소
-        String createdAt    // 생성일시
+        LogActorResponse actor,
+        LogEventResponse event
 ) {
-    private MemberLogResponse(final MemberLogView view) {
-        this(
-                view.id(),
-                view.loginId(),
-                view.executorId(),
-                ApiLogType.fromDomain(view.logType()),
-                view.details(),
-                view.clientIp(),
-                DateTimeFormatUtils.formatKoreanDateTime(view.createdAt())
-        );
-    }
 
     public static MemberLogResponse from(final MemberLogView view) {
         if (view == null) {
             throw new IllegalArgumentException("view는 필수입니다.");
         }
-        return new MemberLogResponse(view);
+        return new MemberLogResponse(
+                view.id(),
+                LogActorResponse.from(view),
+                LogEventResponse.from(view)
+        );
     }
 }

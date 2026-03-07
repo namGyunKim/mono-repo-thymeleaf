@@ -5,6 +5,7 @@ import com.example.domain.aws.payload.dto.*;
 import com.example.domain.aws.service.common.*;
 import com.example.global.exception.GlobalException;
 import com.example.global.exception.enums.ErrorCode;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * S3 Command 공통 로직.
  * [성능 최적화] InputStream 기반 업로드 및 DeleteObjects를 이용한 일괄 삭제 적용.
  */
+@Transactional
 public abstract class AbstractS3CommandService extends AbstractS3ServiceSupport implements S3CommandService {
 
     private final S3UploadSupport s3UploadSupport;
