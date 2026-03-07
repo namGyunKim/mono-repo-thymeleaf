@@ -32,6 +32,7 @@ public class SocialAccount extends BaseTimeEntity implements Serializable {
     @Column(name = "social_account_id", comment = "소셜 계정 아이디")
     private Long id;
 
+    // JPA @ManyToOne 연관관계로 Member 엔티티를 직접 참조 — social_account 테이블의 FK(member_id) 매핑에 불가피
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;

@@ -6,9 +6,9 @@ import com.example.domain.security.port.SecurityAccountAuthQueryPort;
 import com.example.domain.social.support.SocialLoginTokenPort;
 import com.example.global.exception.GlobalException;
 import com.example.global.exception.enums.ErrorCode;
+import com.example.global.security.SecurityContextManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class SocialLoginTokenPortAdapter implements SocialLoginTokenPort {
 
     private final SecurityAccountAuthQueryPort securityAccountAuthQueryPort;
+    private final SecurityContextManager securityContextManager;
 
     @Override
     public void authenticateBySession(final Long memberId) {
@@ -29,6 +30,6 @@ public class SocialLoginTokenPortAdapter implements SocialLoginTokenPort {
                         null,
                         principalDetails.getAuthorities()
                 );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        securityContextManager.getContext().setAuthentication(authentication);
     }
 }

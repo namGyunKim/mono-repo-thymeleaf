@@ -899,7 +899,6 @@ domain-core/src/main/java/com/example/domain/
 ### 4.3 컨트롤러 작성 원칙
 
 - `RestApiController`로 응답 생성, 서비스에서 `ResponseEntity` 생성 금지
-- 모든 API에 `@Operation(summary=...)` 작성
 - Health 제외 모든 API에 `version = ApiVersioning.V1` 등 버전 매핑
 - 상태 코드: POST→`201 Created`+Location, PUT/PATCH→`200`/`204`, DELETE→`204`
 
