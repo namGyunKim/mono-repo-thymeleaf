@@ -1,7 +1,24 @@
+# 통합 테스트 전용 프로필 — 자기완결적 (application.yml에 의존하지 않음)
+server:
+  port: 0
+
 spring:
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create-drop
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  jackson:
+    time-zone: Asia/Seoul
+  threads:
+    virtual:
+      enabled: true
 
 decorator:
   datasource:
@@ -9,6 +26,9 @@ decorator:
       enable-logging: false
 
 app:
+  type: user
+  cors:
+    allowed-origins:
   security:
     encryption-secret: test-social-token-encryption-key-must-be-32chars!!
   logging:
@@ -27,6 +47,8 @@ social:
 s3:
   bucket: test-bucket
   bucket-local: test-bucket
+
 aws:
+  region: ap-northeast-2
   access-key: test-access-key
   secret-key: test-secret-key
