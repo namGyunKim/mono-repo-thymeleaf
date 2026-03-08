@@ -166,9 +166,13 @@ feat/*  ──→  develop  ──→  deploy/*
 
 ## 문서
 
-| 문서                                                             | 내용                        |
-|----------------------------------------------------------------|---------------------------|
-| [`docs/backend/README.md`](docs/backend/README.md)             | 백엔드 구조, 실행, 운영 가이드        |
-| [`docs/backend/RULES.md`](docs/backend/RULES.md)               | 백엔드 개발 규칙 (아키텍처, 컨벤션, 보안) |
-| [`docs/frontend/UI_UX_RULES.md`](docs/frontend/UI_UX_RULES.md) | 프론트엔드 UI/UX 디자인 지침        |
-| [`docs/CI_STRATEGY.md`](docs/CI_STRATEGY.md)                   | CI/CD 및 브랜치 전략            |
+| 문서                                                                               | 내용                         |
+|----------------------------------------------------------------------------------|----------------------------|
+| [`docs/backend/README.md`](docs/backend/README.md)                               | 백엔드 구조, 실행, 운영 가이드         |
+| [`docs/backend/RULES.md`](docs/backend/RULES.md)                                 | 백엔드 개발 규칙 (아키텍처, 컨벤션, 보안)  |
+| [`docs/frontend/UI_UX_RULES.md`](docs/frontend/UI_UX_RULES.md)                   | 프론트엔드 UI/UX 디자인 지침 (허브)    |
+| [`docs/frontend/DESIGN_TOKENS.md`](docs/frontend/DESIGN_TOKENS.md)               | 색상, 타이포, 간격, 라운드, 애니메이션    |
+| [`docs/frontend/COMPONENTS.md`](docs/frontend/COMPONENTS.md)                     | 컴포넌트 스타일, 레이아웃, 아이콘        |
+| [`docs/frontend/PAGE_PATTERNS.md`](docs/frontend/PAGE_PATTERNS.md)               | 공통 페이지 패턴 (로그인, 목록, 폼 등)   |
+| [`docs/frontend/TEMPLATE_CONVENTIONS.md`](docs/frontend/TEMPLATE_CONVENTIONS.md) | 기술 스택, 파일 구조, Thymeleaf 규칙 |
+| [`docs/CI_STRATEGY.md`](docs/CI_STRATEGY.md)                                     | CI/CD 및 브랜치 전략             |

@@ -40,7 +40,7 @@ mono-repo-thymeleaf/
 ├── .github/workflows/ # CI/CD (ci.yml, backend-cd.yml, deploy-user.yml, stage-user.yml)
 ├── docs/
 │   ├── backend/       # RULES.md (§1-§8), README.md, BACKEND_DEPENDENCIES.md, 배포 가이드
-│   ├── frontend/      # UI_UX_RULES.md
+│   ├── frontend/      # UI_UX_RULES.md (허브) + 4개 하위 문서
 │   └── CI_STRATEGY.md # CI/CD, 브랜치 전략, Branch Protection
 ├── CLAUDE.md           # AI 행동 규칙 정본 + 문서 정본 체계
 ├── AGENTS.md           # CLAUDE.md 동기화 미러

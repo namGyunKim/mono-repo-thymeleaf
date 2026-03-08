@@ -130,7 +130,11 @@ mono-repo-thymeleaf/
 │   │       ├── TESTING.md              # §6.2 테스트 규칙
 │   │       └── OPERATIONS.md         # §6+§7 운영 & 체크리스트
 │   └── frontend/                  # 프론트엔드 상세 가이드
-│       └── UI_UX_RULES.md        # UI/UX 디자인 지침
+│       ├── UI_UX_RULES.md        # UI/UX 디자인 지침 (허브)
+│       ├── DESIGN_TOKENS.md      # 색상, 타이포, 간격, 라운드, 애니메이션
+│       ├── COMPONENTS.md         # 컴포넌트 스타일, 레이아웃, 아이콘
+│       ├── PAGE_PATTERNS.md      # 공통 페이지 패턴
+│       └── TEMPLATE_CONVENTIONS.md # 기술 스택, 파일 구조, Thymeleaf
 ```
 
 > 모노레포 경로: `apps/user/`, `libs/backend/*`
