@@ -23,11 +23,13 @@
 | 도메인 간 연동          | [§3.3](rules/ARCHITECTURE.md#33-ddd-bounded-context--vertical-slicing--critical)                                                                 |
 | 점검 요청             | [§6.3](rules/OPERATIONS.md#63-도메인-지침-점검-요청)                                                                                                      |
 | 라이브러리/의존성 변경      | [§6.1](rules/OPERATIONS.md#61-gradle-의존성-점검-실행-규칙-critical)                                                                                      |
+| 규칙에 없는 설계 결정      | [설계 철학](./DESIGN_PHILOSOPHY.md) §4 판단 프레임워크 → 해당 섹션                                                                                              |
 
 ---
 
 ## 목차
 
+- [설계 철학 (Design Philosophy)](./DESIGN_PHILOSOPHY.md) — 규칙의 **근거(rationale)**, 새로운 상황의 판단 기준
 - [§1. 개발 철학 & 프로젝트 개요](#1-개발-철학--프로젝트-개요) *(이 문서)*
     - [§1.1 개발 철학 13대 원칙](#11-개발-철학-13대-원칙)
     - [§1.2 모듈 경계](#12-모듈-경계-module-boundary--critical)

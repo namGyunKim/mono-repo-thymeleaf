@@ -24,15 +24,16 @@
 동일 주제가 여러 문서에 등장할 때, **정본(canonical source)** 을 기준으로 판단한다.
 정본과 참조 문서가 충돌하면 **정본을 우선**하고, 불일치를 발견하면 **참조 문서를 정본에 맞춰 즉시 수정**한다.
 
-| 주제                               | 정본                                 | 참조/동기화 대상                              | 충돌 시                             |
-|----------------------------------|------------------------------------|----------------------------------------|----------------------------------|
-| AI 행동 규칙, Git 워크플로우, 권한 설정       | **`CLAUDE.md`**                    | `AGENTS.md` (동기화 미러)                   | CLAUDE.md 우선 → AGENTS.md 동기화     |
-| 백엔드 코딩 규칙, 아키텍처, API 규칙          | **`docs/backend/RULES.md`**        | `docs/backend/README.md` (개요)          | RULES.md 우선 → README.md 갱신       |
-| 백엔드 프로젝트 구조, 실행/빌드, 운영 기준        | **`docs/backend/README.md`**       | —                                      | —                                |
-| 프론트엔드 UI/UX 디자인 지침               | **`docs/frontend/UI_UX_RULES.md`** | —                                      | —                                |
-| CI/CD, 브랜치 전략, Branch Protection | **`docs/CI_STRATEGY.md`**          | `CLAUDE.md` (워크플로우 요약)                 | CI_STRATEGY.md 우선 → CLAUDE.md 갱신 |
-| 백엔드 의존성 목록                       | **`build.gradle.kts`** (코드)        | `docs/backend/BACKEND_DEPENDENCIES.md` | 코드 우선 → 문서 갱신                    |
-| Port/Adapter 목록                  | **코드** (`support/` 패키지)            | `RULES.md` §3.3 (참고용 테이블)              | 코드 우선 → RULES.md 갱신              |
+| 주제                               | 정본                                      | 참조/동기화 대상                              | 충돌 시                             |
+|----------------------------------|-----------------------------------------|----------------------------------------|----------------------------------|
+| AI 행동 규칙, Git 워크플로우, 권한 설정       | **`CLAUDE.md`**                         | `AGENTS.md` (동기화 미러)                   | CLAUDE.md 우선 → AGENTS.md 동기화     |
+| 백엔드 설계 철학, 판단 기준                 | **`docs/backend/DESIGN_PHILOSOPHY.md`** | `docs/backend/RULES.md` (규칙 정본)        | DESIGN_PHILOSOPHY.md 우선          |
+| 백엔드 코딩 규칙, 아키텍처, API 규칙          | **`docs/backend/RULES.md`**             | `docs/backend/README.md` (개요)          | RULES.md 우선 → README.md 갱신       |
+| 백엔드 프로젝트 구조, 실행/빌드, 운영 기준        | **`docs/backend/README.md`**            | —                                      | —                                |
+| 프론트엔드 UI/UX 디자인 지침               | **`docs/frontend/UI_UX_RULES.md`**      | —                                      | —                                |
+| CI/CD, 브랜치 전략, Branch Protection | **`docs/CI_STRATEGY.md`**               | `CLAUDE.md` (워크플로우 요약)                 | CI_STRATEGY.md 우선 → CLAUDE.md 갱신 |
+| 백엔드 의존성 목록                       | **`build.gradle.kts`** (코드)             | `docs/backend/BACKEND_DEPENDENCIES.md` | 코드 우선 → 문서 갱신                    |
+| Port/Adapter 목록                  | **코드** (`support/` 패키지)                 | `RULES.md` §3.3 (참고용 테이블)              | 코드 우선 → RULES.md 갱신              |
 
 > **원칙**: 코드와 문서가 충돌하면 **코드가 정본**이다. 단, 코드가 규칙을 위반한 것이라면 **코드를 규칙에 맞춰 수정**한다.
 
@@ -216,9 +217,9 @@ Bash 및 MCP 도구는 `allow` 목록으로 관리한다.
 
 아래 유형의 코드 변경이 발생하면 `.serena/memories/`의 관련 메모리를 **최신 상태로 업데이트**한다.
 
-| 변경 유형 | 행동 |
-|---|---|
-| 도메인/모듈 추가·삭제·이름 변경 | `project_overview.md` 도메인 목록·모듈 구조 갱신 |
-| 기술 스택 변경 (프레임워크 버전, 새 라이브러리 도입 등) | 기술 스택 테이블 갱신 |
-| 테스트 인프라 변경 | 테스트 현황 갱신 |
-| 단순 버그 수정, 로직 변경, 리팩토링 | 업데이트 불필요 |
+| 변경 유형                             | 행동                                    |
+|-----------------------------------|---------------------------------------|
+| 도메인/모듈 추가·삭제·이름 변경                | `project_overview.md` 도메인 목록·모듈 구조 갱신 |
+| 기술 스택 변경 (프레임워크 버전, 새 라이브러리 도입 등) | 기술 스택 테이블 갱신                          |
+| 테스트 인프라 변경                        | 테스트 현황 갱신                             |
+| 단순 버그 수정, 로직 변경, 리팩토링             | 업데이트 불필요                              |
