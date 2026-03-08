@@ -128,6 +128,7 @@
 4. **CI 확인**: `gh pr list --state open`으로 진행 중인 PR이 없는지 확인 — **CI 진행 중인 PR이 있으면 CI 완료(머지) 후 다음 단계로 진행**한다
 5. **rebase**: `git fetch origin && git rebase origin/develop` — 4단계에서 머지된 PR을 포함하여 **반드시 최신 develop 위에 rebase**한다
 6. **PR 생성 후**: auto-merge 설정 → **즉시 develop 브랜치로 체크아웃** (`git checkout develop`)
+7. **PR 머지 확인 후**: `git fetch origin && git rebase origin/develop` → 로컬 feature 브랜치 삭제 (`git branch -D <브랜치명>`) — Squash Merge라서 `-d`는 동작하지 않으므로 `-D` 사용
 
 > 상세 배경과 Branch Protection 설정은 [`docs/CI_STRATEGY.md` → PR 생성 워크플로우](docs/CI_STRATEGY.md) 참조
 
