@@ -1,0 +1,54 @@
+# 통합 테스트 전용 프로필 — 자기완결적 (application.yml에 의존하지 않음)
+server:
+  port: 0
+
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  jackson:
+    time-zone: Asia/Seoul
+  threads:
+    virtual:
+      enabled: true
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+
+app:
+  type: user
+  cors:
+    allowed-origins:
+  security:
+    encryption-secret: test-social-token-encryption-key-must-be-32chars!!
+  logging:
+    exception:
+      structured-enabled: false
+
+social:
+  google:
+    baseUrl: https://accounts.google.com
+    apiBaseUrl: https://www.googleapis.com
+    clientId: test-client-id
+    redirectUri: http://localhost:8081/api/social/v1/google/redirect
+    secretKey: test-secret-key
+    scope: email profile
+
+s3:
+  bucket: test-bucket
+  bucket-local: test-bucket
+
+aws:
+  region: ap-northeast-2
+  access-key: test-access-key
+  secret-key: test-secret-key

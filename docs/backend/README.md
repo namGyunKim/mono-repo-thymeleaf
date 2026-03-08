@@ -3,6 +3,7 @@
 이 문서는 모노레포의 백엔드 영역(`apps/*`, `libs/backend/*`)에 대한 **현재 구조/실행 방법/운영 기준**을 설명합니다.
 
 코딩 규칙(아키텍처/컨벤션/보안)은 [RULES.md](./RULES.md)를 기준으로 합니다.
+상세 규칙은 [rules/](./rules/) 하위 문서로 분할되어 있습니다.
 
 ---
 
@@ -179,15 +180,31 @@ mono-repo-thymeleaf/
 
 ## 11. 테스트 전략
 
-> 테스트 코드 작성 규칙 상세는 [RULES.md §6.2](./RULES.md#62-테스트-코드-작성-규칙-critical) 참조
+> 테스트 코드 작성 규칙 상세는 [TESTING.md §6.2](./rules/TESTING.md) 참조
+>
+> **Docker 필수**: 통합 테스트(Testcontainers)는 Docker 데몬이 실행 중이어야 한다
 
 ### 기본 원칙
 
-- **순수 단위 테스트**: Spring Context 로딩 없이 JUnit5 + Mockito + AssertJ 기반으로 작성한다
-- `@SpringBootTest` 사용 금지 — 빠른 피드백 루프 유지
+- **2단계 테스트 전략**: 단위 테스트(기본) + 통합 테스트(Testcontainers, 선택)
+- **단위 테스트**: Spring Context 로딩 없이 JUnit5 + Mockito + AssertJ 기반 — `libs/backend/*/src/test/`
+- **통합 테스트**: `@SpringBootTest` + Testcontainers(PostgreSQL) — `apps/user/src/test/`
 - 테스트 클래스는 package-private, 메서드명은 `{메서드}_{시나리오}_{기대결과}` 패턴
 
-### 테스트 디렉토리 구조
+### 통합 테스트 디렉토리 구조
+
+```text
+apps/user/src/test/java/com/example/userapi/
+├── config/
+│   └── TestcontainersConfig.java   # PostgreSQL 컨테이너 @ServiceConnection
+├── IntegrationTestBase.java        # @SpringBootTest + @Import + @ActiveProfiles("test")
+└── HealthCheckIntegrationTest.java # 통합 테스트 예시
+
+apps/user/src/test/resources/
+└── application-test.yml            # 테스트 프로필 설정
+```
+
+### 단위 테스트 디렉토리 구조
 
 ```text
 libs/backend/common/src/test/java/com/example/global/
@@ -230,6 +247,9 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 
 # 전체 백엔드 테스트
 ./gradlew test
+
+# 통합 테스트 (Docker 필수)
+./gradlew :apps:user:test
 ```
 
 ### 현재 테스트 현황
@@ -279,7 +299,12 @@ libs/backend/domain-core/src/test/java/com/example/domain/
 ## 13. 문서 역할 분리
 
 - 이 문서: 구조/실행/운영 기준(개요)
-- [RULES.md](./RULES.md): 코드 작성 및 리뷰 시 반드시 지켜야 하는 세부 규칙
+- [RULES.md](./RULES.md): 코드 작성 및 리뷰 시 반드시 지켜야 하는 세부 규칙 (허브)
+    - [rules/CODING_CONVENTION.md](./rules/CODING_CONVENTION.md): §2 코딩 컨벤션
+    - [rules/ARCHITECTURE.md](./rules/ARCHITECTURE.md): §3 아키텍처 규칙
+    - [rules/REST_API_SECURITY.md](./rules/REST_API_SECURITY.md): §4+§5 REST API & 보안
+    - [rules/TESTING.md](./rules/TESTING.md): §6.2 테스트 규칙 (피라미드, 단위/통합, Docker)
+    - [rules/OPERATIONS.md](./rules/OPERATIONS.md): §6+§7 운영 & 체크리스트
 - [docs/backend/deployment/](./deployment/): 배포 전략 (ALB Rolling 무중단 배포, 서버 세팅, CI/CD)
 
 충돌 시 최신 정책은 `RULES.md`를 우선 기준으로 하고, 필요한 경우 두 문서를 함께 갱신합니다.

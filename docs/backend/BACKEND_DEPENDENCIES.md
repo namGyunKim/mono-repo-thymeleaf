@@ -41,7 +41,16 @@ common ←(api)── global-core ← domain-core ← security-web ← web-suppo
 | `spring-boot-starter-security`        | implementation      | Spring Security                          |
 | `spring-boot-devtools`                | developmentOnly     | 개발 시 자동 재시작                              |
 | `spring-boot-configuration-processor` | annotationProcessor | `@ConfigurationProperties` 메타데이터 생성      |
-| `spring-boot-starter-test`            | testImplementation  | JUnit5, Mockito, AssertJ, MockMvc 통합     |
+| `spring-boot-starter-test`            | testImplementation  | JUnit5, Mockito, AssertJ 통합              |
+| `spring-boot-webmvc-test`             | testImplementation  | MockMvc, @AutoConfigureMockMvc 통합 테스트    |
+| `spring-boot-testcontainers`          | testImplementation  | Testcontainers + Spring Boot 통합          |
+
+### 테스트 인프라 (Testcontainers)
+
+| 의존성                                               | 버전    | 스코프                | 설명                       |
+|---------------------------------------------------|-------|--------------------|--------------------------|
+| `org.testcontainers:testcontainers-junit-jupiter` | 2.0.3 | testImplementation | JUnit5 Testcontainers 확장 |
+| `org.testcontainers:testcontainers-postgresql`    | 2.0.3 | testImplementation | PostgreSQL 컨테이너 지원       |
 
 ### 데이터베이스 / JPA
 

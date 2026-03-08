@@ -32,6 +32,9 @@
 
 # 전체 라이브러리 테스트 (한 줄)
 ./gradlew :libs:backend:common:test :libs:backend:global-core:test :libs:backend:security-web:test :libs:backend:domain-core:test :libs:backend:web-support:test
+
+# 통합 테스트 (Docker 필수 — Testcontainers)
+./gradlew :apps:user:test
 ```
 
 ## 컴파일 검증 (개별 라이브러리)

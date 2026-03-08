@@ -40,7 +40,7 @@
 ## 6. 테스트
 
 - [ ] 새 유틸/서비스/Validator에 단위 테스트 있는가?
-- [ ] `@SpringBootTest` 없이 순수 단위 테스트인가?
+- [ ] 단위 테스트는 Spring Context 없이 순수 테스트인가? 통합 테스트는 `IntegrationTestBase`를 상속하는가?
 - [ ] `./gradlew test` 전체 통과하는가?
 
 ## 7. 문법/포맷
