@@ -107,7 +107,8 @@ Least Privilege, Idempotency, Module Boundary, Response DTO Composition
 ### 테스트 규칙
 
 - 순수 단위 테스트: JUnit5 + Mockito + AssertJ
-- ❌ `@SpringBootTest` 금지
+- 단위 테스트: JUnit5 + Mockito + AssertJ (Spring Context 없음)
+- 통합 테스트: `@SpringBootTest` + Testcontainers (PostgreSQL) — `apps/user/src/test/`
 - 클래스: package-private, 메서드명: `{메서드}_{시나리오}_{기대결과}`
 - `@Mock` + `@InjectMocks`, strictStubs
 
