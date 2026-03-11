@@ -19,6 +19,22 @@
 
 ---
 
+# 코드 변경 후 사이드이펙트 점검 규칙
+
+코드를 생성하거나 수정한 후에는 반드시 아래 **사이드이펙트 점검**을 수행한다.
+
+| 점검 항목        | 행동                                             |
+|--------------|------------------------------------------------|
+| **참조 검색**    | 변경한 클래스/메서드/필드를 참조하는 코드를 검색하여 영향 범위를 파악한다      |
+| **시그니처 변경**  | 메서드 시그니처(파라미터, 반환 타입)를 변경한 경우, 모든 호출부를 찾아 수정한다 |
+| **삭제/이름 변경** | 심볼을 삭제하거나 이름을 변경한 경우, 기존 참조가 남아 있지 않은지 확인한다    |
+| **빌드 검증**    | `./gradlew build`를 실행하여 컴파일 오류가 없는지 확인한다       |
+| **테스트 실행**   | 변경 영역과 관련된 테스트를 실행하여 기존 테스트가 깨지지 않았는지 확인한다     |
+
+> **원칙**: 코드 변경의 영향 범위를 파악하지 않고 작업을 완료하지 않는다. 사이드이펙트가 발견되면 즉시 수정한다.
+
+---
+
 # 문서 정본 체계 (CRITICAL)
 
 동일 주제가 여러 문서에 등장할 때, **정본(canonical source)** 을 기준으로 판단한다.
@@ -128,7 +144,8 @@
 4. **CI 확인**: `gh pr list --state open`으로 진행 중인 PR이 없는지 확인 — **CI 진행 중인 PR이 있으면 CI 완료(머지) 후 다음 단계로 진행**한다
 5. **rebase**: `git fetch origin && git rebase origin/develop` — 4단계에서 머지된 PR을 포함하여 **반드시 최신 develop 위에 rebase**한다
 6. **PR 생성 후**: auto-merge 설정 → **즉시 develop 브랜치로 체크아웃** (`git checkout develop`)
-7. **PR 머지 확인 후**: `git fetch origin && git rebase origin/develop` → 로컬 feature 브랜치 삭제 (`git branch -D <브랜치명>`) — Squash Merge라서 `-d`는 동작하지 않으므로 `-D` 사용
+7. **PR 머지 확인 후**: `git fetch origin && git rebase origin/develop` → 로컬 feature 브랜치 삭제 (`git branch -D <브랜치명>`) — Squash
+   Merge라서 `-d`는 동작하지 않으므로 `-D` 사용
 
 > 상세 배경과 Branch Protection 설정은 [`docs/CI_STRATEGY.md` → PR 생성 워크플로우](docs/CI_STRATEGY.md) 참조
 
